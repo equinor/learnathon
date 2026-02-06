@@ -6,6 +6,29 @@ A hands-on learning event where teams explore AI-assisted software engineering t
 
 ---
 
+## 📑 Table of Contents
+
+- [🎯 Main Event: EDC 2026](#-main-event-edc-2026)
+- [Why?](#why)
+- [📅 Format Options](#-format-options)
+  - [Option A: Half-Day (4 hours)](#option-a-half-day-4-hours)
+  - [Option B: Full Day (7 hours)](#option-b-full-day-7-hours--edc-format)
+- [🎤 Show & Tell: The Heart of the Learnathon](#-show--tell-the-heart-of-the-learnathon)
+- [📚 Learn Phase Breakdown](#-learn-phase-breakdown)
+- [🔐 Security (Built In, Not Bolted On)](#-security-built-in-not-bolted-on)
+- [🧰 The Toolbox](#-the-toolbox)
+- [👥 Team Formation](#-team-formation)
+- [Pick Your Challenge](#pick-your-challenge)
+- [Learning Bingo](#learning-bingo)
+- [Awards (Audience Votes!)](#awards-audience-votes)
+- [Prizes](#prizes)
+- [📅 Timeline to EDC](#-timeline-to-edc)
+- [✅ Success Looks Like](#-success-looks-like)
+- [❓ Open Questions (For Tuesday Planning)](#-open-questions-for-tuesday-planning)
+- [🧪 Optional: Trondheim Test Run](#-optional-trondheim-test-run)
+
+---
+
 ## 🎯 Main Event: EDC 2026
 
 | Detail | Info |
