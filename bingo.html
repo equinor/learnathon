@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learnathon 2026 - Learning Bingo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 800px;
+            width: 100%;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+
+        .bingo-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .bingo-cell {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border: 3px solid #ddd;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.95em;
+            font-weight: 500;
+            color: #333;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .bingo-cell:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            border-color: #667eea;
+        }
+
+        .bingo-cell.marked {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-color: #764ba2;
+        }
+
+        .bingo-cell.marked::after {
+            content: '✓';
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .bingo-cell.center {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+        .bingo-cell.center.marked {
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+        }
+
+        .controls {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .reset-btn {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        .status {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 1.2em;
+            color: #333;
+            min-height: 30px;
+            font-weight: 600;
+        }
+
+        .status.bingo {
+            color: #764ba2;
+            font-size: 1.5em;
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background: #f093fb;
+            position: absolute;
+            animation: confetti-fall 3s linear;
+        }
+
+        @keyframes confetti-fall {
+            to {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .info {
+            background: #f0f4f8;
+            border-left: 4px solid #667eea;
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 5px;
+            font-size: 0.9em;
+            color: #555;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2em;
+            }
+
+            .bingo-cell {
+                padding: 15px;
+                min-height: 100px;
+                font-size: 0.85em;
+            }
+
+            .container {
+                padding: 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .bingo-grid {
+                gap: 10px;
+            }
+
+            .bingo-cell {
+                padding: 10px;
+                min-height: 80px;
+                font-size: 0.75em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎓 Learnathon 2026</h1>
+        <div class="subtitle">Learning Bingo - Check off what you try!</div>
+        
+        <div class="bingo-grid" id="bingoGrid">
+            <!-- Grid cells will be dynamically generated -->
+        </div>
+
+        <div class="controls">
+            <button onclick="checkBingo()">Check Bingo!</button>
+            <button class="reset-btn" onclick="resetBoard()">Reset Board</button>
+        </div>
+
+        <div class="status" id="status"></div>
+
+        <div class="info">
+            <strong>How to play:</strong> Click on each cell when you complete that activity during the Learnathon. 
+            Get a line (horizontal, vertical, or diagonal) to achieve BINGO! Fill the entire card for legend status! 🌟
+        </div>
+    </div>
+
+    <script>
+        // Bingo card items based on the README
+        const bingoItems = [
+            { text: 'Use agent mode to scaffold', center: false },
+            { text: 'Implement at least 1 AI suggestion', center: false },
+            { text: 'Create architecture drawing', center: false },
+            { text: 'Customize your AI', center: false },
+            { text: '⭐ TRY A NEW TOOL ⭐', center: true },
+            { text: "Don't touch the keyboard", center: false },
+            { text: 'Ask AI to explain code', center: false },
+            { text: 'Generate tests for your code', center: false },
+            { text: 'Identify a RISK with AI output', center: false }
+        ];
+
+        let markedCells = new Array(9).fill(false);
+
+        // Initialize the bingo grid
+        function initGrid() {
+            const grid = document.getElementById('bingoGrid');
+            grid.innerHTML = '';
+            
+            bingoItems.forEach((item, index) => {
+                const cell = document.createElement('div');
+                cell.className = 'bingo-cell' + (item.center ? ' center' : '');
+                cell.textContent = item.text;
+                cell.onclick = () => toggleCell(index);
+                grid.appendChild(cell);
+            });
+
+            // Load saved state from localStorage
+            loadState();
+            updateDisplay();
+        }
+
+        // Toggle cell marked state
+        function toggleCell(index) {
+            markedCells[index] = !markedCells[index];
+            updateDisplay();
+            saveState();
+            
+            // Auto-check for bingo
+            if (markedCells[index]) {
+                setTimeout(checkBingo, 300);
+            }
+        }
+
+        // Update visual display
+        function updateDisplay() {
+            const cells = document.querySelectorAll('.bingo-cell');
+            cells.forEach((cell, index) => {
+                if (markedCells[index]) {
+                    cell.classList.add('marked');
+                } else {
+                    cell.classList.remove('marked');
+                }
+            });
+        }
+
+        // Check for bingo (line completion)
+        function checkBingo() {
+            const wins = [];
+            
+            // Check rows
+            for (let i = 0; i < 3; i++) {
+                if (markedCells[i*3] && markedCells[i*3+1] && markedCells[i*3+2]) {
+                    wins.push(`Row ${i+1}`);
+                }
+            }
+            
+            // Check columns
+            for (let i = 0; i < 3; i++) {
+                if (markedCells[i] && markedCells[i+3] && markedCells[i+6]) {
+                    wins.push(`Column ${i+1}`);
+                }
+            }
+            
+            // Check diagonals
+            if (markedCells[0] && markedCells[4] && markedCells[8]) {
+                wins.push('Diagonal ↘');
+            }
+            if (markedCells[2] && markedCells[4] && markedCells[6]) {
+                wins.push('Diagonal ↙');
+            }
+            
+            // Display results
+            const status = document.getElementById('status');
+            if (wins.length > 0) {
+                status.textContent = `🎉 BINGO! ${wins.join(', ')} 🎉`;
+                status.className = 'status bingo';
+                celebrateBingo();
+            } else {
+                const marked = markedCells.filter(x => x).length;
+                if (marked === 9) {
+                    status.textContent = '🌟 LEGEND STATUS! All squares complete! 🌟';
+                    status.className = 'status bingo';
+                    celebrateBingo();
+                } else if (marked > 0) {
+                    status.textContent = `${marked}/9 squares marked - keep going!`;
+                    status.className = 'status';
+                } else {
+                    status.textContent = 'Start marking off your achievements!';
+                    status.className = 'status';
+                }
+            }
+        }
+
+        // Celebration animation
+        function celebrateBingo() {
+            // Create confetti effect
+            for (let i = 0; i < 50; i++) {
+                setTimeout(() => {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti';
+                    confetti.style.left = Math.random() * window.innerWidth + 'px';
+                    confetti.style.top = '-10px';
+                    confetti.style.background = ['#667eea', '#764ba2', '#f093fb', '#f5576c', '#fee140'][Math.floor(Math.random() * 5)];
+                    document.body.appendChild(confetti);
+                    
+                    setTimeout(() => confetti.remove(), 3000);
+                }, i * 30);
+            }
+        }
+
+        // Reset the board
+        function resetBoard() {
+            if (confirm('Are you sure you want to reset the board?')) {
+                markedCells = new Array(9).fill(false);
+                updateDisplay();
+                saveState();
+                document.getElementById('status').textContent = 'Board reset! Good luck! 🎯';
+                document.getElementById('status').className = 'status';
+            }
+        }
+
+        // Save state to localStorage
+        function saveState() {
+            localStorage.setItem('learnathonBingo', JSON.stringify(markedCells));
+        }
+
+        // Load state from localStorage
+        function loadState() {
+            const saved = localStorage.getItem('learnathonBingo');
+            if (saved) {
+                markedCells = JSON.parse(saved);
+            }
+        }
+
+        // Initialize on page load
+        initGrid();
+    </script>
+</body>
+</html>
