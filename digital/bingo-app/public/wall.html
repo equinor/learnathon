@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Learnathon Bingo — Wall</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #07070f;
+      color: #fff;
+      min-height: 100vh;
+      padding: 1.5rem;
+    }
+
+    h1 {
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: #555;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 1.5rem;
+      text-align: center;
+    }
+
+    /* Legends section */
+    #legends-section {
+      display: none;
+      margin-bottom: 2rem;
+    }
+
+    #legends-title {
+      text-align: center;
+      font-size: 1.8rem;
+      font-weight: 900;
+      background: linear-gradient(135deg, #f59e0b, #ef4444);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 1rem;
+      letter-spacing: 0.04em;
+    }
+
+    #legends-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      justify-content: center;
+    }
+
+    .legend-badge {
+      background: linear-gradient(135deg, #92400e, #d97706);
+      border-radius: 50px;
+      padding: 0.5rem 1.25rem;
+      font-size: 1rem;
+      font-weight: 800;
+      animation: legendFloat 3s ease-in-out infinite;
+    }
+
+    @keyframes legendFloat {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-4px); }
+    }
+
+    /* Team grid */
+    #team-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 1rem;
+    }
+
+    /* Mini card */
+    .mini-card {
+      background: #111120;
+      border: 1px solid #222;
+      border-radius: 10px;
+      padding: 0.75rem;
+      transition: border-color 0.3s;
+    }
+
+    .mini-card.has-line {
+      border-color: #d97706;
+    }
+
+    .mini-card.is-legend {
+      border-color: #f59e0b;
+      background: #1c1204;
+      box-shadow: 0 0 20px #d9770644;
+    }
+
+    .mini-card-name {
+      font-size: 0.8rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      color: #ccc;
+    }
+
+    .mini-card.is-legend .mini-card-name {
+      color: #fbbf24;
+    }
+
+    .mini-card-name.blink {
+      animation: nameBlink 0.4s ease-in-out 6;
+    }
+
+    @keyframes nameBlink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.1; }
+    }
+
+    /* Mini bingo grid */
+    .mini-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 3px;
+    }
+
+    .mini-sq {
+      aspect-ratio: 1;
+      border-radius: 3px;
+      background: #1e1e30;
+      transition: background 0.2s, box-shadow 0.2s;
+    }
+
+    .mini-sq.marked {
+      background: #5b21b6;
+    }
+
+    .mini-sq.in-line {
+      background: #d97706;
+      animation: squarePulse 0.6s ease-in-out 8;
+    }
+
+    .mini-sq.center { border: 1px solid #4c1d95; }
+    .mini-sq.center.marked { background: #7c3aed; }
+    .mini-sq.center.in-line { background: #f59e0b; }
+
+    @keyframes squarePulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+
+    .mini-lines {
+      font-size: 0.65rem;
+      color: #555;
+      margin-top: 0.4rem;
+      text-align: right;
+    }
+
+    .mini-lines.has-line { color: #d97706; font-weight: 700; }
+
+    /* Idle state */
+    #idle {
+      text-align: center;
+      color: #333;
+      margin-top: 4rem;
+      font-size: 1.2rem;
+    }
+
+    /* Confetti canvas */
+    #confetti-canvas {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 999;
+    }
+  </style>
+</head>
+<body>
+  <h1>🎓 Learnathon 2026 — Bingo Wall</h1>
+
+  <div id="legends-section">
+    <div id="legends-title">🔥 LEARNATHON LEGENDS 🔥</div>
+    <div id="legends-list"></div>
+  </div>
+
+  <div id="team-grid"></div>
+  <div id="idle">Waiting for teams to join...</div>
+
+  <canvas id="confetti-canvas"></canvas>
+
+  <script>
+    const LINES = [
+      [0,1,2],[3,4,5],[6,7,8],
+      [0,3,6],[1,4,7],[2,5,8],
+      [0,4,8],[2,4,6]
+    ];
+
+    let prevTeams = {};
+    let legends = new Set();
+
+    // --- Confetti ---
+    const canvas = document.getElementById('confetti-canvas');
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+    let animFrame = null;
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+
+    const COLORS = ['#7c3aed','#3b82f6','#10b981','#f59e0b','#ef4444','#ec4899','#fcd34d'];
+
+    function launchConfetti() {
+      const count = 120;
+      for (let i = 0; i < count; i++) {
+        particles.push({
+          x: Math.random() * canvas.width,
+          y: -10,
+          vx: (Math.random() - 0.5) * 4,
+          vy: Math.random() * 3 + 2,
+          rot: Math.random() * 360,
+          rotV: (Math.random() - 0.5) * 8,
+          w: Math.random() * 10 + 6,
+          h: Math.random() * 5 + 3,
+          color: COLORS[Math.floor(Math.random() * COLORS.length)],
+          life: 1,
+        });
+      }
+      if (!animFrame) animateConfetti();
+    }
+
+    function animateConfetti() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particles = particles.filter(p => p.life > 0);
+
+      particles.forEach(p => {
+        p.x += p.vx;
+        p.y += p.vy;
+        p.vy += 0.08; // gravity
+        p.rot += p.rotV;
+        if (p.y > canvas.height + 20) p.life = 0;
+
+        ctx.save();
+        ctx.translate(p.x, p.y);
+        ctx.rotate((p.rot * Math.PI) / 180);
+        ctx.globalAlpha = Math.min(1, p.life);
+        ctx.fillStyle = p.color;
+        ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+        ctx.restore();
+      });
+
+      if (particles.length > 0) {
+        animFrame = requestAnimationFrame(animateConfetti);
+      } else {
+        animFrame = null;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+      }
+    }
+
+    // --- State rendering ---
+    function getCompletedLines(squares) {
+      return LINES.filter(line => line.every(i => squares[i]));
+    }
+
+    function applyState({ teams, squares: squareDefs }) {
+      const teamList = Object.values(teams);
+
+      document.getElementById('idle').style.display =
+        teamList.length === 0 ? 'block' : 'none';
+
+      // Detect new line completions and new legends
+      let newLineDetected = false;
+      teamList.forEach(team => {
+        const prev = prevTeams[team.name];
+        const prevLineCount = prev ? getCompletedLines(prev.squares).length : 0;
+        const currLineCount = getCompletedLines(team.squares).length;
+
+        if (currLineCount > prevLineCount) {
+          newLineDetected = true;
+          blinkTeamName(team.name);
+        }
+
+        if (team.isLegend && !legends.has(team.name)) {
+          legends.add(team.name);
+          launchConfetti();
+          setTimeout(launchConfetti, 800);
+        }
+      });
+
+      if (newLineDetected) launchConfetti();
+
+      prevTeams = JSON.parse(JSON.stringify(teams));
+
+      // Legends section
+      const legendsSection = document.getElementById('legends-section');
+      if (legends.size > 0) {
+        legendsSection.style.display = 'block';
+        document.getElementById('legends-list').innerHTML =
+          [...legends].map(name => `<div class="legend-badge">🔥 ${name} 🔥</div>`).join('');
+      }
+
+      // Team grid
+      const sorted = teamList.sort((a, b) => {
+        // Legends first, then by line count, then by squares marked
+        if (a.isLegend !== b.isLegend) return b.isLegend - a.isLegend;
+        const aLines = getCompletedLines(a.squares).length;
+        const bLines = getCompletedLines(b.squares).length;
+        if (aLines !== bLines) return bLines - aLines;
+        return b.squares.filter(Boolean).length - a.squares.filter(Boolean).length;
+      });
+
+      document.getElementById('team-grid').innerHTML = sorted.map(team => {
+        const completedLines = getCompletedLines(team.squares);
+        const inLineSquares = new Set(completedLines.flat());
+
+        const miniSquares = squareDefs.map((sq, i) => {
+          const classes = [
+            'mini-sq',
+            sq.center ? 'center' : '',
+            team.squares[i] ? 'marked' : '',
+            inLineSquares.has(i) ? 'in-line' : '',
+          ].filter(Boolean).join(' ');
+          return `<div class="${classes}"></div>`;
+        }).join('');
+
+        const lineCount = completedLines.length;
+
+        return `
+          <div class="mini-card ${lineCount > 0 ? 'has-line' : ''} ${team.isLegend ? 'is-legend' : ''}"
+               id="card-${CSS.escape(team.name)}">
+            <div class="mini-card-name" id="name-${CSS.escape(team.name)}">
+              ${team.isLegend ? '🔥 ' : ''}${team.name}
+            </div>
+            <div class="mini-grid">${miniSquares}</div>
+            <div class="mini-lines ${lineCount > 0 ? 'has-line' : ''}">
+              ${lineCount > 0 ? `${lineCount} line${lineCount > 1 ? 's' : ''}` : ''}
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function blinkTeamName(name) {
+      const el = document.getElementById(`name-${CSS.escape(name)}`);
+      if (!el) return;
+      el.classList.remove('blink');
+      void el.offsetWidth; // reflow to restart animation
+      el.classList.add('blink');
+    }
+
+    // --- SSE ---
+    const es = new EventSource('/events');
+    es.onmessage = e => applyState(JSON.parse(e.data));
+    es.onerror = () => console.warn('SSE reconnecting...');
+  </script>
+</body>
+</html>

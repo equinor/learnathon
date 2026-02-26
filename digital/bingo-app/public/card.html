@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>Learnathon Bingo</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #0a0a14;
+      color: #fff;
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 1.25rem 1rem 2rem;
+    }
+
+    header {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: #555;
+      margin-bottom: 1rem;
+    }
+
+    /* Team name modal */
+    #join-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.85);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      padding: 1.5rem;
+    }
+
+    .modal-box {
+      background: #1a1a2e;
+      border: 1px solid #333;
+      border-radius: 16px;
+      padding: 2rem;
+      width: 100%;
+      max-width: 360px;
+      text-align: center;
+    }
+
+    .modal-box h2 { font-size: 1.4rem; margin-bottom: 0.5rem; }
+    .modal-box p  { color: #666; font-size: 0.9rem; margin-bottom: 1.25rem; }
+
+    .modal-box input {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      background: #0f0f1a;
+      border: 1px solid #444;
+      border-radius: 10px;
+      color: #fff;
+      font-size: 1.1rem;
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+
+    .modal-box input:focus { outline: none; border-color: #7c3aed; }
+
+    /* Team header */
+    #team-header {
+      text-align: center;
+      margin-bottom: 1.25rem;
+    }
+
+    #team-name-display {
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: #a78bfa;
+    }
+
+    #progress-line {
+      font-size: 0.8rem;
+      color: #555;
+      margin-top: 0.25rem;
+    }
+
+    #legend-banner {
+      display: none;
+      background: linear-gradient(135deg, #92400e, #d97706);
+      border-radius: 12px;
+      padding: 0.75rem 1.25rem;
+      text-align: center;
+      font-weight: 800;
+      font-size: 1.1rem;
+      margin-bottom: 1rem;
+      animation: legendPulse 2s infinite;
+    }
+
+    @keyframes legendPulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.7; }
+    }
+
+    /* Bingo grid */
+    #grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.5rem;
+      width: 100%;
+      max-width: 380px;
+    }
+
+    .square {
+      background: #1a1a2e;
+      border: 2px solid #2a2a3e;
+      border-radius: 10px;
+      padding: 0.6rem 0.4rem;
+      min-height: 80px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      font-size: 0.72rem;
+      line-height: 1.3;
+      color: #888;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+      position: relative;
+    }
+
+    .square:active { transform: scale(0.96); }
+
+    .square.center {
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: #a78bfa;
+      border-color: #4c1d95;
+    }
+
+    .square.marked {
+      background: #1e1b4b;
+      border-color: #7c3aed;
+      color: #c4b5fd;
+    }
+
+    .square.marked::after {
+      content: '✓';
+      position: absolute;
+      top: 4px;
+      right: 7px;
+      font-size: 0.7rem;
+      color: #7c3aed;
+    }
+
+    .square.center.marked {
+      background: #1c1917;
+      border-color: #d97706;
+      color: #fcd34d;
+    }
+
+    .square.center.marked::after { color: #d97706; }
+
+    /* Line completion highlight */
+    .square.in-line {
+      background: #1c1917;
+      border-color: #d97706;
+      color: #fcd34d;
+      animation: lineGlow 1s ease-in-out 4;
+    }
+
+    @keyframes lineGlow {
+      0%, 100% { box-shadow: none; }
+      50% { box-shadow: 0 0 16px #d97706, 0 0 32px #d97706aa; }
+    }
+
+    /* Primary button */
+    .btn-primary {
+      background: #7c3aed;
+      color: #fff;
+      border: none;
+      padding: 0.75rem 2rem;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      width: 100%;
+    }
+
+    .btn-primary:hover { opacity: 0.85; }
+  </style>
+</head>
+<body>
+
+  <header>🎓 Learnathon 2026</header>
+
+  <!-- Join modal -->
+  <div id="join-modal">
+    <div class="modal-box">
+      <h2>👋 Welcome!</h2>
+      <p>Enter your team name to get your bingo card.</p>
+      <input type="text" id="name-input" placeholder="Team Rocket" maxlength="40" />
+      <button class="btn-primary" onclick="join()">Get my card</button>
+      <p id="join-error" style="color:#ef4444;font-size:0.85rem;margin-top:0.5rem;"></p>
+    </div>
+  </div>
+
+  <!-- Card -->
+  <div id="team-header">
+    <div id="team-name-display"></div>
+    <div id="progress-line"></div>
+  </div>
+
+  <div id="legend-banner">🔥 LEARNATHON LEGEND 🔥</div>
+
+  <div id="grid"></div>
+
+  <script>
+    const LINES = [
+      [0,1,2],[3,4,5],[6,7,8],
+      [0,3,6],[1,4,7],[2,5,8],
+      [0,4,8],[2,4,6]
+    ];
+
+    let teamName = localStorage.getItem('learnathon-bingo-team') || '';
+    let squares = new Array(9).fill(false);
+    let serverSquares = [];
+
+    function join() {
+      const input = document.getElementById('name-input').value.trim();
+      if (!input) return;
+
+      fetch('/join', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: input }),
+      })
+        .then(r => r.json())
+        .then(data => {
+          if (data.error) {
+            document.getElementById('join-error').textContent = data.error;
+            return;
+          }
+          teamName = input;
+          localStorage.setItem('learnathon-bingo-team', teamName);
+          squares = data.team.squares;
+          document.getElementById('join-modal').style.display = 'none';
+          connectSSE();
+          render();
+        });
+    }
+
+    document.getElementById('name-input').addEventListener('keydown', e => {
+      if (e.key === 'Enter') join();
+    });
+
+    function toggleSquare(index) {
+      const newVal = !squares[index];
+      fetch('/mark', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: teamName, square: index, marked: newVal }),
+      })
+        .then(r => r.json())
+        .then(data => {
+          if (data.error) { alert(data.error); return; }
+          squares[index] = newVal;
+          if (data.newLine) celebrateLine();
+          if (data.newLegend) celebrateLegend();
+          render();
+        });
+    }
+
+    function getCompletedLines() {
+      return LINES.filter(line => line.every(i => squares[i]));
+    }
+
+    function render() {
+      if (!teamName || !serverSquares.length) return;
+
+      document.getElementById('team-name-display').textContent = teamName;
+
+      const completedLines = getCompletedLines();
+      const inLineSquares = new Set(completedLines.flat());
+      const marked = squares.filter(Boolean).length;
+
+      document.getElementById('progress-line').textContent =
+        `${marked}/9 squares · ${completedLines.length} line${completedLines.length !== 1 ? 's' : ''}`;
+
+      document.getElementById('legend-banner').style.display =
+        squares.every(Boolean) ? 'block' : 'none';
+
+      document.getElementById('grid').innerHTML = serverSquares.map((sq, i) => {
+        const isMarked = squares[i];
+        const inLine = inLineSquares.has(i);
+        const classes = [
+          'square',
+          sq.center ? 'center' : '',
+          isMarked ? 'marked' : '',
+          inLine ? 'in-line' : '',
+        ].filter(Boolean).join(' ');
+
+        return `<div class="${classes}" onclick="toggleSquare(${i})">${sq.label}</div>`;
+      }).join('');
+    }
+
+    function celebrateLine() {
+      // Haptic feedback on mobile
+      if (navigator.vibrate) navigator.vibrate([100, 50, 100]);
+    }
+
+    function celebrateLegend() {
+      if (navigator.vibrate) navigator.vibrate([200, 100, 200, 100, 400]);
+    }
+
+    function connectSSE() {
+      const es = new EventSource('/events');
+      es.onmessage = e => {
+        const data = JSON.parse(e.data);
+        serverSquares = data.squares;
+        // Sync our squares from server state
+        if (data.teams[teamName]) {
+          squares = data.teams[teamName].squares;
+        }
+        render();
+      };
+    }
+
+    // Auto-rejoin if name is stored
+    if (teamName) {
+      fetch('/join', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: teamName }),
+      })
+        .then(r => r.json())
+        .then(data => {
+          if (data.ok) {
+            squares = data.team.squares;
+            document.getElementById('join-modal').style.display = 'none';
+            connectSSE();
+          }
+        });
+    }
+  </script>
+</body>
+</html>
