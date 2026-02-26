@@ -1,9 +1,9 @@
 # Learnathon MCP Server
 
 An MCP (Model Context Protocol) server built for the Learnathon event itself.
-This is both a working tool for the day **and** a live demo of what an MCP server is.
+This is both a working tool for the day **and** a live example of what the MCP Server challenge track produces.
 
-> **Status:** To be built using the tools — Claude Code + Spark/Node.js
+> **Status:** Sketched — to be built before the event
 
 ---
 
@@ -22,28 +22,37 @@ Exposes these tools to any MCP-enabled AI agent (Claude Code, OpenCode, etc.):
 
 ---
 
-## Why Build This?
+## Security
 
-1. **It's useful on the day** — coaches can ask "what teams are still on Lab 1?" via their agent
-2. **It demonstrates MCP servers** — participants in the MCP Server challenge track can use this as a reference
-3. **It's a live meta-demo** — we built an event tool using the tools we're teaching
+**Event token**: A short random string generated before the event. Distributed via the event Slack channel and injected into all Codespaces as an org-level secret (`LEARNATHON_EVENT_TOKEN`). Every request must include it as a Bearer token. This keeps the server closed to the outside world without requiring individual logins.
+
+Teams identify themselves by team name/number in the request body. We trust participants not to mark each other's bingo — and if they do, it's a teachable moment.
 
 ---
 
-## Building It
+## Hosting: Radix (Equinor)
 
-This will be built using Claude Code (or OpenCode) as the primary tool, following the Learnathon workflow:
+Deploy as a Radix application for the day. Radix is Equinor's internal Kubernetes platform — easy to spin up, easy to tear down.
 
 ```
-spec → plan → build → verify → secure → ship
+Spin up:  1 day before the event
+Tear down: 1 day after the event
 ```
 
-See `SPEC.md` (to be created) for the mini-spec.
+A `radixconfig.yaml` will be provided in this directory. After the event, archive the repo, delete the Radix app. Done.
 
-**Tech stack (proposed):**
-- Node.js / TypeScript
-- `@modelcontextprotocol/sdk` (the official MCP TypeScript SDK)
-- Simple JSON file for state (no database needed for a one-day event)
+---
+
+## Equinor MCP Server Template (Varia)
+
+This project will also serve as a **reusable template** for teams at Equinor who want to build and deploy their own MCP servers on Radix. After the event, publish to Varia:
+
+- Working Node.js MCP server with auth pattern
+- `radixconfig.yaml` for Radix deployment
+- `Dockerfile`
+- README explaining the pattern
+
+> **Goal:** Any Equinor team should be able to fork this and have a running MCP server on Radix within a day.
 
 ---
 
@@ -55,8 +64,11 @@ Once running, add to `~/.claude/mcp_servers.json`:
 {
   "mcpServers": {
     "learnathon": {
-      "command": "node",
-      "args": ["/path/to/learnathon-mcp/dist/index.js"]
+      "type": "http",
+      "url": "https://learnathon-mcp.radix.equinor.com",
+      "headers": {
+        "Authorization": "Bearer ${LEARNATHON_EVENT_TOKEN}"
+      }
     }
   }
 }
@@ -65,14 +77,24 @@ Once running, add to `~/.claude/mcp_servers.json`:
 Then in any Claude Code session:
 ```
 "What teams have completed Lab 1?"
-"Mark Team 7's bingo square for 'Use agent mode to scaffold'"
+"Mark our bingo square for 'Use agent mode to scaffold'"
 "Show me all gotchas submitted so far"
 ```
 
 ---
 
+## Tech Stack (Proposed)
+
+- Node.js + TypeScript
+- `@modelcontextprotocol/sdk` (official MCP TypeScript SDK)
+- HTTP + SSE transport (one server, all participants connect)
+- JSON file for state persistence across restarts
+- Docker + `radixconfig.yaml` for Radix deployment
+
+---
+
 ## Stretch Goals
 
-- Bingo board displayed on screen (separate web view)
-- Real-time updates via SSE
+- Bingo board as a live web view (separate from the MCP interface)
 - Integration with the voting app
+- Post-event: publish as Varia article + template repo

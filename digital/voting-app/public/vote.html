@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>Learnathon 2026 — Vote</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #0f0f1a;
+      color: #fff;
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 1.5rem 1rem;
+    }
+
+    header {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #666;
+      margin-bottom: 2rem;
+    }
+
+    #status {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    #category-emoji {
+      font-size: 3rem;
+      display: block;
+      margin-bottom: 0.5rem;
+    }
+
+    #category-label {
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: #fff;
+      line-height: 1.2;
+    }
+
+    #voting-status {
+      margin-top: 0.75rem;
+      font-size: 0.9rem;
+      color: #888;
+    }
+
+    #voting-status.open {
+      color: #4ade80;
+      font-weight: 600;
+    }
+
+    #waiting {
+      text-align: center;
+      color: #555;
+      font-size: 1.1rem;
+      margin-top: 3rem;
+    }
+
+    #waiting span {
+      display: block;
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+
+    #teams {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+      width: 100%;
+      max-width: 400px;
+    }
+
+    .team-btn {
+      background: #1e1e2e;
+      border: 2px solid #333;
+      color: #fff;
+      padding: 1rem 0.5rem;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      text-align: center;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .team-btn:active {
+      transform: scale(0.96);
+    }
+
+    .team-btn:hover {
+      border-color: #7c3aed;
+      background: #2a1f3d;
+    }
+
+    .team-btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    #voted-message {
+      display: none;
+      text-align: center;
+      margin-top: 2rem;
+    }
+
+    #voted-message .checkmark {
+      font-size: 3rem;
+      display: block;
+    }
+
+    #voted-message p {
+      color: #4ade80;
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-top: 0.5rem;
+    }
+
+    #voted-message .voted-team {
+      color: #a78bfa;
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-top: 0.25rem;
+    }
+
+    #new-vote-btn {
+      display: none;
+      margin-top: 1.5rem;
+      background: none;
+      border: 1px solid #444;
+      color: #888;
+      padding: 0.5rem 1.25rem;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <header>🎓 Learnathon 2026</header>
+
+  <div id="status"></div>
+
+  <div id="waiting" style="display:none">
+    <span>⏳</span>
+    Waiting for the next category...
+  </div>
+
+  <div id="teams"></div>
+
+  <div id="voted-message">
+    <span class="checkmark">✅</span>
+    <p>Voted for</p>
+    <div class="voted-team" id="voted-team-name"></div>
+    <button id="new-vote-btn">Vote again</button>
+  </div>
+
+  <script>
+    let currentCategoryId = null;
+    let votedCategories = JSON.parse(localStorage.getItem('voted') || '{}');
+
+    function applyState(state) {
+      const statusEl = document.getElementById('status');
+      const waitingEl = document.getElementById('waiting');
+      const teamsEl = document.getElementById('teams');
+      const votedMsg = document.getElementById('voted-message');
+
+      // Nothing started yet
+      if (state.currentCategoryIndex < 0) {
+        statusEl.innerHTML = '';
+        waitingEl.style.display = 'block';
+        teamsEl.innerHTML = '';
+        votedMsg.style.display = 'none';
+        return;
+      }
+
+      const cat = state.categories[state.currentCategoryIndex];
+
+      // Category changed — reset voted state for this session if new category
+      if (cat.id !== currentCategoryId) {
+        currentCategoryId = cat.id;
+        document.getElementById('voted-message').style.display = 'none';
+        document.getElementById('new-vote-btn').style.display = 'none';
+      }
+
+      statusEl.innerHTML = `
+        <span id="category-emoji">${cat.emoji}</span>
+        <div id="category-label">${cat.label}</div>
+        <div id="voting-status" class="${state.votingOpen ? 'open' : ''}">
+          ${state.votingOpen ? '● Voting is open' : '○ Voting is closed'}
+        </div>
+      `;
+
+      waitingEl.style.display = 'none';
+
+      const alreadyVoted = votedCategories[cat.id];
+
+      if (alreadyVoted) {
+        teamsEl.innerHTML = '';
+        votedMsg.style.display = 'block';
+        document.getElementById('voted-team-name').textContent = alreadyVoted;
+        document.getElementById('new-vote-btn').style.display = 'inline-block';
+      } else {
+        votedMsg.style.display = 'none';
+        teamsEl.innerHTML = state.teams.map(team => `
+          <button class="team-btn" onclick="vote('${team.replace(/'/g, "\\'")}')"
+            ${!state.votingOpen ? 'disabled' : ''}>
+            ${team}
+          </button>
+        `).join('');
+      }
+    }
+
+    function vote(team) {
+      fetch('/vote', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ team }),
+      })
+        .then(r => r.json())
+        .then(data => {
+          if (data.ok) {
+            votedCategories[currentCategoryId] = team;
+            localStorage.setItem('voted', JSON.stringify(votedCategories));
+            document.getElementById('teams').innerHTML = '';
+            document.getElementById('voted-team-name').textContent = team;
+            document.getElementById('voted-message').style.display = 'block';
+            document.getElementById('new-vote-btn').style.display = 'inline-block';
+          } else {
+            alert(data.error || 'Could not cast vote');
+          }
+        });
+    }
+
+    document.getElementById('new-vote-btn').addEventListener('click', () => {
+      delete votedCategories[currentCategoryId];
+      localStorage.setItem('voted', JSON.stringify(votedCategories));
+      document.getElementById('voted-message').style.display = 'none';
+      // re-render from last known state
+      fetch('/state').then(r => r.json()).then(applyState);
+    });
+
+    // SSE
+    const es = new EventSource('/events');
+    es.onmessage = e => applyState(JSON.parse(e.data));
+    es.onerror = () => console.warn('SSE disconnected — retrying...');
+  </script>
+</body>
+</html>
