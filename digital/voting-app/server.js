@@ -1,5 +1,6 @@
 const express = require('express');
 const path = require('path');
+const fs = require('fs');
 
 const app = express();
 app.use(express.json());
@@ -8,6 +9,23 @@ app.use(express.static(path.join(__dirname, 'public')));
 // --- Config ---
 const ADMIN_TOKEN = process.env.ADMIN_TOKEN || 'admin-dev';
 const PORT = process.env.PORT || 3000;
+
+// --- Persistence ---
+const STATE_FILE = path.join(__dirname, 'state.json');
+
+function loadState(defaults) {
+  try {
+    const saved = JSON.parse(fs.readFileSync(STATE_FILE, 'utf8'));
+    // Always use the hardcoded categories — never load them from file
+    return { ...saved, categories: defaults.categories };
+  } catch {
+    return defaults;
+  }
+}
+
+function saveState() {
+  fs.writeFileSync(STATE_FILE, JSON.stringify(state, null, 2));
+}
 
 // --- State ---
 const CATEGORIES = [
@@ -19,14 +37,14 @@ const CATEGORIES = [
   { id: 'best-fail',        label: 'Best Fail Story',        emoji: '😂' },
 ];
 
-let state = {
+let state = loadState({
   teams: [],
   categories: CATEGORIES,
-  currentCategoryIndex: -1,  // -1 = not started
+  currentCategoryIndex: -1,
   votingOpen: false,
   revealed: false,
-  votes: {},                  // { categoryId: { teamName: count } }
-};
+  votes: {},
+});
 
 // --- SSE ---
 const clients = new Set();
@@ -70,6 +88,7 @@ app.post('/vote', (req, res) => {
   if (!state.votes[categoryId]) state.votes[categoryId] = {};
   state.votes[categoryId][team] = (state.votes[categoryId][team] || 0) + 1;
 
+  saveState();
   broadcast();
   res.json({ ok: true });
 });
@@ -91,6 +110,7 @@ app.post('/admin/teams', requireAdmin, (req, res) => {
     return res.status(400).json({ error: 'teams must be an array' });
   }
   state.teams = teams.map(t => t.trim()).filter(Boolean);
+  saveState();
   broadcast();
   res.json({ ok: true, teams: state.teams });
 });
@@ -102,6 +122,7 @@ app.post('/admin/next', requireAdmin, (req, res) => {
   state.votingOpen = false;
   state.revealed = false;
   state.currentCategoryIndex += 1;
+  saveState();
   broadcast();
   res.json({ ok: true, category: state.categories[state.currentCategoryIndex] });
 });
@@ -111,18 +132,21 @@ app.post('/admin/open', requireAdmin, (req, res) => {
     return res.status(400).json({ error: 'Advance to a category first' });
   }
   state.votingOpen = true;
+  saveState();
   broadcast();
   res.json({ ok: true });
 });
 
 app.post('/admin/close', requireAdmin, (req, res) => {
   state.votingOpen = false;
+  saveState();
   broadcast();
   res.json({ ok: true });
 });
 
 app.post('/admin/reveal', requireAdmin, (req, res) => {
   state.revealed = true;
+  saveState();
   broadcast();
   res.json({ ok: true });
 });
@@ -132,6 +156,7 @@ app.post('/admin/reset', requireAdmin, (req, res) => {
   state.votingOpen = false;
   state.revealed = false;
   state.votes = {};
+  saveState();
   broadcast();
   res.json({ ok: true });
 });
@@ -144,6 +169,11 @@ app.listen(PORT, () => {
   console.log(`  Admin panel:  http://localhost:${PORT}/admin.html`);
   console.log(`\nAdmin token: ${ADMIN_TOKEN}`);
   if (ADMIN_TOKEN === 'admin-dev') {
-    console.log('  ⚠️  Using default dev token — set ADMIN_TOKEN env var in production\n');
+    console.log('  ⚠️  Using default dev token — set ADMIN_TOKEN env var in production');
   }
+  console.log(`✓  State persisted to: ${STATE_FILE}`);
+  if (state.currentCategoryIndex >= 0) {
+    console.log(`   Resumed from category ${state.currentCategoryIndex + 1}/6.`);
+  }
+  console.log();
 });
