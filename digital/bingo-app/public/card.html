@@ -16,13 +16,19 @@
       flex-direction: column;
       align-items: center;
       padding: 1.25rem 1rem 2rem;
+      opacity: 0;
+      animation: fadeIn 0.5s ease forwards;
+    }
+
+    @keyframes fadeIn {
+      to { opacity: 1; }
     }
 
     header {
-      font-size: 0.7rem;
+      font-size: 0.8rem;
       text-transform: uppercase;
       letter-spacing: 0.12em;
-      color: #555;
+      color: #777;
       margin-bottom: 1rem;
     }
 
@@ -30,12 +36,14 @@
     #join-modal {
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,0.85);
+      background: rgba(0,0,0,0.70);
       display: flex;
       align-items: center;
       justify-content: center;
       z-index: 100;
       padding: 1.5rem;
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
     }
 
     .modal-box {
@@ -48,27 +56,47 @@
       text-align: center;
     }
 
-    .modal-box h2 { font-size: 1.4rem; margin-bottom: 0.5rem; }
-    .modal-box p  { color: #666; font-size: 0.9rem; margin-bottom: 1.25rem; }
+    .modal-emoji {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .modal-box h2 { font-size: 1.4rem; margin-bottom: 0.3rem; }
+    .modal-box p  { color: #888; font-size: 0.9rem; margin-bottom: 1.25rem; }
 
     .modal-box input {
       width: 100%;
-      padding: 0.75rem 1rem;
+      padding: 0.9rem 1rem;
       background: #0f0f1a;
-      border: 1px solid #444;
-      border-radius: 10px;
+      border: 2px solid #333;
+      border-radius: 12px;
       color: #fff;
-      font-size: 1.1rem;
+      font-size: 1.15rem;
       text-align: center;
       margin-bottom: 1rem;
+      transition: border-color 0.2s;
     }
 
+    .modal-box input::placeholder { color: #555; }
     .modal-box input:focus { outline: none; border-color: #7c3aed; }
+
+    .join-error {
+      display: none;
+      background: rgba(239, 68, 68, 0.12);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      border-radius: 10px;
+      padding: 0.6rem 0.75rem;
+      font-size: 0.85rem;
+      color: #fca5a5;
+      margin-top: 0.75rem;
+    }
+
+    .join-error.visible { display: block; }
 
     /* Team header */
     #team-header {
       text-align: center;
-      margin-bottom: 1.25rem;
+      margin-bottom: 0.75rem;
     }
 
     #team-name-display {
@@ -77,27 +105,82 @@
       color: #a78bfa;
     }
 
-    #progress-line {
-      font-size: 0.8rem;
-      color: #555;
-      margin-top: 0.25rem;
+    /* Progress bar */
+    #progress-area {
+      width: 100%;
+      max-width: 380px;
+      margin-bottom: 1rem;
     }
 
+    #progress-bar-track {
+      width: 100%;
+      height: 4px;
+      background: #1e1e30;
+      border-radius: 4px;
+      overflow: hidden;
+      margin-bottom: 0.4rem;
+    }
+
+    #progress-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #7c3aed, #a78bfa);
+      border-radius: 4px;
+      transition: width 0.4s ease;
+      width: 0%;
+    }
+
+    #progress-line {
+      font-size: 0.8rem;
+      color: #999;
+      text-align: center;
+    }
+
+    /* Legend banner - fixed at top */
     #legend-banner {
       display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
       background: linear-gradient(135deg, #92400e, #d97706);
-      border-radius: 12px;
       padding: 0.75rem 1.25rem;
       text-align: center;
       font-weight: 800;
       font-size: 1.1rem;
-      margin-bottom: 1rem;
+      z-index: 50;
       animation: legendPulse 2s infinite;
+    }
+
+    #legend-banner.visible {
+      display: block;
     }
 
     @keyframes legendPulse {
       0%, 100% { opacity: 1; }
-      50% { opacity: 0.7; }
+      50% { opacity: 0.8; }
+    }
+
+    /* Line toast */
+    #line-toast {
+      position: fixed;
+      top: 1.5rem;
+      left: 50%;
+      transform: translateX(-50%) translateY(-20px);
+      background: linear-gradient(135deg, #92400e, #d97706);
+      color: #fff;
+      padding: 0.6rem 1.5rem;
+      border-radius: 50px;
+      font-weight: 700;
+      font-size: 0.95rem;
+      opacity: 0;
+      pointer-events: none;
+      z-index: 60;
+      transition: opacity 0.3s, transform 0.3s;
+    }
+
+    #line-toast.visible {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
     }
 
     /* Bingo grid */
@@ -112,9 +195,9 @@
     .square {
       background: #1a1a2e;
       border: 2px solid #2a2a3e;
-      border-radius: 10px;
-      padding: 0.6rem 0.4rem;
-      min-height: 80px;
+      border-radius: 12px;
+      padding: 0.75rem 0.5rem;
+      min-height: 90px;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -122,21 +205,40 @@
       text-align: center;
       cursor: pointer;
       transition: all 0.15s ease;
-      font-size: 0.72rem;
-      line-height: 1.3;
-      color: #888;
+      font-size: 0.85rem;
+      line-height: 1.35;
+      color: #999;
       -webkit-tap-highlight-color: transparent;
       user-select: none;
       position: relative;
+      overflow: hidden;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
     }
 
     .square:active { transform: scale(0.96); }
 
+    /* Hover/focus state for unmarked squares */
+    @media (hover: hover) {
+      .square:not(.marked):hover {
+        border-color: #444;
+        background: #1e1e34;
+      }
+    }
+
+    .square:not(.marked):active {
+      border-color: #555;
+    }
+
     .square.center {
-      font-size: 0.7rem;
+      font-size: 0.82rem;
       font-weight: 700;
       color: #a78bfa;
-      border-color: #4c1d95;
+      border: 2px solid transparent;
+      background-image: linear-gradient(#1a1a2e, #1a1a2e), linear-gradient(135deg, #7c3aed, #a78bfa, #7c3aed);
+      background-origin: border-box;
+      background-clip: padding-box, border-box;
     }
 
     .square.marked {
@@ -146,33 +248,46 @@
     }
 
     .square.marked::after {
-      content: '✓';
+      content: '\2713';
       position: absolute;
-      top: 4px;
-      right: 7px;
-      font-size: 0.7rem;
+      top: 5px;
+      right: 8px;
+      font-size: 0.65rem;
       color: #7c3aed;
+      font-weight: 700;
+      background: rgba(124, 58, 237, 0.15);
+      width: 18px;
+      height: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
     }
 
     .square.center.marked {
       background: #1c1917;
-      border-color: #d97706;
+      border: 2px solid #d97706;
+      background-image: none;
       color: #fcd34d;
     }
 
-    .square.center.marked::after { color: #d97706; }
+    .square.center.marked::after {
+      color: #d97706;
+      background: rgba(217, 119, 6, 0.15);
+    }
 
     /* Line completion highlight */
     .square.in-line {
       background: #1c1917;
       border-color: #d97706;
+      background-image: none;
       color: #fcd34d;
       animation: lineGlow 1s ease-in-out 4;
     }
 
     @keyframes lineGlow {
       0%, 100% { box-shadow: none; }
-      50% { box-shadow: 0 0 16px #d97706, 0 0 32px #d97706aa; }
+      50% { box-shadow: 0 0 20px #d97706, 0 0 40px #d97706aa, 0 0 60px #d9770644; }
     }
 
     /* Primary button */
@@ -180,39 +295,60 @@
       background: #7c3aed;
       color: #fff;
       border: none;
-      padding: 0.75rem 2rem;
-      border-radius: 10px;
+      padding: 0.85rem 2rem;
+      border-radius: 12px;
       font-size: 1rem;
       font-weight: 700;
       cursor: pointer;
       width: 100%;
+      transition: opacity 0.15s;
     }
 
     .btn-primary:hover { opacity: 0.85; }
+    .btn-primary:active { transform: scale(0.98); }
+
+    .square-label {
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      word-break: break-word;
+    }
   </style>
 </head>
 <body>
 
-  <header>🎓 Learnathon 2026</header>
+  <header>Learnathon 2026</header>
+
+  <!-- Line completion toast -->
+  <div id="line-toast">Line completed!</div>
 
   <!-- Join modal -->
   <div id="join-modal">
     <div class="modal-box">
-      <h2>👋 Welcome!</h2>
-      <p>Enter your team name to get your bingo card.</p>
-      <input type="text" id="name-input" placeholder="Team Rocket" maxlength="40" />
+      <div class="modal-emoji">🎯</div>
+      <h2>Join the Bingo</h2>
+      <p>Enter your team name to get your card.</p>
+      <input type="text" id="name-input" placeholder="e.g. Team Rocket" maxlength="40" autocomplete="off" />
       <button class="btn-primary" onclick="join()">Get my card</button>
-      <p id="join-error" style="color:#ef4444;font-size:0.85rem;margin-top:0.5rem;"></p>
+      <div class="join-error" id="join-error"></div>
     </div>
   </div>
+
+  <!-- Legend banner (fixed top) -->
+  <div id="legend-banner">LEARNATHON LEGEND</div>
 
   <!-- Card -->
   <div id="team-header">
     <div id="team-name-display"></div>
-    <div id="progress-line"></div>
   </div>
 
-  <div id="legend-banner">🔥 LEARNATHON LEGEND 🔥</div>
+  <div id="progress-area">
+    <div id="progress-bar-track">
+      <div id="progress-bar-fill"></div>
+    </div>
+    <div id="progress-line"></div>
+  </div>
 
   <div id="grid"></div>
 
@@ -226,6 +362,7 @@
     let teamName = localStorage.getItem('learnathon-bingo-team') || '';
     let squares = new Array(9).fill(false);
     let serverSquares = [];
+    let prevLineCount = 0;
 
     function join() {
       const input = document.getElementById('name-input').value.trim();
@@ -239,20 +376,32 @@
         .then(r => r.json())
         .then(data => {
           if (data.error) {
-            document.getElementById('join-error').textContent = data.error;
+            showError(data.error);
             return;
           }
           teamName = input;
           localStorage.setItem('learnathon-bingo-team', teamName);
           squares = data.team.squares;
+          prevLineCount = getCompletedLines().length;
           document.getElementById('join-modal').style.display = 'none';
           connectSSE();
           render();
         });
     }
 
+    function showError(msg) {
+      const el = document.getElementById('join-error');
+      el.textContent = msg;
+      el.classList.add('visible');
+    }
+
     document.getElementById('name-input').addEventListener('keydown', e => {
       if (e.key === 'Enter') join();
+    });
+
+    // Hide error on input change
+    document.getElementById('name-input').addEventListener('input', () => {
+      document.getElementById('join-error').classList.remove('visible');
     });
 
     function toggleSquare(index) {
@@ -285,11 +434,20 @@
       const inLineSquares = new Set(completedLines.flat());
       const marked = squares.filter(Boolean).length;
 
+      // Progress bar
+      document.getElementById('progress-bar-fill').style.width = `${(marked / 9) * 100}%`;
       document.getElementById('progress-line').textContent =
-        `${marked}/9 squares · ${completedLines.length} line${completedLines.length !== 1 ? 's' : ''}`;
+        `${marked}/9 squares \u00b7 ${completedLines.length} line${completedLines.length !== 1 ? 's' : ''}`;
 
-      document.getElementById('legend-banner').style.display =
-        squares.every(Boolean) ? 'block' : 'none';
+      // Legend banner
+      const legendBanner = document.getElementById('legend-banner');
+      if (squares.every(Boolean)) {
+        legendBanner.classList.add('visible');
+        document.body.style.paddingTop = '4rem';
+      } else {
+        legendBanner.classList.remove('visible');
+        document.body.style.paddingTop = '';
+      }
 
       document.getElementById('grid').innerHTML = serverSquares.map((sq, i) => {
         const isMarked = squares[i];
@@ -301,13 +459,19 @@
           inLine ? 'in-line' : '',
         ].filter(Boolean).join(' ');
 
-        return `<div class="${classes}" onclick="toggleSquare(${i})">${sq.label}</div>`;
+        return `<div class="${classes}" onclick="toggleSquare(${i})"><span class="square-label">${sq.label}</span></div>`;
       }).join('');
     }
 
     function celebrateLine() {
-      // Haptic feedback on mobile
       if (navigator.vibrate) navigator.vibrate([100, 50, 100]);
+      showLineToast();
+    }
+
+    function showLineToast() {
+      const toast = document.getElementById('line-toast');
+      toast.classList.add('visible');
+      setTimeout(() => toast.classList.remove('visible'), 2000);
     }
 
     function celebrateLegend() {
@@ -338,6 +502,7 @@
         .then(data => {
           if (data.ok) {
             squares = data.team.squares;
+            prevLineCount = getCompletedLines().length;
             document.getElementById('join-modal').style.display = 'none';
             connectSSE();
           }

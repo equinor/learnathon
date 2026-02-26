@@ -125,11 +125,21 @@ app.post('/mark', (req, res) => {
   res.json({ ok: true, newLine, newLegend, isLegend: team.isLegend });
 });
 
+// --- Admin reset ---
+app.post('/reset', (req, res) => {
+  teams = {};
+  saveState();
+  broadcast();
+  console.log('🔄 All bingo cards reset by admin.');
+  res.json({ ok: true });
+});
+
 // --- Start ---
 app.listen(PORT, () => {
   console.log(`\nLearnathon Bingo App running on http://localhost:${PORT}`);
   console.log(`  Team card:  http://localhost:${PORT}/card.html`);
   console.log(`  Wall view:  http://localhost:${PORT}/wall.html`);
+  console.log(`  Admin:      http://localhost:${PORT}/admin.html`);
   const teamCount = Object.keys(teams).length;
   console.log(`\n✓  State persisted to: ${STATE_FILE}`);
   if (teamCount > 0) {
