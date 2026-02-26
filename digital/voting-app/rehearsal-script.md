@@ -32,9 +32,9 @@ The goal is not to rebuild this exact app. The goal is to show the **workflow** 
 ```
 What: A live audience voting app for the awards ceremony.
 Who: Participants vote on their phones. Facilitator controls the flow. Big screen shows results.
-Why: Make the awards theatrical — everyone votes live, results appear in real time.
+Why: Make the awards theatrical — everyone votes live, results revealed one by one.
 Scope: Mobile voting page, admin control panel, screen display. No login, honor system.
-Done when: Facilitator can open a category, participants vote on their phone, screen shows results.
+Done when: Participants can vote on all 6 categories at once, facilitator reveals winners one by one on the big screen.
 ```
 
 **Say:**
@@ -81,8 +81,9 @@ One step at a time.
 
 **Continue with the screen view:**
 ```
-Good. Now add the big screen view — shows the current category,
-live vote counts when revealed. Same server, new HTML file.
+Good. Now add the big screen view — shows "VOTING IS OPEN" with the URL
+when voting is active, then switches to a reveal view where the facilitator
+can show results one category at a time. Same server, new HTML file.
 ```
 
 **If something breaks:** Don't panic. Say:

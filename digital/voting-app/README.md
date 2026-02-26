@@ -1,46 +1,59 @@
 # Learnathon Voting App
 
-Live audience voting for the awards ceremony.
+Live audience voting for the awards ceremony — vote once on all categories, reveal winners one by one.
 
-> **Status:** To be built — **primary candidate for the live demo at 8:45**
-> See `docs/live-demo-plan.md`
-
----
-
-## What It Does
-
-- Participants open a URL on their phone
-- Vote on one of 6 award categories per team
-- Live results shown on the big screen
-- Facilitator can reset/open/close voting
+> **Primary candidate for the live demo at 8:45** — see `rehearsal-script.md`
 
 ---
 
-## Award Categories
+## How It Works
 
-- Best Creation
-- Most Creative AI Use
-- Best Safety Practice
-- Best Risk Catch
-- People's Choice
-- Best Fail Story
+1. Facilitator enters team names in the admin panel
+2. Opens voting — participants see all 6 categories on their phone and vote one team per category
+3. After 2–3 min, facilitator closes voting
+4. Facilitator reveals winners one at a time on the big screen (gameshow-style)
+
+Three views:
+- **`/vote.html`** — mobile voting page for participants
+- **`/screen.html`** — projector view with bar charts and reveals
+- **`/admin.html`** — facilitator control panel with guidance banners
 
 ---
 
-## Build Plan
+## Award Categories (reveal order)
 
-**Recommended:** Build this live during the 8:45 demo using GitHub Spark.
+1. Best Creation
+2. Most Creative AI Use
+3. Best Safety Practice
+4. Best Risk Catch
+5. Best Fail Story
+6. People's Choice
 
-Why:
-- Spark handles hosting — sharable URL immediately
-- Simple enough to build in 20 minutes
-- Visually impressive (live vote counts updating)
-- Directly useful — used 6 hours later
+---
 
-**Fallback:** Static HTML with GitHub Pages hosting if Spark has issues.
+## Run Locally
+
+```bash
+npm install
+node server.js
+# → http://localhost:3000
+```
+
+Default admin token: `admin-dev` (set `ADMIN_TOKEN` env var in production).
+
+State is persisted to `state.json` — survives restarts. Use **Reset All** in admin to clear.
+
+---
+
+## Docker
+
+```bash
+docker build -t voting-app .
+docker run -p 3000:3000 -e ADMIN_TOKEN=my-secret voting-app
+```
 
 ---
 
 ## Security Note
 
-This takes no sensitive user input — just button clicks for categories. Low security risk. Still worth running the security pulse on as a teaching moment ("even simple apps deserve a check").
+This takes no sensitive user input — just button clicks for team names. Low security risk. Still worth running the security pulse on as a teaching moment ("even simple apps deserve a check").

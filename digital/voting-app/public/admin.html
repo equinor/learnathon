@@ -16,200 +16,95 @@
     }
 
     h1 { font-size: 1.4rem; font-weight: 700; margin-bottom: 0.25rem; }
-    .subtitle { color: #555; font-size: 0.85rem; margin-bottom: 2rem; }
+    .subtitle { color: #555; font-size: 0.85rem; margin-bottom: 1.5rem; }
 
     /* Login */
-    #login-screen {
-      max-width: 360px;
-      margin: 10vh auto;
-      text-align: center;
-    }
-
+    #login-screen { max-width: 360px; margin: 10vh auto; text-align: center; }
     #login-screen input {
-      width: 100%;
-      padding: 0.75rem 1rem;
-      background: #1a1a2e;
-      border: 1px solid #333;
-      border-radius: 8px;
-      color: #fff;
-      font-size: 1rem;
-      margin: 1rem 0;
+      width: 100%; padding: 0.75rem 1rem; background: #1a1a2e;
+      border: 1px solid #333; border-radius: 8px; color: #fff;
+      font-size: 1rem; margin: 1rem 0;
     }
+    #login-screen button { width: 100%; }
 
-    #login-screen button {
-      width: 100%;
-    }
-
-    /* Main layout */
+    /* App */
     #app { display: none; max-width: 800px; }
 
     .card {
-      background: #1a1a2e;
-      border: 1px solid #2a2a3e;
-      border-radius: 12px;
-      padding: 1.25rem;
-      margin-bottom: 1.25rem;
+      background: #1a1a2e; border: 1px solid #2a2a3e;
+      border-radius: 12px; padding: 1.25rem; margin-bottom: 1.25rem;
     }
-
     .card h2 {
-      font-size: 0.8rem;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: #555;
-      margin-bottom: 1rem;
+      font-size: 0.8rem; text-transform: uppercase;
+      letter-spacing: 0.08em; color: #555; margin-bottom: 1rem;
     }
 
     button {
-      padding: 0.6rem 1.25rem;
-      border: none;
-      border-radius: 8px;
-      font-size: 0.9rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: opacity 0.15s;
+      padding: 0.6rem 1.25rem; border: none; border-radius: 8px;
+      font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: opacity 0.15s;
     }
-
     button:hover { opacity: 0.85; }
     button:disabled { opacity: 0.35; cursor: not-allowed; }
 
-    .btn-primary   { background: #7c3aed; color: #fff; }
-    .btn-green     { background: #16a34a; color: #fff; }
-    .btn-red       { background: #dc2626; color: #fff; }
-    .btn-amber     { background: #d97706; color: #fff; }
-    .btn-ghost     { background: #2a2a3e; color: #ccc; }
-
+    .btn-primary { background: #7c3aed; color: #fff; }
+    .btn-green   { background: #16a34a; color: #fff; }
+    .btn-red     { background: #dc2626; color: #fff; }
+    .btn-amber   { background: #d97706; color: #fff; }
+    .btn-ghost   { background: #2a2a3e; color: #ccc; }
     .btn-row { display: flex; gap: 0.75rem; flex-wrap: wrap; }
 
     textarea {
-      width: 100%;
-      background: #0f0f1a;
-      border: 1px solid #333;
-      border-radius: 8px;
-      color: #fff;
-      padding: 0.75rem;
-      font-size: 0.9rem;
-      resize: vertical;
-      min-height: 120px;
-      font-family: inherit;
+      width: 100%; background: #0f0f1a; border: 1px solid #333;
+      border-radius: 8px; color: #fff; padding: 0.75rem;
+      font-size: 0.9rem; resize: vertical; min-height: 120px; font-family: inherit;
     }
 
-    /* Next-step guidance banner */
+    /* Guidance banner */
     #guidance {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      padding: 0.9rem 1.1rem;
-      border-radius: 12px;
-      margin-bottom: 1.25rem;
-      font-size: 0.95rem;
-      font-weight: 600;
-      border: 1px solid transparent;
-      transition: background 0.3s;
+      display: flex; align-items: center; gap: 0.75rem;
+      padding: 0.9rem 1.1rem; border-radius: 12px; margin-bottom: 1.25rem;
+      font-size: 0.95rem; font-weight: 600; border: 1px solid transparent;
     }
-
-    #guidance.step-setup   { background: #1c1917; border-color: #44403c; color: #d6d3d1; }
-    #guidance.step-ready   { background: #1e1b4b; border-color: #4338ca; color: #c7d2fe; }
-    #guidance.step-open    { background: #14532d; border-color: #15803d; color: #86efac; }
-    #guidance.step-close   { background: #1c1917; border-color: #b45309; color: #fcd34d; }
-    #guidance.step-reveal  { background: #2e1065; border-color: #7c3aed; color: #e9d5ff; }
-    #guidance.step-next    { background: #1e1b4b; border-color: #4338ca; color: #c7d2fe; }
-    #guidance.step-done    { background: #14532d; border-color: #15803d; color: #86efac; }
-
+    #guidance.step-setup  { background: #1c1917; border-color: #44403c; color: #d6d3d1; }
+    #guidance.step-ready  { background: #1e1b4b; border-color: #4338ca; color: #c7d2fe; }
+    #guidance.step-open   { background: #14532d; border-color: #15803d; color: #86efac; }
+    #guidance.step-close  { background: #1c1917; border-color: #b45309; color: #fcd34d; }
+    #guidance.step-reveal { background: #2e1065; border-color: #7c3aed; color: #e9d5ff; }
+    #guidance.step-done   { background: #14532d; border-color: #15803d; color: #86efac; }
     #guidance-icon { font-size: 1.3rem; flex-shrink: 0; }
 
     /* Vote URL bar */
     #vote-url-bar {
-      display: none;
-      align-items: center;
-      gap: 0.75rem;
-      padding: 0.6rem 1rem;
-      background: #14532d;
-      border: 1px solid #15803d;
-      border-radius: 10px;
-      margin-bottom: 1.25rem;
-      font-size: 0.85rem;
-      color: #86efac;
+      display: none; align-items: center; gap: 0.75rem;
+      padding: 0.6rem 1rem; background: #14532d; border: 1px solid #15803d;
+      border-radius: 10px; margin-bottom: 1.25rem; font-size: 0.85rem; color: #86efac;
     }
-
     #vote-url-bar span { font-weight: 700; font-family: monospace; font-size: 0.9rem; }
-
-    /* Status bar */
-    #status-bar {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      padding: 0.75rem 1rem;
-      background: #1a1a2e;
-      border: 1px solid #2a2a3e;
-      border-radius: 12px;
-      margin-bottom: 1.25rem;
-      font-size: 0.9rem;
-    }
-
-    .status-pill {
-      padding: 0.2rem 0.6rem;
-      border-radius: 20px;
-      font-size: 0.75rem;
-      font-weight: 700;
-      text-transform: uppercase;
-    }
-
-    .pill-open    { background: #14532d; color: #4ade80; }
-    .pill-closed  { background: #2a2a3e; color: #666; }
-    .pill-waiting { background: #1c1917; color: #888; }
 
     /* Category list */
     .cat-item {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      padding: 0.5rem 0;
-      border-bottom: 1px solid #1e1e30;
+      display: flex; align-items: center; gap: 0.75rem;
+      padding: 0.5rem 0; border-bottom: 1px solid #1e1e30;
     }
-
     .cat-item:last-child { border-bottom: none; }
-
     .cat-emoji { font-size: 1.2rem; width: 2rem; text-align: center; }
     .cat-name  { flex: 1; font-size: 0.95rem; }
     .cat-state { font-size: 0.75rem; color: #555; }
-    .cat-state.active { color: #a78bfa; font-weight: 700; }
+    .cat-state.revealed { color: #4ade80; font-weight: 700; }
+    .cat-state.next     { color: #fbbf24; font-weight: 700; }
 
-    /* Vote table */
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 0.9rem;
-    }
+    /* Vote totals */
+    .cat-votes { font-size: 0.75rem; color: #555; width: 60px; text-align: right; }
 
-    th {
-      text-align: left;
-      color: #555;
-      font-size: 0.75rem;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      padding: 0.4rem 0.5rem;
-      border-bottom: 1px solid #2a2a3e;
-    }
-
-    td {
-      padding: 0.4rem 0.5rem;
-      border-bottom: 1px solid #1a1a2e;
-    }
-
+    table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+    th { text-align: left; color: #555; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.06em; padding: 0.4rem 0.5rem; border-bottom: 1px solid #2a2a3e; }
+    td { padding: 0.4rem 0.5rem; border-bottom: 1px solid #1a1a2e; }
     tr.winner td { color: #fbbf24; font-weight: 700; }
 
     .toast {
-      position: fixed;
-      bottom: 1.5rem;
-      left: 50%;
-      transform: translateX(-50%);
-      background: #4ade80;
-      color: #000;
-      padding: 0.6rem 1.25rem;
-      border-radius: 8px;
-      font-weight: 600;
-      font-size: 0.9rem;
-      display: none;
+      position: fixed; bottom: 1.5rem; left: 50%; transform: translateX(-50%);
+      background: #4ade80; color: #000; padding: 0.6rem 1.25rem; border-radius: 8px;
+      font-weight: 600; font-size: 0.9rem; display: none;
     }
   </style>
 </head>
@@ -226,7 +121,7 @@
   <!-- App -->
   <div id="app">
     <h1>🎓 Learnathon 2026 — Admin</h1>
-    <p class="subtitle">Facilitator control panel</p>
+    <p class="subtitle">Facilitator control panel — vote once, reveal one by one</p>
 
     <div id="guidance">
       <span id="guidance-icon"></span>
@@ -237,27 +132,18 @@
       📱 Tell participants to open: <span id="vote-url"></span>
     </div>
 
-    <div id="status-bar">
-      <span id="sb-category">Not started</span>
-      <span id="sb-pill" class="status-pill pill-waiting">Waiting</span>
-      <span id="sb-votes" style="margin-left:auto;color:#555;"></span>
-    </div>
-
     <!-- Flow controls -->
     <div class="card">
-      <h2>Gameshow Controls</h2>
+      <h2>Ceremony Controls</h2>
       <div class="btn-row">
-        <button class="btn-primary" id="btn-next" onclick="api('admin/next')">
-          ▶ Next Category
+        <button class="btn-green" id="btn-open" onclick="api('admin/open')">
+          🗳️ Open Voting
         </button>
-        <button class="btn-green" id="btn-open" onclick="api('admin/open')" disabled>
-          🔓 Open Voting
-        </button>
-        <button class="btn-ghost" id="btn-close" onclick="api('admin/close')" disabled>
+        <button class="btn-ghost" id="btn-close" onclick="api('admin/close')">
           🔒 Close Voting
         </button>
-        <button class="btn-amber" id="btn-reveal" onclick="api('admin/reveal')" disabled>
-          ✨ Reveal Results
+        <button class="btn-amber" id="btn-reveal" onclick="api('admin/reveal-next')">
+          ✨ Reveal Next
         </button>
         <button class="btn-red" onclick="confirmReset()">
           ↺ Reset All
@@ -267,14 +153,14 @@
 
     <!-- Categories overview -->
     <div class="card">
-      <h2>Categories</h2>
+      <h2>Reveal Order</h2>
       <div id="cat-list"></div>
     </div>
 
-    <!-- Vote counts -->
-    <div class="card">
-      <h2>Live Vote Counts — Current Category</h2>
-      <div id="vote-table">No votes yet</div>
+    <!-- Vote counts for current revealed category -->
+    <div class="card" id="vote-detail-card" style="display:none;">
+      <h2 id="vote-detail-title">Votes</h2>
+      <div id="vote-table"></div>
     </div>
 
     <!-- Team setup -->
@@ -294,16 +180,12 @@
 
   <script>
     let adminToken = '';
-    let currentState = null;
 
     function login() {
       adminToken = document.getElementById('token-input').value.trim();
       fetch('/state', { headers: { 'x-admin-token': adminToken } })
-        .then(r => {
-          if (r.status === 401) throw new Error('Bad token');
-          return r.json();
-        })
-        .then(state => {
+        .then(r => { if (r.status === 401) throw new Error(); return r.json(); })
+        .then(() => {
           document.getElementById('login-screen').style.display = 'none';
           document.getElementById('app').style.display = 'block';
           connectSSE();
@@ -317,164 +199,135 @@
       if (e.key === 'Enter') login();
     });
 
-    function api(endpoint, method = 'POST', body = {}) {
+    function api(endpoint) {
       return fetch(`/${endpoint}`, {
-        method,
-        headers: {
-          'Content-Type': 'application/json',
-          'x-admin-token': adminToken,
-        },
-        body: JSON.stringify(body),
-      })
-        .then(r => r.json())
-        .then(data => {
-          if (data.error) showToast('❌ ' + data.error, '#ef4444');
-        });
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'x-admin-token': adminToken },
+        body: '{}',
+      }).then(r => r.json()).then(data => {
+        if (data.error) showToast('❌ ' + data.error, '#ef4444');
+      });
     }
 
     function saveTeams() {
       const raw = document.getElementById('teams-input').value;
       const teams = raw.split('\n').map(t => t.trim()).filter(Boolean);
-      api('admin/teams', 'POST', { teams })
-        .then(() => showToast('✓ Teams saved'));
+      fetch('/admin/teams', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'x-admin-token': adminToken },
+        body: JSON.stringify({ teams }),
+      }).then(r => r.json()).then(data => {
+        if (data.ok) showToast('✓ ' + data.teams.length + ' teams saved');
+        else showToast('❌ ' + data.error, '#ef4444');
+      });
     }
 
     function confirmReset() {
-      if (confirm('Reset all votes and go back to the start?')) {
-        api('admin/reset');
-      }
+      if (confirm('Reset all votes and reveals?')) api('admin/reset');
     }
 
     function showToast(msg, bg = '#4ade80') {
       const t = document.getElementById('toast');
-      t.textContent = msg;
-      t.style.background = bg;
+      t.textContent = msg; t.style.background = bg;
       t.style.display = 'block';
       setTimeout(() => t.style.display = 'none', 2000);
     }
 
     function applyState(state) {
-      currentState = state;
-      const cat = state.currentCategoryIndex >= 0
-        ? state.categories[state.currentCategoryIndex]
-        : null;
+      const allRevealed = state.revealedUpTo >= state.categories.length - 1;
 
-      // --- Guidance banner ---
-      const guidance = document.getElementById('guidance');
+      // --- Guidance ---
+      const g = document.getElementById('guidance');
       const icon = document.getElementById('guidance-icon');
       const text = document.getElementById('guidance-text');
-      const isLast = state.currentCategoryIndex >= state.categories.length - 1;
 
       if (!state.teams.length) {
-        guidance.className = 'step-setup';
+        g.className = 'step-setup';
         icon.textContent = '①';
-        text.textContent = 'Start here: enter your team names below and click Save Teams.';
-      } else if (state.currentCategoryIndex < 0) {
-        guidance.className = 'step-ready';
+        text.textContent = 'Enter team names below and click Save Teams.';
+      } else if (!state.votingOpen && state.revealedUpTo < 0 && !Object.keys(state.votes).length) {
+        g.className = 'step-ready';
         icon.textContent = '②';
-        text.textContent = 'Teams are set. Click ▶ Next Category to reveal the first award.';
+        text.textContent = 'Ready! Click 🗳️ Open Voting — participants vote on all 6 categories at once.';
       } else if (state.votingOpen) {
-        guidance.className = 'step-close';
+        g.className = 'step-open';
+        icon.textContent = '③';
+        text.textContent = 'Voting is live. Give them 2–3 minutes. Click 🔒 Close Voting when done.';
+      } else if (state.revealedUpTo < 0) {
+        g.className = 'step-close';
         icon.textContent = '④';
-        text.textContent = 'Voting is live — watch the votes come in. Click 🔒 Close Voting when ready.';
-      } else if (!state.revealed) {
-        guidance.className = 'step-reveal';
-        icon.textContent = '⑤';
-        text.textContent = 'Voting closed. Build suspense… then click ✨ Reveal Results.';
-      } else if (!isLast) {
-        guidance.className = 'step-next';
-        icon.textContent = '⑥';
-        text.textContent = 'Announce the winner, then click ▶ Next Category for the next award.';
+        const nextCat = state.categories[0];
+        text.textContent = `Voting closed. Build suspense... then click ✨ Reveal Next for ${nextCat.emoji} ${nextCat.label}.`;
+      } else if (!allRevealed) {
+        g.className = 'step-reveal';
+        icon.textContent = '✨';
+        const nextCat = state.categories[state.revealedUpTo + 1];
+        text.textContent = `Announce the winner. Then click ✨ Reveal Next for ${nextCat.emoji} ${nextCat.label}.`;
       } else {
-        guidance.className = 'step-done';
+        g.className = 'step-done';
         icon.textContent = '🎉';
-        text.textContent = 'All 6 categories done! Announce the winners and hand out stickers.';
+        text.textContent = 'All 6 categories revealed! Announce the winners and hand out stickers.';
       }
 
-      // --- Vote URL bar (show only when voting is open) ---
+      // --- Vote URL bar ---
       const urlBar = document.getElementById('vote-url-bar');
       if (state.votingOpen) {
         urlBar.style.display = 'flex';
-        document.getElementById('vote-url').textContent =
-          window.location.origin + '/vote.html';
+        document.getElementById('vote-url').textContent = window.location.origin + '/vote.html';
       } else {
         urlBar.style.display = 'none';
       }
 
-      // Status bar
-      document.getElementById('sb-category').textContent =
-        cat ? `${cat.emoji} ${cat.label}` : 'Not started';
+      // --- Buttons ---
+      document.getElementById('btn-open').disabled = !state.teams.length || state.votingOpen || state.revealedUpTo >= 0;
+      document.getElementById('btn-close').disabled = !state.votingOpen;
+      document.getElementById('btn-reveal').disabled = state.votingOpen || allRevealed || (state.revealedUpTo < 0 && !Object.keys(state.votes).length);
 
-      const pill = document.getElementById('sb-pill');
-      if (state.votingOpen) {
-        pill.textContent = 'Voting Open';
-        pill.className = 'status-pill pill-open';
-      } else if (cat) {
-        pill.textContent = state.revealed ? 'Revealed' : 'Voting Closed';
-        pill.className = 'status-pill pill-closed';
-      } else {
-        pill.textContent = 'Waiting';
-        pill.className = 'status-pill pill-waiting';
-      }
-
-      // Vote count in status bar
-      if (cat) {
+      // --- Category list ---
+      document.getElementById('cat-list').innerHTML = state.categories.map((cat, i) => {
+        const isRevealed = i <= state.revealedUpTo;
+        const isNext = i === state.revealedUpTo + 1 && !state.votingOpen && state.revealedUpTo >= 0;
         const catVotes = state.votes[cat.id] || {};
         const total = Object.values(catVotes).reduce((a, b) => a + b, 0);
-        document.getElementById('sb-votes').textContent =
-          `${total} vote${total !== 1 ? 's' : ''}`;
-      }
 
-      // Buttons
-      const isLast = state.currentCategoryIndex >= state.categories.length - 1;
-      document.getElementById('btn-next').disabled = isLast;
-      document.getElementById('btn-open').disabled = !cat || state.votingOpen;
-      document.getElementById('btn-close').disabled = !state.votingOpen;
-      document.getElementById('btn-reveal').disabled = !cat || state.revealed || state.votingOpen;
-
-      // Category list
-      document.getElementById('cat-list').innerHTML = state.categories.map((c, i) => {
-        const isActive = i === state.currentCategoryIndex;
-        const isDone = i < state.currentCategoryIndex;
         return `
           <div class="cat-item">
-            <div class="cat-emoji">${c.emoji}</div>
-            <div class="cat-name">${c.label}</div>
-            <div class="cat-state ${isActive ? 'active' : ''}">
-              ${isActive ? '▶ Current' : isDone ? '✓ Done' : ''}
+            <div class="cat-emoji">${cat.emoji}</div>
+            <div class="cat-name">${cat.label}</div>
+            <div class="cat-votes">${total > 0 ? total + ' votes' : ''}</div>
+            <div class="cat-state ${isRevealed ? 'revealed' : ''} ${isNext ? 'next' : ''}">
+              ${isRevealed ? '✓ Revealed' : isNext ? '▶ Next' : ''}
             </div>
           </div>
         `;
       }).join('');
 
-      // Vote table for current category
-      if (cat) {
+      // --- Vote detail for most recently revealed category ---
+      const detailCard = document.getElementById('vote-detail-card');
+      if (state.revealedUpTo >= 0) {
+        const cat = state.categories[state.revealedUpTo];
         const catVotes = state.votes[cat.id] || {};
         const rows = state.teams
           .map(team => ({ team, count: catVotes[team] || 0 }))
           .sort((a, b) => b.count - a.count);
-
         const maxCount = rows[0]?.count || 0;
 
-        if (rows.length === 0) {
-          document.getElementById('vote-table').textContent = 'No teams configured';
-        } else {
-          document.getElementById('vote-table').innerHTML = `
-            <table>
-              <thead><tr><th>Team</th><th>Votes</th></tr></thead>
-              <tbody>
-                ${rows.map(r => `
-                  <tr class="${r.count > 0 && r.count === maxCount ? 'winner' : ''}">
-                    <td>${r.team}</td>
-                    <td>${r.count}</td>
-                  </tr>
-                `).join('')}
-              </tbody>
-            </table>
-          `;
-        }
+        detailCard.style.display = 'block';
+        document.getElementById('vote-detail-title').textContent = `${cat.emoji} ${cat.label} — Results`;
+        document.getElementById('vote-table').innerHTML = `
+          <table>
+            <thead><tr><th>Team</th><th>Votes</th></tr></thead>
+            <tbody>
+              ${rows.map(r => `
+                <tr class="${r.count > 0 && r.count === maxCount ? 'winner' : ''}">
+                  <td>${r.team}</td><td>${r.count}</td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        `;
       } else {
-        document.getElementById('vote-table').textContent = 'No active category';
+        detailCard.style.display = 'none';
       }
 
       // Sync teams textarea if empty
@@ -487,7 +340,6 @@
     function connectSSE() {
       const es = new EventSource('/events');
       es.onmessage = e => applyState(JSON.parse(e.data));
-      es.onerror = () => console.warn('SSE reconnecting...');
     }
   </script>
 </body>

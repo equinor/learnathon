@@ -12,250 +12,229 @@
       background: #0f0f1a;
       color: #fff;
       min-height: 100dvh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 1.5rem 1rem;
+      padding: 1.25rem 1rem 3rem;
     }
 
     header {
-      font-size: 0.75rem;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      color: #666;
-      margin-bottom: 2rem;
-    }
-
-    #status {
       text-align: center;
-      margin-bottom: 2rem;
-    }
-
-    #category-emoji {
-      font-size: 3rem;
-      display: block;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: #555;
       margin-bottom: 0.5rem;
     }
 
-    #category-label {
-      font-size: 1.6rem;
-      font-weight: 700;
-      color: #fff;
-      line-height: 1.2;
-    }
-
-    #voting-status {
-      margin-top: 0.75rem;
-      font-size: 0.9rem;
+    #progress {
+      text-align: center;
+      font-size: 0.85rem;
       color: #888;
+      margin-bottom: 1.5rem;
     }
 
-    #voting-status.open {
-      color: #4ade80;
+    #progress strong { color: #a78bfa; }
+
+    #all-done {
+      display: none;
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+
+    #all-done .icon { font-size: 2.5rem; display: block; }
+    #all-done p { color: #4ade80; font-weight: 700; font-size: 1.1rem; margin-top: 0.5rem; }
+    #all-done small { color: #555; font-size: 0.85rem; }
+
+    /* Status banner */
+    #status-banner {
+      text-align: center;
+      font-size: 1rem;
+      padding: 0.75rem;
+      border-radius: 10px;
+      margin-bottom: 1.5rem;
       font-weight: 600;
     }
 
-    #waiting {
-      text-align: center;
-      color: #555;
-      font-size: 1.1rem;
-      margin-top: 3rem;
+    #status-banner.open {
+      background: #14532d;
+      border: 1px solid #15803d;
+      color: #4ade80;
     }
 
-    #waiting span {
-      display: block;
-      font-size: 2.5rem;
-      margin-bottom: 1rem;
+    #status-banner.closed {
+      background: #1c1917;
+      border: 1px solid #44403c;
+      color: #a8a29e;
     }
 
-    #teams {
+    /* Category section */
+    .category-section {
+      margin-bottom: 1.5rem;
+    }
+
+    .cat-header {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.6rem;
+    }
+
+    .cat-emoji { font-size: 1.3rem; }
+
+    .cat-label {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #e2e8f0;
+    }
+
+    .cat-voted {
+      margin-left: auto;
+      font-size: 0.75rem;
+      color: #4ade80;
+      font-weight: 700;
+    }
+
+    .team-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 0.75rem;
-      width: 100%;
-      max-width: 400px;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.4rem;
     }
 
     .team-btn {
-      background: #1e1e2e;
-      border: 2px solid #333;
-      color: #fff;
-      padding: 1rem 0.5rem;
-      border-radius: 12px;
-      font-size: 1rem;
+      background: #1a1a2e;
+      border: 2px solid #2a2a3e;
+      color: #ccc;
+      padding: 0.55rem 0.4rem;
+      border-radius: 8px;
+      font-size: 0.8rem;
       font-weight: 600;
       cursor: pointer;
-      transition: all 0.15s ease;
+      transition: all 0.12s ease;
       text-align: center;
       -webkit-tap-highlight-color: transparent;
+      user-select: none;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
-    .team-btn:active {
-      transform: scale(0.96);
-    }
+    .team-btn:active { transform: scale(0.97); }
+    .team-btn:disabled { opacity: 0.3; cursor: not-allowed; transform: none; }
 
-    .team-btn:hover {
+    .team-btn.selected {
+      background: #1e1b4b;
       border-color: #7c3aed;
-      background: #2a1f3d;
+      color: #c4b5fd;
     }
 
-    .team-btn:disabled {
-      opacity: 0.4;
-      cursor: not-allowed;
-      transform: none;
-    }
-
-    #voted-message {
-      display: none;
-      text-align: center;
-      margin-top: 2rem;
-    }
-
-    #voted-message .checkmark {
-      font-size: 3rem;
-      display: block;
-    }
-
-    #voted-message p {
-      color: #4ade80;
-      font-size: 1.1rem;
-      font-weight: 600;
-      margin-top: 0.5rem;
-    }
-
-    #voted-message .voted-team {
-      color: #a78bfa;
-      font-size: 1.3rem;
-      font-weight: 700;
-      margin-top: 0.25rem;
-    }
-
-    #new-vote-btn {
-      display: none;
-      margin-top: 1.5rem;
-      background: none;
-      border: 1px solid #444;
-      color: #888;
-      padding: 0.5rem 1.25rem;
-      border-radius: 8px;
-      font-size: 0.85rem;
-      cursor: pointer;
+    .divider {
+      border: none;
+      border-top: 1px solid #1e1e30;
+      margin: 1.5rem 0;
     }
   </style>
 </head>
 <body>
-  <header>🎓 Learnathon 2026</header>
-
-  <div id="status"></div>
-
-  <div id="waiting" style="display:none">
-    <span>⏳</span>
-    The ceremony hasn't started yet.<br>
-    <small style="color:#444;font-size:0.85rem;">Keep an eye on the big screen.</small>
+  <header>🎓 Learnathon 2026 — Awards</header>
+  <div id="progress"></div>
+  <div id="all-done">
+    <span class="icon">✅</span>
+    <p>All votes cast!</p>
+    <small>Watch the big screen for results.</small>
   </div>
-
-  <div id="teams"></div>
-
-  <div id="voted-message">
-    <span class="checkmark">✅</span>
-    <p>Voted for</p>
-    <div class="voted-team" id="voted-team-name"></div>
-    <button id="new-vote-btn">Vote again</button>
-  </div>
+  <div id="status-banner"></div>
+  <div id="categories"></div>
 
   <script>
-    let currentCategoryId = null;
-    let votedCategories = JSON.parse(localStorage.getItem('voted') || '{}');
+    let myVotes = JSON.parse(localStorage.getItem('learnathon-votes') || '{}');
 
-    function applyState(state) {
-      const statusEl = document.getElementById('status');
-      const waitingEl = document.getElementById('waiting');
-      const teamsEl = document.getElementById('teams');
-      const votedMsg = document.getElementById('voted-message');
-
-      // Nothing started yet
-      if (state.currentCategoryIndex < 0) {
-        statusEl.innerHTML = '';
-        waitingEl.style.display = 'block';
-        teamsEl.innerHTML = '';
-        votedMsg.style.display = 'none';
-        return;
-      }
-
-      const cat = state.categories[state.currentCategoryIndex];
-
-      // Category changed — reset voted state for this session if new category
-      if (cat.id !== currentCategoryId) {
-        currentCategoryId = cat.id;
-        document.getElementById('voted-message').style.display = 'none';
-        document.getElementById('new-vote-btn').style.display = 'none';
-      }
-
-      statusEl.innerHTML = `
-        <span id="category-emoji">${cat.emoji}</span>
-        <div id="category-label">${cat.label}</div>
-        <div id="voting-status" class="${state.votingOpen ? 'open' : ''}">
-          ${state.votingOpen
-            ? '● Voting is open — tap your team below'
-            : state.revealed
-              ? '✨ Results are live — look at the screen!'
-              : '○ Voting closed — watch the screen for results'}
-        </div>
-      `;
-
-      waitingEl.style.display = 'none';
-
-      const alreadyVoted = votedCategories[cat.id];
-
-      if (alreadyVoted) {
-        teamsEl.innerHTML = '';
-        votedMsg.style.display = 'block';
-        document.getElementById('voted-team-name').textContent = alreadyVoted;
-        document.getElementById('new-vote-btn').style.display = 'inline-block';
-      } else {
-        votedMsg.style.display = 'none';
-        teamsEl.innerHTML = state.teams.map(team => `
-          <button class="team-btn" onclick="vote('${team.replace(/'/g, "\\'")}')"
-            ${!state.votingOpen ? 'disabled' : ''}>
-            ${team}
-          </button>
-        `).join('');
-      }
+    function saveMyVotes() {
+      localStorage.setItem('learnathon-votes', JSON.stringify(myVotes));
     }
 
-    function vote(team) {
+    function vote(categoryId, team) {
       fetch('/vote', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ team }),
+        body: JSON.stringify({ team, category: categoryId }),
       })
         .then(r => r.json())
         .then(data => {
           if (data.ok) {
-            votedCategories[currentCategoryId] = team;
-            localStorage.setItem('voted', JSON.stringify(votedCategories));
-            document.getElementById('teams').innerHTML = '';
-            document.getElementById('voted-team-name').textContent = team;
-            document.getElementById('voted-message').style.display = 'block';
-            document.getElementById('new-vote-btn').style.display = 'inline-block';
+            myVotes[categoryId] = team;
+            saveMyVotes();
+            // re-render from current state
+            fetch('/state').then(r => r.json()).then(render);
           } else {
-            alert(data.error || 'Could not cast vote');
+            alert(data.error || 'Vote failed');
           }
         });
     }
 
-    document.getElementById('new-vote-btn').addEventListener('click', () => {
-      delete votedCategories[currentCategoryId];
-      localStorage.setItem('voted', JSON.stringify(votedCategories));
-      document.getElementById('voted-message').style.display = 'none';
-      // re-render from last known state
-      fetch('/state').then(r => r.json()).then(applyState);
-    });
+    function render(state) {
+      const banner = document.getElementById('status-banner');
+      const catsEl = document.getElementById('categories');
+      const progressEl = document.getElementById('progress');
+      const doneEl = document.getElementById('all-done');
+
+      if (!state.votingOpen && state.revealedUpTo < 0) {
+        banner.className = 'closed';
+        banner.textContent = '⏳ Voting hasn\'t opened yet — hang tight!';
+        catsEl.innerHTML = '';
+        progressEl.textContent = '';
+        doneEl.style.display = 'none';
+        return;
+      }
+
+      if (!state.votingOpen && state.revealedUpTo >= 0) {
+        banner.className = 'closed';
+        banner.textContent = '🎉 Voting closed — watch the screen for reveals!';
+        catsEl.innerHTML = '';
+        progressEl.textContent = '';
+        doneEl.style.display = 'none';
+        return;
+      }
+
+      // Voting is open — show all categories
+      banner.className = 'open';
+      banner.textContent = '● Voting is open — one team per category';
+
+      const votedCount = state.categories.filter(c => myVotes[c.id]).length;
+      const total = state.categories.length;
+
+      if (votedCount >= total) {
+        progressEl.textContent = '';
+        doneEl.style.display = 'block';
+      } else {
+        progressEl.innerHTML = `<strong>${votedCount}</strong> of <strong>${total}</strong> categories voted`;
+        doneEl.style.display = 'none';
+      }
+
+      catsEl.innerHTML = state.categories.map((cat, i) => {
+        const selected = myVotes[cat.id];
+        const teamButtons = state.teams.map(team => {
+          const isSelected = selected === team;
+          return `<button class="team-btn ${isSelected ? 'selected' : ''}"
+            onclick="vote('${cat.id}', '${team.replace(/'/g, "\\'")}')"
+            ${!state.votingOpen ? 'disabled' : ''}>${team}</button>`;
+        }).join('');
+
+        return `
+          <div class="category-section">
+            <div class="cat-header">
+              <span class="cat-emoji">${cat.emoji}</span>
+              <span class="cat-label">${cat.label}</span>
+              ${selected ? `<span class="cat-voted">✓ ${selected}</span>` : ''}
+            </div>
+            <div class="team-grid">${teamButtons}</div>
+          </div>
+          ${i < state.categories.length - 1 ? '<hr class="divider">' : ''}
+        `;
+      }).join('');
+    }
 
     // SSE
     const es = new EventSource('/events');
-    es.onmessage = e => applyState(JSON.parse(e.data));
-    es.onerror = () => console.warn('SSE disconnected — retrying...');
+    es.onmessage = e => render(JSON.parse(e.data));
+    es.onerror = () => console.warn('SSE reconnecting...');
   </script>
 </body>
 </html>

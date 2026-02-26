@@ -142,26 +142,30 @@ Rough schedule for 20 teams × 5 min = 100 min. You have 90 min — keep it movi
 
 Run this from the voting app admin panel (`/admin.html`). The panel tells you what to do next at every step — follow the coloured guidance banner at the top.
 
+**Key design:** Participants vote on ALL 6 categories at once (2–3 minutes), then you reveal winners one by one like a gameshow. This saves ~10 minutes compared to voting per round, giving more time for Show & Tell.
+
 **Before 15:45 (during the break at 14:00):**
 1. Open `admin.html` on your laptop → log in with the admin token
 2. Open `screen.html` on the projector (full screen, browser in presentation mode)
 3. Enter all team names in the Team Setup section → click **Save Teams**
-4. Do a quick test: click **Next Category**, **Open Voting**, vote on your phone, **Close Voting**, **Reveal Results** — then **Reset All** to clear it before the real thing
+4. Do a quick test: Open Voting → vote on your phone → Close Voting → Reveal Next → check it works → **Reset All** to clear before the real thing
 
-**Running the ceremony (6 rounds, ~4 min each):**
+**Running the ceremony:**
 
-| Step | You do | Participants see |
-|------|--------|-----------------|
-| 1 | Click **▶ Next Category** | Category name appears on screen |
-| 2 | Announce the category out loud — build suspense | Screen shows category, no votes yet |
-| 3 | Click **🔓 Open Voting** | Vote URL appears on screen + their phones show team buttons |
-| 4 | Wait 60–90 seconds, watch votes come in on admin panel | Phones show live "voting open" state |
-| 5 | Click **🔒 Close Voting** | Phones show "watch the screen for results" |
-| 6 | Pause for drama… then click **✨ Reveal Results** | Bar chart appears, winner highlighted in gold |
-| 7 | Announce the winner! Give the team a moment. | Winner's bar glows gold |
-| 8 | Repeat from step 1 for the next category | — |
+| Phase | You do | Participants see | Time |
+|-------|--------|-----------------|------|
+| **Vote** | Click **Open Voting** | Big screen shows "VOTING IS OPEN" + URL. Phones show all 6 categories with team buttons. | — |
+| | Announce: *"Phones out! Vote one team per category. You've got 2 minutes."* | Participants tap through 6 categories on their phones | 2–3 min |
+| | Watch vote count on admin panel. Call out the energy. | Progress: "4 of 6 voted" on phones | — |
+| | Click **Close Voting** | Phones: "Watch the screen for reveals!" Screen: "Results are in..." | — |
+| **Reveal 1** | Build suspense. Click **Reveal Next** | Screen shows Best Creation + bar chart, winner in gold | ~2 min |
+| **Reveal 2** | Click **Reveal Next** | Most Creative AI Use results | ~2 min |
+| **Reveal 3** | Click **Reveal Next** | Best Safety Practice results | ~2 min |
+| **Reveal 4** | Click **Reveal Next** | Best Risk Catch results | ~2 min |
+| **Reveal 5** | Click **Reveal Next** | Best Fail Story results | ~2 min |
+| **Reveal 6** | Click **Reveal Next** | People's Choice results. Screen shows "Congratulations!" | ~2 min |
 
-**After all 6 categories:** Click nothing — just announce winners, hand out stickers.
+**After all 6 reveals:** Announce winners, hand out stickers.
 
 **If something goes wrong:**
 - App not loading on phones → read the URL off the screen slowly, check wifi
