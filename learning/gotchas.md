@@ -104,6 +104,19 @@ These are known, common AI coding pitfalls. Learn them now so you can spot them 
 
 ---
 
+### 9. The Missing .gitignore
+
+**Scenario**: Built something, ran `npm install`, then committed the project.
+**What happened**: `node_modules/` — all 600 packages — went into the commit. The diff was 46,000 files.
+**How we fixed it**: Added a `.gitignore` with `node_modules/`, then `git rm -r --cached node_modules/` to remove them from tracking without deleting them locally. Then a clean follow-up commit.
+**The lesson**: Create your `.gitignore` before your first commit. For Node projects: `node_modules/`. For everyone: `.env`.
+**Tool**: Git (not AI's fault — but AI won't remind you either)
+**Contributed by**: The Learnathon organisers, building the voting app
+
+> *This actually happened while building this repo. Hence the entry.*
+
+---
+
 ### 8. The Dependency Explosion
 
 **Scenario**: Started a small project. After a few hours, `node_modules` has 400 packages.
