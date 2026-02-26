@@ -140,17 +140,99 @@ Rough schedule for 20 teams × 5 min = 100 min. You have 90 min — keep it movi
 
 ### 15:45 — Vote + Awards (30 min)
 
-**Voting:** Participants vote using the [digital voting app] (link TBD) or paper ballots.
+Run this from the voting app admin panel (`/admin.html`). The panel tells you what to do next at every step — follow the coloured guidance banner at the top.
 
-Categories:
-- Best Creation
-- Most Creative AI Use
-- Best Safety Practice
-- Best Risk Catch
-- People's Choice
-- Best Fail Story
+**Before 15:45 (during the break at 14:00):**
+1. Open `admin.html` on your laptop → log in with the admin token
+2. Open `screen.html` on the projector (full screen, browser in presentation mode)
+3. Enter all team names in the Team Setup section → click **Save Teams**
+4. Do a quick test: click **Next Category**, **Open Voting**, vote on your phone, **Close Voting**, **Reveal Results** — then **Reset All** to clear it before the real thing
 
-Announce winners. Give out stickers. Remind people about the blog post / follow-up.
+**Running the ceremony (6 rounds, ~4 min each):**
+
+| Step | You do | Participants see |
+|------|--------|-----------------|
+| 1 | Click **▶ Next Category** | Category name appears on screen |
+| 2 | Announce the category out loud — build suspense | Screen shows category, no votes yet |
+| 3 | Click **🔓 Open Voting** | Vote URL appears on screen + their phones show team buttons |
+| 4 | Wait 60–90 seconds, watch votes come in on admin panel | Phones show live "voting open" state |
+| 5 | Click **🔒 Close Voting** | Phones show "watch the screen for results" |
+| 6 | Pause for drama… then click **✨ Reveal Results** | Bar chart appears, winner highlighted in gold |
+| 7 | Announce the winner! Give the team a moment. | Winner's bar glows gold |
+| 8 | Repeat from step 1 for the next category | — |
+
+**After all 6 categories:** Click nothing — just announce winners, hand out stickers.
+
+**If something goes wrong:**
+- App not loading on phones → read the URL off the screen slowly, check wifi
+- Wrong team name → it's fine, fix it after the event
+- Accidentally reset → votes are gone, do a quick show of hands instead
+
+---
+
+### How to Run the Ceremony Well
+
+The app handles the mechanics. Your job is the energy. Here's how to make it feel like a gameshow rather than a meeting.
+
+#### Category order (matters more than you'd think)
+
+Run them in this order:
+
+| # | Category | Why here |
+|---|----------|---------|
+| 1 | 🥇 Best Creation | Concrete, visual — easy for everyone to vote on. Warm-up round. |
+| 2 | 🎨 Most Creative AI Use | Gets more interesting. Teams start to engage. |
+| 3 | 🔐 Best Safety Practice | The serious one. Give it its own moment mid-ceremony. |
+| 4 | 🚨 Best Risk Catch | Natural follow-on from security. Still thoughtful. |
+| 5 | 😂 Best Fail Story | Comic relief after two serious categories. Energy picks back up. |
+| 6 | 🤝 People's Choice | The finale. Broadest category, most votes, most drama. Save the best for last. |
+
+#### The script for each round (~4 minutes)
+
+**Step 1 — Introduce the category (30 sec)**
+Don't just read the name. Say what it means and why it matters.
+
+> *"Best Safety Practice goes to the team that stopped, looked at what the AI built, and asked the hard security questions. Not because they had to — because they understood why it matters."*
+
+**Step 2 — Name nominees (30–60 sec)** *(optional but highly recommended)*
+During Show & Tell, coaches should be quietly flagging 2–3 standout teams per category. Before opening voting, name them. People vote more thoughtfully when they're reminded of specific moments.
+
+> *"I want to call out three teams who stood out for this one: Team Rocket caught a hardcoded API key before it shipped. Team Copilot ran the security prompt on their whole codebase at lunch. Team Vibe found a prompt injection risk in their own app. Three great examples — but you're voting, not me."*
+
+If you don't have nominees ready, skip this — don't make it up.
+
+**Step 3 — Open voting (60–90 sec)**
+Click **Open Voting**. The URL appears on screen. Say:
+
+> *"Phones out — you've got 60 seconds. Vote for the team you think earned it."*
+
+Watch the admin panel. Call out the action:
+> *"Votes coming in... it's close... ten seconds..."*
+
+**Step 4 — The reveal (30–60 sec)**
+Click **Close Voting**. Pause. Let the silence sit for 3–5 seconds. Then:
+
+> *"And the winner of Best Safety Practice is..."*
+
+Click **Reveal Results**. Let the bars animate. The winner highlights gold. Pause again — let the room react before you say the name.
+
+**Step 5 — The winner's moment (30 sec)**
+Don't rush past it. Say one thing about *why* they won — reference the specific moment from their demo. Give them 10 seconds of applause. If they're nearby, make eye contact or gesture to them.
+
+#### Fairness
+
+- **Recency bias is real.** Teams that demoed last are more memorable. The nominees step counteracts this by reminding the room of earlier teams.
+- **If one team is sweeping.** After they win their second category, gently say: *"If you've already voted for this team today, maybe give someone else a moment."* It's an honour system — that's fine.
+- **Ties.** Award it to both. More generous, more fun, more stickers. If you want drama: *"We have a tie! 30-second tiebreaker!"* — your call.
+- **People's Choice last.** It's the fairest category because the audience has seen all 20 demos by then. It's also the most democratic — no nominees, no coaching. Pure crowd vote.
+
+#### Ending it
+
+After People's Choice, don't rush to wrap up. Let it breathe. Then:
+
+> *"Six categories. Six teams who did something worth celebrating today. But honestly — every team in this room built something real, learned something real, and shared it. That's the whole point. Thank you."*
+
+Hand out stickers. Take a photo. Remind people about the retrospective on March 25.
 
 ---
 
@@ -174,3 +256,5 @@ Announce winners. Give out stickers. Remind people about the blog post / follow-
 | Team's agent is looping | Fresh chat, paste context summary |
 | Build sprint running way over | "Commit what you have, we're moving on" |
 | Team's demo is broken | Demo the code, not the running app — "here's what it should do" |
+| Voting app crashes mid-ceremony | Restart server — state reloads from file. Refresh admin + screen. |
+| Voting app not reachable on phones | Check everyone is on the same wifi; read URL from screen slowly |

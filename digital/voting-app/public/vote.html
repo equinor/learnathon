@@ -150,7 +150,8 @@
 
   <div id="waiting" style="display:none">
     <span>⏳</span>
-    Waiting for the next category...
+    The ceremony hasn't started yet.<br>
+    <small style="color:#444;font-size:0.85rem;">Keep an eye on the big screen.</small>
   </div>
 
   <div id="teams"></div>
@@ -194,7 +195,11 @@
         <span id="category-emoji">${cat.emoji}</span>
         <div id="category-label">${cat.label}</div>
         <div id="voting-status" class="${state.votingOpen ? 'open' : ''}">
-          ${state.votingOpen ? '● Voting is open' : '○ Voting is closed'}
+          ${state.votingOpen
+            ? '● Voting is open — tap your team below'
+            : state.revealed
+              ? '✨ Results are live — look at the screen!'
+              : '○ Voting closed — watch the screen for results'}
         </div>
       `;
 
