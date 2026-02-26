@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "defaultMode": "default",
+    "deny": [
+      "Bash(rm -rf /)",
+      "Bash(sudo rm -rf*)",
+      "Bash(:(){ :|:& };:*)"
+    ]
+  }
+}
