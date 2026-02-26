@@ -1,5 +1,6 @@
 const express = require('express');
 const path = require('path');
+const fs = require('fs');
 
 const app = express();
 app.use(express.json());
@@ -28,9 +29,22 @@ const LINES = [
 ];
 
 // --- State ---
-// NOTE: In-memory only. A server restart resets all bingo state.
-// For production: replace `teams` with a JSON file read/write or a lightweight DB.
-let teams = {};
+const STATE_FILE = path.join(__dirname, 'state.json');
+
+function loadState() {
+  try {
+    const raw = fs.readFileSync(STATE_FILE, 'utf8');
+    return JSON.parse(raw);
+  } catch {
+    return {};
+  }
+}
+
+function saveState() {
+  fs.writeFileSync(STATE_FILE, JSON.stringify(teams, null, 2));
+}
+
+let teams = loadState();
 
 function newTeam(name) {
   return {
@@ -77,6 +91,7 @@ app.post('/join', (req, res) => {
 
   if (!teams[name]) {
     teams[name] = newTeam(name);
+    saveState();
     broadcast();
   }
 
@@ -105,6 +120,7 @@ app.post('/mark', (req, res) => {
   const newLine = team.completedLines.length > prevLineCount;
   const newLegend = team.isLegend && !wasLegend;
 
+  saveState();
   broadcast();
   res.json({ ok: true, newLine, newLegend, isLegend: team.isLegend });
 });
@@ -114,6 +130,10 @@ app.listen(PORT, () => {
   console.log(`\nLearnathon Bingo App running on http://localhost:${PORT}`);
   console.log(`  Team card:  http://localhost:${PORT}/card.html`);
   console.log(`  Wall view:  http://localhost:${PORT}/wall.html`);
-  console.log(`\n⚠️  State is in-memory — a server restart resets all progress.`);
-  console.log(`   See README for persistence options.\n`);
+  const teamCount = Object.keys(teams).length;
+  console.log(`\n✓  State persisted to: ${STATE_FILE}`);
+  if (teamCount > 0) {
+    console.log(`   Resumed ${teamCount} team${teamCount !== 1 ? 's' : ''} from previous session.`);
+  }
+  console.log();
 });
