@@ -3,12 +3,17 @@
 const REVEAL_VERSION = '5.2.1';
 const CDN = `https://cdnjs.cloudflare.com/ajax/libs/reveal.js/${REVEAL_VERSION}`;
 
+// Detect base path from the script's own URL so it works on GitHub Pages
+// e.g. https://equinor.github.io/learnathon/assets/reveal-bootstrap.js → "/learnathon"
+const SCRIPT_URL = new URL(import.meta.url);
+const BASE = SCRIPT_URL.pathname.replace(/\/assets\/reveal-bootstrap\.js$/, '');
+
 // Load all required CSS files
 const stylesheets = [
   `${CDN}/reset.css`,
   `${CDN}/reveal.min.css`,
   `${CDN}/plugin/highlight/monokai.css`,
-  `/assets/sessions.css`
+  `${BASE}/assets/sessions.css`
 ];
 
 stylesheets.forEach(href => {
@@ -67,7 +72,7 @@ async function initReveal() {
       
       const link = document.createElement('link');
       link.rel = 'icon';
-      link.href = faviconAttr;
+      link.href = `${BASE}${faviconAttr}`;
       document.head.appendChild(link);
     }
     
@@ -88,7 +93,7 @@ async function initReveal() {
       
       contentPaths.forEach(contentPath => {
         const section = document.createElement('section');
-        section.setAttribute('data-markdown', contentPath);
+        section.setAttribute('data-markdown', `${BASE}${contentPath}`);
         section.setAttribute('data-separator', '^-----');
         section.setAttribute('data-separator-vertical', '^---');
         section.setAttribute('data-separator-notes', '^--Speaker Note--');
@@ -151,7 +156,7 @@ async function initReveal() {
           const matches = [...content.matchAll(embedRegex)];
           
           for (const match of matches) {
-            const embedPath = match[1].trim();
+            const embedPath = `${BASE}${match[1].trim()}`;
             const embedOptions = match[2] ? match[2].trim() : '';
             const fileExtension = embedPath.split('.').pop().toLowerCase();
             
