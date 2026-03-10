@@ -236,7 +236,19 @@ After People's Choice, don't rush to wrap up. Let it breathe. Then:
 
 > *"Six categories. Six teams who did something worth celebrating today. But honestly — every team in this room built something real, learned something real, and shared it. That's the whole point. Thank you."*
 
-Hand out stickers. Take a photo. Remind people about the retrospective on March 25.
+Hand out swag. Take a photo. Remind people about the retrospective on March 25.
+
+---
+
+## Swag Checklist
+
+Order/print these before the event. Bring them in a bag to the ceremony.
+
+- [ ] Learnathon 2026 sticker — all participants
+- [ ] Legend sticker — bingo full card completions
+- [ ] Winner sticker — category winners
+- [ ] Custom keycap — category winners
+- [ ] Custom socks — category winners
 
 ---
 
