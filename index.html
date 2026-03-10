@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Learnathon</title>
+    <style>
+        @import url('https://cdn.eds.equinor.com/font/equinor-font.css');
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: "Equinor", Helvetica, sans-serif;
+            background: #132634;
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        header {
+            text-align: center;
+            padding: 3rem 1rem 2rem;
+        }
+
+        header h1 { font-size: 2.4rem; font-weight: 600; }
+        header .subtitle { font-size: 1.1rem; color: #97CACE; margin-top: 0.4rem; }
+
+        main {
+            width: 100%;
+            max-width: 900px;
+            padding: 1rem 1.5rem 3rem;
+        }
+
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 1.25rem;
+        }
+
+        .card {
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 8px;
+            padding: 1.5rem;
+            transition: transform 0.15s, border-color 0.15s;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .card:hover {
+            transform: translateY(-3px);
+            border-color: #97CACE;
+        }
+
+        .card h2 { font-size: 1.2rem; margin-bottom: 0.5rem; }
+        .card p { font-size: 0.9rem; color: rgba(255,255,255,0.7); line-height: 1.4; }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Learnathon</h1>
+        <p class="subtitle">AI & LLM Learning Sessions</p>
+    </header>
+
+    <main>
+        <div class="card-grid">
+            <a class="card" href="/presentations/hello.html">
+                <h2>The Learnathon</h2>
+                <p>EDC 2026 — overview of the event, tools, challenges & awards</p>
+            </a>
+        </div>
+    </main>
+</body>
+</html>
