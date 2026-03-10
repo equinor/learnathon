@@ -3,6 +3,17 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script>
+      // Fix relative URL resolution for GitHub Pages project sites
+      // When accessed as /learnathon (no trailing slash), relative paths break
+      !function(){
+        var p = location.pathname;
+        if (!p.endsWith('/')) p = p.slice(0, p.lastIndexOf('/') + 1);
+        var b = document.createElement('base');
+        b.href = p;
+        document.head.prepend(b);
+      }();
+    </script>
     <title>Learnathon</title>
     <style>
         @import url('https://cdn.eds.equinor.com/font/equinor-font.css');
