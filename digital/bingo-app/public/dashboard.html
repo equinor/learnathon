@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Learnathon 2026 — Dashboard</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #07070f;
+      color: #fff;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Header */
+    .header {
+      text-align: center;
+      padding: 1rem;
+      border-bottom: 1px solid #1a1a2e;
+    }
+
+    .header h1 {
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: #999;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    .header-accent {
+      width: 80px;
+      height: 3px;
+      background: linear-gradient(90deg, #7c3aed, #a78bfa);
+      border-radius: 3px;
+      margin: 0.4rem auto 0;
+    }
+
+    /* Connection dot */
+    .connection-dot {
+      position: fixed;
+      top: 12px;
+      right: 16px;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #555;
+      z-index: 50;
+      transition: background 0.3s;
+    }
+
+    .connection-dot.connected {
+      background: #22c55e;
+      box-shadow: 0 0 6px #22c55e88;
+    }
+
+    /* Main grid */
+    .dashboard-grid {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr 1fr;
+      gap: 1px;
+      background: #1a1a2e;
+      min-height: 0;
+    }
+
+    .panel {
+      background: #07070f;
+      padding: 1rem;
+      overflow-y: auto;
+      min-height: 0;
+    }
+
+    .panel-title {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: #666;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .panel-title .count {
+      background: #1e1e30;
+      color: #a78bfa;
+      padding: 0.1rem 0.5rem;
+      border-radius: 10px;
+      font-size: 0.65rem;
+    }
+
+    /* --- Bingo Cards Panel --- */
+    .bingo-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+      gap: 0.6rem;
+    }
+
+    .mini-card {
+      background: #111120;
+      border: 1px solid #222;
+      border-radius: 8px;
+      padding: 0.5rem;
+    }
+
+    .mini-card.has-line { border-color: #d97706; }
+    .mini-card.is-legend {
+      border-color: #f59e0b;
+      background: #1c1204;
+      box-shadow: 0 0 12px #d9770633;
+    }
+
+    .mini-card-name {
+      font-size: 0.7rem;
+      font-weight: 700;
+      margin-bottom: 0.35rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      color: #ccc;
+    }
+
+    .mini-card.is-legend .mini-card-name { color: #fbbf24; }
+
+    .mini-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+    }
+
+    .mini-sq {
+      aspect-ratio: 1;
+      border-radius: 2px;
+      background: #1e1e30;
+    }
+
+    .mini-sq.marked { background: #5b21b6; }
+    .mini-sq.in-line { background: #d97706; }
+    .mini-sq.center { border: 1px solid #4c1d95; }
+    .mini-sq.center.marked { background: #7c3aed; }
+    .mini-sq.center.in-line { background: #f59e0b; }
+
+    /* --- Leaderboard Panel --- */
+    .leaderboard-list {
+      list-style: none;
+    }
+
+    .leaderboard-item {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.4rem 0.5rem;
+      border-radius: 6px;
+      margin-bottom: 0.3rem;
+      font-size: 0.8rem;
+    }
+
+    .leaderboard-item:nth-child(-n+3) {
+      background: #111120;
+    }
+
+    .lb-rank {
+      width: 1.5rem;
+      text-align: center;
+      font-weight: 800;
+      color: #555;
+      font-size: 0.75rem;
+    }
+
+    .leaderboard-item:nth-child(1) .lb-rank { color: #f59e0b; }
+    .leaderboard-item:nth-child(2) .lb-rank { color: #c0c0c0; }
+    .leaderboard-item:nth-child(3) .lb-rank { color: #cd7f32; }
+
+    .lb-name {
+      flex: 1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      color: #ccc;
+    }
+
+    .lb-legend .lb-name { color: #fbbf24; font-weight: 700; }
+
+    .lb-stats {
+      font-size: 0.65rem;
+      color: #666;
+      white-space: nowrap;
+    }
+
+    .lb-stats .lines { color: #d97706; font-weight: 700; }
+    .lb-stats .legend-tag { color: #f59e0b; font-weight: 700; }
+
+    /* --- Activity Feed Panel --- */
+    .activity-list {
+      list-style: none;
+    }
+
+    .activity-item {
+      padding: 0.35rem 0;
+      border-bottom: 1px solid #111120;
+      font-size: 0.75rem;
+      color: #999;
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .activity-time {
+      color: #555;
+      font-size: 0.65rem;
+      white-space: nowrap;
+      min-width: 3.5rem;
+    }
+
+    .activity-text { flex: 1; }
+
+    .activity-item.event-legend { color: #f59e0b; }
+    .activity-item.event-line { color: #d97706; }
+    .activity-item.event-mark { color: #a78bfa; }
+    .activity-item.event-join { color: #22c55e; }
+
+    /* --- Issues Panel (Gotchas + Projects) --- */
+    .tabs {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .tab-btn {
+      background: #1e1e30;
+      border: 1px solid #222;
+      color: #666;
+      padding: 0.3rem 0.8rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.7rem;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+
+    .tab-btn.active {
+      background: #7c3aed;
+      border-color: #7c3aed;
+      color: #fff;
+    }
+
+    .tab-btn:hover:not(.active) {
+      border-color: #444;
+      color: #999;
+    }
+
+    .issue-card {
+      background: #111120;
+      border: 1px solid #222;
+      border-radius: 8px;
+      padding: 0.6rem 0.75rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .issue-title {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: #ccc;
+      margin-bottom: 0.25rem;
+    }
+
+    .issue-meta {
+      font-size: 0.65rem;
+      color: #555;
+    }
+
+    .issue-body {
+      font-size: 0.7rem;
+      color: #888;
+      margin-top: 0.35rem;
+      line-height: 1.4;
+      max-height: 3.5rem;
+      overflow: hidden;
+    }
+
+    .no-issues {
+      color: #444;
+      font-size: 0.8rem;
+      text-align: center;
+      padding: 2rem 0;
+    }
+
+    /* --- Stats Bar --- */
+    .stats-bar {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      padding: 0.6rem 1rem;
+      background: #0a0a14;
+      border-top: 1px solid #1a1a2e;
+      flex-wrap: wrap;
+    }
+
+    .stat {
+      text-align: center;
+    }
+
+    .stat-value {
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: #a78bfa;
+    }
+
+    .stat-label {
+      font-size: 0.6rem;
+      color: #555;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .stat-value.amber { color: #d97706; }
+    .stat-value.gold { color: #f59e0b; }
+  </style>
+</head>
+<body>
+  <div class="connection-dot" id="connection-dot"></div>
+
+  <div class="header">
+    <h1>Learnathon 2026 — Live Dashboard</h1>
+    <div class="header-accent"></div>
+  </div>
+
+  <div class="dashboard-grid">
+    <!-- Top-left: Bingo Cards -->
+    <div class="panel" id="panel-cards">
+      <div class="panel-title">Bingo Cards <span class="count" id="cards-count">0</span></div>
+      <div class="bingo-grid" id="bingo-grid"></div>
+    </div>
+
+    <!-- Top-right: Leaderboard -->
+    <div class="panel" id="panel-leaderboard">
+      <div class="panel-title">Leaderboard</div>
+      <ol class="leaderboard-list" id="leaderboard"></ol>
+    </div>
+
+    <!-- Bottom-left: Activity Feed -->
+    <div class="panel" id="panel-activity">
+      <div class="panel-title">Activity Feed</div>
+      <ul class="activity-list" id="activity-feed"></ul>
+    </div>
+
+    <!-- Bottom-right: Gotchas + Projects -->
+    <div class="panel" id="panel-issues">
+      <div class="panel-title">Community</div>
+      <div class="tabs">
+        <button class="tab-btn active" data-tab="gotcha">Gotchas</button>
+        <button class="tab-btn" data-tab="project">Projects</button>
+      </div>
+      <div id="issues-content"></div>
+    </div>
+  </div>
+
+  <div class="stats-bar" id="stats-bar">
+    <div class="stat"><div class="stat-value" id="stat-teams">0</div><div class="stat-label">Teams</div></div>
+    <div class="stat"><div class="stat-value" id="stat-squares">0</div><div class="stat-label">Squares Marked</div></div>
+    <div class="stat"><div class="stat-value amber" id="stat-lines">0</div><div class="stat-label">Lines</div></div>
+    <div class="stat"><div class="stat-value gold" id="stat-legends">0</div><div class="stat-label">Legends</div></div>
+    <div class="stat"><div class="stat-value" id="stat-popular">-</div><div class="stat-label">Most Popular</div></div>
+    <div class="stat"><div class="stat-value" id="stat-least">-</div><div class="stat-label">Least Popular</div></div>
+  </div>
+
+  <script>
+    const LINES = [
+      [0,1,2],[3,4,5],[6,7,8],
+      [0,3,6],[1,4,7],[2,5,8],
+      [0,4,8],[2,4,6]
+    ];
+
+    let prevTeams = {};
+    let squareDefs = [];
+    let activityLog = []; // { time, text, type }
+    const MAX_ACTIVITY = 100;
+
+    // --- SSE ---
+    const dot = document.getElementById('connection-dot');
+    const es = new EventSource('/events');
+
+    es.onopen = () => dot.classList.add('connected');
+    es.onmessage = e => {
+      dot.classList.add('connected');
+      const state = JSON.parse(e.data);
+      squareDefs = state.squares;
+      detectActivity(state.teams);
+      prevTeams = JSON.parse(JSON.stringify(state.teams));
+      renderCards(state.teams, state.squares);
+      renderLeaderboard(state.teams);
+      renderStats(state.teams, state.squares);
+    };
+    es.onerror = () => dot.classList.remove('connected');
+
+    // --- Activity detection ---
+    function getCompletedLines(squares) {
+      return LINES.filter(line => line.every(i => squares[i]));
+    }
+
+    function detectActivity(teams) {
+      const now = new Date().toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+
+      for (const [name, team] of Object.entries(teams)) {
+        const prev = prevTeams[name];
+
+        if (!prev) {
+          addActivity(now, `${name} joined the game`, 'join');
+          continue;
+        }
+
+        // Check for newly marked squares
+        for (let i = 0; i < 9; i++) {
+          if (team.squares[i] && !prev.squares[i]) {
+            const label = squareDefs[i]?.label || `Square ${i}`;
+            addActivity(now, `${name} marked "${label}"`, 'mark');
+          }
+        }
+
+        // Check for new lines
+        const prevLines = getCompletedLines(prev.squares).length;
+        const currLines = getCompletedLines(team.squares).length;
+        if (currLines > prevLines) {
+          addActivity(now, `${name} completed a line! (${currLines} total)`, 'line');
+        }
+
+        // Check for legend
+        if (team.isLegend && !prev.isLegend) {
+          addActivity(now, `${name} became a LEGEND!`, 'legend');
+        }
+      }
+    }
+
+    function addActivity(time, text, type) {
+      activityLog.unshift({ time, text, type });
+      if (activityLog.length > MAX_ACTIVITY) activityLog.length = MAX_ACTIVITY;
+      renderActivityFeed();
+    }
+
+    function renderActivityFeed() {
+      const el = document.getElementById('activity-feed');
+      el.innerHTML = activityLog.map(a =>
+        `<li class="activity-item event-${a.type}">
+          <span class="activity-time">${a.time}</span>
+          <span class="activity-text">${a.text}</span>
+        </li>`
+      ).join('');
+    }
+
+    // --- Bingo Cards ---
+    function renderCards(teams, squares) {
+      const teamList = Object.values(teams);
+      document.getElementById('cards-count').textContent = teamList.length;
+
+      const sorted = teamList.sort((a, b) => {
+        if (a.isLegend !== b.isLegend) return b.isLegend - a.isLegend;
+        const aLines = getCompletedLines(a.squares).length;
+        const bLines = getCompletedLines(b.squares).length;
+        if (aLines !== bLines) return bLines - aLines;
+        return b.squares.filter(Boolean).length - a.squares.filter(Boolean).length;
+      });
+
+      document.getElementById('bingo-grid').innerHTML = sorted.map(team => {
+        const completedLines = getCompletedLines(team.squares);
+        const inLineSquares = new Set(completedLines.flat());
+
+        const miniSquares = squares.map((sq, i) => {
+          const classes = [
+            'mini-sq',
+            sq.center ? 'center' : '',
+            team.squares[i] ? 'marked' : '',
+            inLineSquares.has(i) ? 'in-line' : '',
+          ].filter(Boolean).join(' ');
+          return `<div class="${classes}"></div>`;
+        }).join('');
+
+        const lineCount = completedLines.length;
+        return `
+          <div class="mini-card ${lineCount > 0 ? 'has-line' : ''} ${team.isLegend ? 'is-legend' : ''}">
+            <div class="mini-card-name" title="${team.name}">
+              ${team.isLegend ? '\ud83d\udd25 ' : ''}${team.name}
+            </div>
+            <div class="mini-grid">${miniSquares}</div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // --- Leaderboard ---
+    function renderLeaderboard(teams) {
+      const teamList = Object.values(teams);
+      const sorted = teamList.sort((a, b) => {
+        if (a.isLegend !== b.isLegend) return b.isLegend - a.isLegend;
+        const aLines = getCompletedLines(a.squares).length;
+        const bLines = getCompletedLines(b.squares).length;
+        if (aLines !== bLines) return bLines - aLines;
+        return b.squares.filter(Boolean).length - a.squares.filter(Boolean).length;
+      });
+
+      document.getElementById('leaderboard').innerHTML = sorted.map((team, i) => {
+        const lines = getCompletedLines(team.squares).length;
+        const marked = team.squares.filter(Boolean).length;
+        let stats = `${marked}/9`;
+        if (lines > 0) stats += ` <span class="lines">${lines} line${lines > 1 ? 's' : ''}</span>`;
+        if (team.isLegend) stats += ` <span class="legend-tag">LEGEND</span>`;
+
+        return `
+          <li class="leaderboard-item ${team.isLegend ? 'lb-legend' : ''}">
+            <span class="lb-rank">${i + 1}</span>
+            <span class="lb-name">${team.name}</span>
+            <span class="lb-stats">${stats}</span>
+          </li>
+        `;
+      }).join('');
+    }
+
+    // --- Stats ---
+    function renderStats(teams, squares) {
+      const teamList = Object.values(teams);
+      const totalTeams = teamList.length;
+      const totalSquares = teamList.reduce((sum, t) => sum + t.squares.filter(Boolean).length, 0);
+      const totalLines = teamList.reduce((sum, t) => sum + getCompletedLines(t.squares).length, 0);
+      const totalLegends = teamList.filter(t => t.isLegend).length;
+
+      document.getElementById('stat-teams').textContent = totalTeams;
+      document.getElementById('stat-squares').textContent = totalSquares;
+      document.getElementById('stat-lines').textContent = totalLines;
+      document.getElementById('stat-legends').textContent = totalLegends;
+
+      // Most/least popular square
+      if (totalTeams > 0 && squares.length > 0) {
+        const counts = squares.map((_, i) => teamList.filter(t => t.squares[i]).length);
+        const maxCount = Math.max(...counts);
+        const minCount = Math.min(...counts);
+        const mostIdx = counts.indexOf(maxCount);
+        const leastIdx = counts.indexOf(minCount);
+
+        const mostLabel = squares[mostIdx]?.label || '';
+        const leastLabel = squares[leastIdx]?.label || '';
+
+        document.getElementById('stat-popular').textContent = truncate(mostLabel, 18);
+        document.getElementById('stat-popular').title = mostLabel;
+        document.getElementById('stat-least').textContent = truncate(leastLabel, 18);
+        document.getElementById('stat-least').title = leastLabel;
+      }
+    }
+
+    function truncate(str, max) {
+      return str.length > max ? str.slice(0, max - 1) + '\u2026' : str;
+    }
+
+    // --- Issues (Gotchas + Projects) ---
+    let activeTab = 'gotcha';
+    let issuesData = { gotcha: [], project: [] };
+
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        activeTab = btn.dataset.tab;
+        renderIssues();
+      });
+    });
+
+    function renderIssues() {
+      const issues = issuesData[activeTab];
+      const el = document.getElementById('issues-content');
+
+      if (issues.length === 0) {
+        el.innerHTML = `<div class="no-issues">No ${activeTab === 'gotcha' ? 'gotchas' : 'projects'} submitted yet</div>`;
+        return;
+      }
+
+      el.innerHTML = issues.map(issue => {
+        const ago = timeAgo(new Date(issue.created_at));
+        const bodyPreview = (issue.body || '').replace(/[#*_`\-\[\]]/g, '').trim().slice(0, 120);
+        return `
+          <div class="issue-card">
+            <div class="issue-title">${escapeHtml(issue.title)}</div>
+            <div class="issue-meta">by ${escapeHtml(issue.user || 'unknown')} &middot; ${ago}</div>
+            ${bodyPreview ? `<div class="issue-body">${escapeHtml(bodyPreview)}</div>` : ''}
+          </div>
+        `;
+      }).join('');
+    }
+
+    function escapeHtml(str) {
+      const div = document.createElement('div');
+      div.textContent = str;
+      return div.innerHTML;
+    }
+
+    function timeAgo(date) {
+      const seconds = Math.floor((Date.now() - date.getTime()) / 1000);
+      if (seconds < 60) return 'just now';
+      const minutes = Math.floor(seconds / 60);
+      if (minutes < 60) return `${minutes}m ago`;
+      const hours = Math.floor(minutes / 60);
+      return `${hours}h ago`;
+    }
+
+    async function fetchIssues() {
+      for (const label of ['gotcha', 'project']) {
+        try {
+          const res = await fetch(`/api/issues?label=${label}`);
+          if (res.ok) {
+            issuesData[label] = await res.json();
+          }
+        } catch {
+          // Silently ignore — issues panel is optional
+        }
+      }
+      renderIssues();
+    }
+
+    // Poll issues every 30 seconds
+    fetchIssues();
+    setInterval(fetchIssues, 30_000);
+  </script>
+</body>
+</html>
