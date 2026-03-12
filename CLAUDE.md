@@ -5,8 +5,7 @@ Read `AGENTS.md` in this repository root for full context: event info, workflow,
 ## Claude Code Specific
 
 - Use **compact** mode for routine tasks to save context: `/compact`
-- Skills are in `.claude/skills/` — use `/submit-gotcha` and `/submit-project` to contribute back to the event
-- The MCP server config is in `.claude/settings.json` if configured
+- Skills are in `skills/` (with pointers in `.claude/skills/`) — use `/submit-gotcha` and `/submit-project` to contribute back to the event
 - When Claude asks for permission to run a command, read what it wants to do before approving
 - Commit often — small, working changes with clear commit messages
 

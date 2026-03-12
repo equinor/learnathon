@@ -25,8 +25,10 @@ See `learning/workflow-card.md` for the full version.
 
 You have two submission skills for contributing back to the event:
 
-- **submit-gotcha** — Share an AI pitfall or lesson learned. Creates a GitHub issue with the `gotcha` label on the main repo. Invoke with `/submit-gotcha` (Claude Code) or ask "submit a gotcha".
-- **submit-project** — Register your team's project for the showcase. Creates a GitHub issue with the `project` label. Invoke with `/submit-project` (Claude Code) or ask "submit a project".
+- **submit-gotcha** (`skills/submit-gotcha.md`) — Share an AI pitfall or lesson learned. Creates a GitHub issue with the `gotcha` label on the main repo. Invoke with `/submit-gotcha` or ask "submit a gotcha".
+- **submit-project** (`skills/submit-project.md`) — Register your team's project for the showcase. Creates a GitHub issue with the `project` label. Invoke with `/submit-project` or ask "submit a project".
+
+Both Claude Code and Copilot discover these skills automatically via pointers in `.claude/skills/` and `.github/skills/`.
 
 ## MCP Tools Available
 
