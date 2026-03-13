@@ -201,7 +201,19 @@ async function initReveal() {
           if (matches.length > 0) {
             hasChanges = true;
           }
-          
+
+          // Rewrite absolute image/link paths to include BASE so they work on GitHub Pages
+          if (BASE) {
+            const rewritten = content.replace(
+              /(!\[[^\]]*\]\()\/([^)]+\))/g,
+              `$1${BASE}/$2`
+            );
+            if (rewritten !== content) {
+              content = rewritten;
+              hasChanges = true;
+            }
+          }
+
           // If we processed any directives, we need to inject the content directly
           if (hasChanges) {
             section.removeAttribute('data-markdown');
