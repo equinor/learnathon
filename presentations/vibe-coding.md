@@ -256,13 +256,16 @@ Any team member can invoke them.
 
 ### Progressive disclosure
 
-Skills load in **three levels**:
+Agent Skills use a **three-level** loading system:
 
-| Level | What loads | Cost |
-|-------|-----------|------|
-| **1. Metadata** | Name + description only | ~30 tokens per skill |
-| **2. Instructions** | Full SKILL.md body | Only when triggered |
-| **3. Resources** | Scripts, templates, docs | Only when referenced |
+**Level 1 — YAML frontmatter** *(always loaded)*
+Just enough for the agent to know *when* each skill should be used — without loading all of it into context.
+
+**Level 2 — SKILL.md body** *(loaded when relevant)*
+The agent thinks this skill matches the current task → full instructions and guidance load in.
+
+**Level 3 — Linked files** *(loaded on demand)*
+Additional files in the skill directory — scripts, templates, docs — that the agent navigates and discovers only as needed.
 
 Many skills. Zero context bloat.
 
