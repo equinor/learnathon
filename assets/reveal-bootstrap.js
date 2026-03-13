@@ -203,9 +203,11 @@ async function initReveal() {
           }
 
           // Rewrite absolute image/link paths to include BASE so they work on GitHub Pages
+          // Skip paths that already start with BASE (e.g. from @embed processing)
           if (BASE) {
+            const baseEscaped = BASE.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
             const rewritten = content.replace(
-              /(!\[[^\]]*\]\()\/([^)]+\))/g,
+              new RegExp(`(!\\[[^\\]]*\\]\\()(?!${baseEscaped})\\/([^)]+\\))`, 'g'),
               `$1${BASE}/$2`
             );
             if (rewritten !== content) {
