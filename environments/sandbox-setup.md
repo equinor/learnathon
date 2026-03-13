@@ -69,6 +69,20 @@ Alternatively: each team forks their chosen template at the start of the day.
 - Add all 60 participants as members of the org (member role, not owner)
 - They get Codespace access automatically
 
+### 6. Participant Pre-Event Setup (Personal Codespaces Secret)
+
+Each participant needs to add the API key as a personal Codespaces secret **before the event day**. Include this in participant comms:
+
+1. Go to [github.com/settings/codespaces](https://github.com/settings/codespaces) (Settings → Codespaces → Secrets)
+2. Click **New secret**
+3. Name: `ANTHROPIC_API_KEY`
+4. Value: *(provided in the event invite email)*
+5. Repository access: select `learnathon-edc2026/*` (all repos in the org)
+
+This ensures the key is available in every Codespace they open, even for repos they fork or create themselves.
+
+> **Alternative**: If using an org-level secret (step 2 above), participants do NOT need to set this up individually. Choose one approach — org-level is simpler for the event but requires all repos to be in the org.
+
 ## On the Day
 
 - Participants open their team repo and click **Code → Codespaces → New Codespace**
