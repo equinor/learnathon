@@ -81,14 +81,14 @@ If a team asks what a square means:
 
 | Square | What it means |
 |--------|--------------|
-| Use agent mode to scaffold | Start a project from scratch using only AI prompts |
-| Implement at least 1 AI suggestion | Accept and ship something Copilot or the agent suggested |
+| Use plan mode before building | Use the agent's plan mode to design before coding |
 | Create architecture drawing | Ask AI to draw a diagram (ASCII, Mermaid, etc.) of the system |
+| Use an MCP tool | Connect to an external system via MCP (bingo, voting, etc.) |
 | Customize your AI | Write/modify the CLAUDE.md or copilot-instructions.md |
 | TRY A NEW TOOL | Use something not in the primary toolbox |
-| Don't touch the keyboard | Let the agent do an entire task autonomously without you typing |
-| Ask AI to explain code | Use the agent to explain code you didn't write |
-| Generate tests for your code | Have the agent write tests |
+| Deploy to Radix playground | Get your solution running on Radix for others to try |
+| Help another team | Go to another team and help them get unstuck |
+| Use or create a skill | Use an existing skill or write a new SKILL.md |
 | Identify a RISK with AI output | Catch a hallucination, wrong suggestion, or security issue |
 
 ---
