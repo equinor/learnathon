@@ -101,6 +101,18 @@
     td { padding: 0.4rem 0.5rem; border-bottom: 1px solid #1a1a2e; }
     tr.winner td { color: #fbbf24; font-weight: 700; }
 
+    .tie-alert {
+      display: flex; align-items: center; gap: 0.6rem;
+      padding: 0.7rem 1rem; background: #2d1a00; border: 2px solid #d97706;
+      border-radius: 10px; margin-top: 0.75rem;
+      font-size: 0.9rem; color: #fbbf24; font-weight: 600;
+      animation: tiePulse 1.5s infinite;
+    }
+    @keyframes tiePulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.6; }
+    }
+
     .toast {
       position: fixed; bottom: 1.5rem; left: 50%; transform: translateX(-50%);
       background: #4ade80; color: #000; padding: 0.6rem 1.25rem; border-radius: 8px;
@@ -314,6 +326,7 @@
 
         detailCard.style.display = 'block';
         document.getElementById('vote-detail-title').textContent = `${cat.emoji} ${cat.label} — Results`;
+        const isTie = rows.length >= 2 && maxCount > 0 && rows[0].count === rows[1].count;
         document.getElementById('vote-table').innerHTML = `
           <table>
             <thead><tr><th>Team</th><th>Votes</th></tr></thead>
@@ -325,6 +338,7 @@
               `).join('')}
             </tbody>
           </table>
+          ${isTie ? '<div class="tie-alert">⚖️ Tie! Check bingo card progress to decide the winner.</div>' : ''}
         `;
       } else {
         detailCard.style.display = 'none';

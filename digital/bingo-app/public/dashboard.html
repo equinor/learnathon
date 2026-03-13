@@ -320,6 +320,94 @@
 
     .stat-value.amber { color: #d97706; }
     .stat-value.gold { color: #f59e0b; }
+
+    /* --- Confetti & Fire Effects --- */
+    .confetti-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 100;
+      overflow: hidden;
+    }
+
+    .confetti-piece {
+      position: absolute;
+      top: -20px;
+      width: 10px;
+      height: 10px;
+      opacity: 0;
+      animation: confettiFall 3s ease-in forwards;
+    }
+
+    @keyframes confettiFall {
+      0% { opacity: 1; transform: translateY(0) rotate(0deg); }
+      100% { opacity: 0; transform: translateY(100vh) rotate(720deg); }
+    }
+
+    .legend-toast {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0);
+      z-index: 200;
+      text-align: center;
+      animation: legendPop 3s ease-out forwards;
+      pointer-events: none;
+    }
+
+    .legend-toast .legend-name {
+      font-size: 3rem;
+      font-weight: 900;
+      color: #f59e0b;
+      text-shadow: 0 0 40px #f59e0b88, 0 0 80px #f59e0b44;
+      white-space: nowrap;
+    }
+
+    .legend-toast .legend-subtitle {
+      font-size: 1.2rem;
+      color: #fbbf24;
+      margin-top: 0.5rem;
+    }
+
+    .legend-toast .fire-ring {
+      font-size: 2.5rem;
+      display: block;
+      margin-bottom: 0.5rem;
+    }
+
+    @keyframes legendPop {
+      0% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
+      15% { transform: translate(-50%, -50%) scale(1.1); opacity: 1; }
+      25% { transform: translate(-50%, -50%) scale(1); }
+      80% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+      100% { transform: translate(-50%, -50%) scale(0.8); opacity: 0; }
+    }
+
+    .line-toast {
+      position: fixed;
+      top: 1.5rem;
+      right: 1.5rem;
+      background: #1c1204;
+      border: 2px solid #d97706;
+      border-radius: 12px;
+      padding: 0.8rem 1.2rem;
+      z-index: 150;
+      animation: toastSlide 3s ease-out forwards;
+      pointer-events: none;
+      font-size: 0.9rem;
+      color: #fbbf24;
+      font-weight: 700;
+    }
+
+    @keyframes toastSlide {
+      0% { transform: translateX(120%); opacity: 0; }
+      10% { transform: translateX(0); opacity: 1; }
+      80% { transform: translateX(0); opacity: 1; }
+      100% { transform: translateX(120%); opacity: 0; }
+    }
   </style>
 </head>
 <body>
@@ -398,6 +486,53 @@
     };
     es.onerror = () => dot.classList.remove('connected');
 
+    // --- Confetti & Fire Effects ---
+    function spawnConfetti(colors) {
+      const container = document.createElement('div');
+      container.className = 'confetti-container';
+      document.body.appendChild(container);
+
+      for (let i = 0; i < 60; i++) {
+        const piece = document.createElement('div');
+        piece.className = 'confetti-piece';
+        piece.style.left = `${Math.random() * 100}%`;
+        piece.style.animationDelay = `${Math.random() * 1.5}s`;
+        piece.style.animationDuration = `${2 + Math.random() * 2}s`;
+        piece.style.background = colors[Math.floor(Math.random() * colors.length)];
+        piece.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+        piece.style.width = `${6 + Math.random() * 8}px`;
+        piece.style.height = `${6 + Math.random() * 8}px`;
+        container.appendChild(piece);
+      }
+
+      setTimeout(() => container.remove(), 5000);
+    }
+
+    function showLineToast(teamName, lineCount) {
+      const toast = document.createElement('div');
+      toast.className = 'line-toast';
+      toast.innerHTML = `🎯 ${teamName} — ${lineCount} line${lineCount > 1 ? 's' : ''}!`;
+      document.body.appendChild(toast);
+      spawnConfetti(['#d97706', '#f59e0b', '#fbbf24', '#7c3aed', '#a78bfa']);
+      setTimeout(() => toast.remove(), 3500);
+    }
+
+    function showLegendToast(teamName) {
+      const toast = document.createElement('div');
+      toast.className = 'legend-toast';
+      toast.innerHTML = `
+        <span class="fire-ring">🔥🔥🔥</span>
+        <div class="legend-name">${teamName}</div>
+        <div class="legend-subtitle">⭐ LEGEND STATUS ⭐</div>
+        <span class="fire-ring">🔥🔥🔥</span>
+      `;
+      document.body.appendChild(toast);
+      spawnConfetti(['#f59e0b', '#ef4444', '#fbbf24', '#ff6b35', '#ffcc00']);
+      // Second burst after a beat
+      setTimeout(() => spawnConfetti(['#f59e0b', '#ef4444', '#fbbf24', '#ff6b35', '#ffcc00']), 800);
+      setTimeout(() => toast.remove(), 3500);
+    }
+
     // --- Activity detection ---
     function getCompletedLines(squares) {
       return LINES.filter(line => line.every(i => squares[i]));
@@ -426,12 +561,14 @@
         const prevLines = getCompletedLines(prev.squares).length;
         const currLines = getCompletedLines(team.squares).length;
         if (currLines > prevLines) {
-          addActivity(now, `${name} completed a line! (${currLines} total)`, 'line');
+          addActivity(now, `🎯 ${name} completed a line! (${currLines} total)`, 'line');
+          showLineToast(name, currLines);
         }
 
         // Check for legend
         if (team.isLegend && !prev.isLegend) {
-          addActivity(now, `${name} became a LEGEND!`, 'legend');
+          addActivity(now, `🔥 ${name} became a LEGEND! 🔥`, 'legend');
+          showLegendToast(name);
         }
       }
     }
