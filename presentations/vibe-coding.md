@@ -88,10 +88,9 @@ This is the loop. You'll use it all day.
 
 ### Cheap. Fast. Results only.
 
-- You don't care about the **tech stack**
-- You care about the **outcome**
-- Cost of trying: **near zero**
-- Time to first result: **minutes**
+![Drake vibe coding](/presentations/images/drake.jpg) <!-- .element style="max-height:350px" -->
+
+
 
 ---
 
@@ -130,11 +129,7 @@ That's what the rest of this talk is about.
 
 ### Context engineering
 
-> The difference between a **vibe coder** and a **vibe engineer** is **context engineering**.
-
-Giving the AI the **right information** at the **right time** so it makes the **right decisions**.
-
-It's not about better prompts. It's about better **input**.
+![Galaxy brain](/presentations/images/galaxybrain.jpg) <!-- .element style="max-height:380px" -->
 
 ---
 
@@ -159,12 +154,7 @@ It's not about better prompts. It's about better **input**.
 
 ### Agent engineering
 
-An AI **agent** can:
-
-- Read and write files
-- Run terminal commands
-- Search your codebase
-- Call external tools
+![Captain Phillips](/presentations/images/captainnow.jpg) <!-- .element style="max-height:350px" -->
 
 **Copilot Agent Mode** and **Claude Code** are both agents.
 
@@ -275,22 +265,21 @@ When things go wrong (and they will):
 
 ### The context cliff
 
+![Context cliff](/presentations/images/Gemini_Generated_Image_fzf4y6fzf4y6fzf4.png) <!-- .element style="max-height:380px" -->
+
+---
+
+### How to avoid the cliff
+
 @embed(/presentations/images/context-cliff.svg, width=85%)
 
 ---
 
 ### Security
 
-AI assistants will **not** flag security issues unless you ask.
-
-- No input sanitisation by default
-- Will happily commit `.env` files
-- Will install packages that don't exist
-- Will use `eval()` if it seems convenient
+![Always has been](/presentations/images/alwayshasbeen.jpg) <!-- .element style="max-height:350px" -->
 
 **Always ask: "Is this secure?"**
-
-*The security pulse after lunch is your checkpoint.*
 
 ---
 
@@ -515,6 +504,8 @@ If you find something interesting — good or bad:
 
 ### Polish, fix, prepare
 
+![Endgame](/presentations/images/endgame.jpg) <!-- .element style="max-height:300px" -->
+
 - Scope **down** if needed — a working demo beats a broken feature
 - **13:15** — "45 minutes to demo time"
 - **13:30** — "Stop features. Prepare what you'll say."
@@ -563,6 +554,8 @@ Frame your demo around your strongest category:
 ---
 
 ### 5 min per team
+
+![Honest work](/presentations/images/itaintmuch.jpg) <!-- .element style="max-height:280px" -->
 
 | Time | What |
 |------|------|
