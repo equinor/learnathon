@@ -1,0 +1,41 @@
+apiVersion: radix.equinor.com/v1
+kind: RadixApplication
+metadata:
+  name: learnathon
+spec:
+  environments:
+    - name: prod
+  components:
+    - name: server
+      src: digital/learnathon-server
+      dockerfileName: Dockerfile
+      ports:
+        - name: http
+          port: 8080
+      publicPort: http
+      replicas: 1
+      environmentConfig:
+        - environment: prod
+          replicas: 1
+      secrets:
+        - ADMIN_TOKEN
+        - GITHUB_TOKEN
+      resources:
+        requests:
+          memory: "128Mi"
+          cpu: "100m"
+        limits:
+          memory: "256Mi"
+          cpu: "500m"
+      readinessProbe:
+        httpGet:
+          path: /health
+          port: 8080
+        initialDelaySeconds: 5
+        periodSeconds: 10
+      livenessProbe:
+        httpGet:
+          path: /health
+          port: 8080
+        initialDelaySeconds: 10
+        periodSeconds: 30
