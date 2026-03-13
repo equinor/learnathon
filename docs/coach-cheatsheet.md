@@ -61,7 +61,7 @@ Not the end of the world. Two options:
 
 ---
 
-## Security Pulse (12:30)
+## Security Pulse (12:15)
 
 Help teams run this prompt on their code:
 ```
@@ -84,7 +84,7 @@ If a team asks what a square means:
 | Use plan mode before building | Use the agent's plan mode to design before coding |
 | Create architecture drawing | Ask AI to draw a diagram (ASCII, Mermaid, etc.) of the system |
 | Use an MCP tool | Connect to an external system via MCP (bingo, voting, etc.) |
-| Customize your AI | Write/modify the CLAUDE.md or copilot-instructions.md |
+| Customize your AI | Write/modify the CLAUDE.md or .github/copilot-instructions.md |
 | TRY A NEW TOOL | Use something not in the primary toolbox |
 | Deploy to Radix playground | Get your solution running on Radix for others to try |
 | Help another team | Go to another team and help them get unstuck |

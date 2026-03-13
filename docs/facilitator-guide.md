@@ -1,7 +1,7 @@
 # Facilitator Guide
 
 **Event:** Learnathon 2026 — EDC, March 18
-**Format:** Full day, 8:15–16:15, ~60 participants, ~20 teams of 3
+**Format:** Full day, 8:15–16:00, ~60 participants, ~20 teams of 3
 **Facilitators needed:** ~5–6 (1 lead + 4–5 coaches on the floor)
 
 ---
@@ -87,7 +87,7 @@ At 11:45: announce "15 minutes to lunch — commit what you have."
 
 ---
 
-### 12:30 — Security Pulse (15 min)
+### 12:15 — Security Pulse (15 min)
 
 **Not a full audit — a quick honest check.**
 
@@ -105,7 +105,7 @@ This is a **15-minute** phase. Keep it tight. Don't let it run into Lab 3.
 
 ---
 
-### 12:45 — Lab 3: Build Sprint 2 (75 min)
+### 12:30 — Lab 3: Build Sprint 2 (75 min)
 
 **Goal:** Polish, fix, prepare the demo. Scope *down* if needed.
 
@@ -120,7 +120,7 @@ At 13:45: announce "Wrap up features. Spend last 15 min preparing what you'll sa
 
 ---
 
-### 14:15 — Show & Tell (90 min)
+### 14:00 — Show & Tell (90 min)
 
 **Format per team: 5 min**
 - 2 min: demo
@@ -137,7 +137,7 @@ Rough schedule for 20 teams × 5 min = 100 min. You have 90 min — keep it movi
 
 ---
 
-### 15:45 — Vote + Awards (30 min)
+### 15:30 — Vote + Awards (30 min)
 
 Run this from the voting app admin panel (`/admin.html`). The panel tells you what to do next at every step — follow the coloured guidance banner at the top.
 

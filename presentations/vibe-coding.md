@@ -30,7 +30,7 @@ Go to the **template repo** link *(on screen / in chat)*
 
 ---
 
-### 3. Setup API key
+### 3. Set up API key
 
 `github.com/settings/codespaces` → **New secret**
 
@@ -145,7 +145,7 @@ That's what the rest of this talk is about.
 |------|---------|
 | `CLAUDE.md` | Always loaded — project rules, conventions, boundaries |
 | `AGENTS.md` | Tool-agnostic instructions for any AI assistant |
-| `copilot-instructions.md` | Copilot-specific context |
+| `.github/copilot-instructions.md` | Copilot-specific context |
 | `mini-spec.md` | What you're building and why |
 
 **Write these first. Code second.**
