@@ -226,7 +226,7 @@ Don't rush past it. Say one thing about *why* they won — reference the specifi
 
 - **Recency bias is real.** Teams that demoed last are more memorable. The nominees step counteracts this by reminding the room of earlier teams.
 - **If one team is sweeping.** After they win their second category, gently say: *"If you've already voted for this team today, maybe give someone else a moment."* It's an honour system — that's fine.
-- **Ties.** Award it to both. More generous, more fun, more stickers. If you want drama: *"We have a tie! 30-second tiebreaker!"* — your call.
+- **Ties.** Check bingo card progress — the team with more squares/lines wins the tiebreaker. If still tied, award it to both. The voting app will prompt you to check bingo cards when there's a tie.
 - **People's Choice last.** It's the fairest category because the audience has seen all 20 demos by then. It's also the most democratic — no nominees, no coaching. Pure crowd vote.
 
 #### Ending it

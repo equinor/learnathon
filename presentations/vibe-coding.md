@@ -361,6 +361,8 @@ Connects any AI assistant to event infrastructure.
 
 Get a line = recognition · Fill the card = **legend status** 🏆
 
+*Tiebreaker: if two teams tie in an award vote, bingo progress decides.*
+
 ---
 
 ### Submit your learnings
