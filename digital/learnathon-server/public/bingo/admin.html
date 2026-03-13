@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bingo Admin</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #0a0a14;
+      color: #fff;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem 1rem;
+    }
+
+    h1 {
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: #999;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 2rem;
+    }
+
+    .card {
+      background: #111120;
+      border: 1px solid #222;
+      border-radius: 12px;
+      padding: 1.5rem;
+      width: 100%;
+      max-width: 420px;
+      margin-bottom: 1rem;
+    }
+
+    .card h2 {
+      font-size: 0.85rem;
+      color: #888;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 0.75rem;
+    }
+
+    .stat {
+      font-size: 2rem;
+      font-weight: 800;
+      color: #a78bfa;
+    }
+
+    .stat-label {
+      font-size: 0.8rem;
+      color: #555;
+      margin-top: 0.15rem;
+    }
+
+    .stat-row {
+      display: flex;
+      gap: 2rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .btn-reset {
+      background: #1c1c2e;
+      color: #ef4444;
+      border: 1px solid #333;
+      padding: 0.85rem 2rem;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      width: 100%;
+      transition: background 0.15s, border-color 0.15s;
+    }
+
+    .btn-reset:hover {
+      background: #2a1a1a;
+      border-color: #ef4444;
+    }
+
+    .confirm-box {
+      display: none;
+      background: rgba(239, 68, 68, 0.08);
+      border: 1px solid rgba(239, 68, 68, 0.25);
+      border-radius: 12px;
+      padding: 1.25rem;
+      text-align: center;
+      width: 100%;
+      max-width: 420px;
+    }
+
+    .confirm-box p {
+      color: #fca5a5;
+      margin-bottom: 1rem;
+      font-size: 0.95rem;
+    }
+
+    .confirm-actions {
+      display: flex;
+      gap: 0.75rem;
+    }
+
+    .btn-confirm {
+      flex: 1;
+      padding: 0.75rem;
+      border-radius: 10px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      border: none;
+    }
+
+    .btn-confirm.danger {
+      background: #ef4444;
+      color: #fff;
+    }
+
+    .btn-confirm.cancel {
+      background: #1e1e30;
+      color: #888;
+      border: 1px solid #333;
+    }
+
+    .btn-confirm:hover { opacity: 0.85; }
+
+    .toast {
+      position: fixed;
+      top: 1.5rem;
+      left: 50%;
+      transform: translateX(-50%) translateY(-20px);
+      background: #14532d;
+      border: 1px solid #15803d;
+      color: #86efac;
+      padding: 0.6rem 1.5rem;
+      border-radius: 50px;
+      font-weight: 700;
+      font-size: 0.9rem;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s, transform 0.3s;
+    }
+
+    .toast.visible {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .links {
+      margin-top: 1rem;
+      font-size: 0.8rem;
+      color: #555;
+    }
+
+    .links a {
+      color: #7c3aed;
+      text-decoration: none;
+    }
+
+    .links a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <h1>Bingo Admin</h1>
+
+  <div class="toast" id="toast">All cards reset</div>
+
+  <div class="card">
+    <h2>Status</h2>
+    <div class="stat-row">
+      <div>
+        <div class="stat" id="team-count">-</div>
+        <div class="stat-label">teams</div>
+      </div>
+      <div>
+        <div class="stat" id="legend-count">-</div>
+        <div class="stat-label">legends</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Reset</h2>
+    <button class="btn-reset" id="reset-btn" onclick="showConfirm()">Reset all bingo cards</button>
+  </div>
+
+  <div class="confirm-box" id="confirm-box">
+    <p>This will clear all teams and progress. Are you sure?</p>
+    <div class="confirm-actions">
+      <button class="btn-confirm cancel" onclick="hideConfirm()">Cancel</button>
+      <button class="btn-confirm danger" onclick="doReset()">Yes, reset everything</button>
+    </div>
+  </div>
+
+  <div class="links">
+    <a href="/bingo/card.html">Card view</a> &middot; <a href="/bingo/wall.html">Wall view</a>
+  </div>
+
+  <script>
+    function updateStats(teams) {
+      const list = Object.values(teams);
+      document.getElementById('team-count').textContent = list.length;
+      document.getElementById('legend-count').textContent = list.filter(t => t.isLegend).length;
+    }
+
+    // SSE for live stats
+    const es = new EventSource('/bingo/events');
+    es.onmessage = e => {
+      const data = JSON.parse(e.data);
+      updateStats(data.teams);
+    };
+
+    function showConfirm() {
+      document.getElementById('confirm-box').style.display = 'block';
+    }
+
+    function hideConfirm() {
+      document.getElementById('confirm-box').style.display = 'none';
+    }
+
+    function doReset() {
+      hideConfirm();
+      fetch('/bingo/reset', { method: 'POST' })
+        .then(r => r.json())
+        .then(data => {
+          if (data.ok) {
+            const toast = document.getElementById('toast');
+            toast.classList.add('visible');
+            setTimeout(() => toast.classList.remove('visible'), 2000);
+          }
+        });
+    }
+  </script>
+</body>
+</html>
