@@ -504,8 +504,6 @@ If you find something interesting — good or bad:
 
 ### Polish, fix, prepare
 
-![Endgame](/presentations/images/endgame.jpg) <!-- .element style="max-height:300px" -->
-
 - Scope **down** if needed — a working demo beats a broken feature
 - **13:15** — "45 minutes to demo time"
 - **13:30** — "Stop features. Prepare what you'll say."
@@ -513,6 +511,8 @@ If you find something interesting — good or bad:
 -----
 
 ## Prep for Demos
+
+![Endgame](/presentations/images/endgame.jpg) <!-- .element style="max-height:350px" -->
 
 *13:45 — 14:00*
 
