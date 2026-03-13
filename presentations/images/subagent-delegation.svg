@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 400" font-family="Equinor, Helvetica, sans-serif">
+  <defs>
+    <marker id="arrowDown" markerWidth="8" markerHeight="6" refX="4" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#97CACE"/>
+    </marker>
+    <marker id="arrowUp" markerWidth="8" markerHeight="6" refX="4" refY="3" orient="auto">
+      <polygon points="8 0, 0 3, 8 6" fill="#40d38f"/>
+    </marker>
+  </defs>
+
+  <!-- You (orchestrator) -->
+  <rect x="270" y="10" width="160" height="50" rx="25" fill="#132634" stroke="#d97706" stroke-width="2"/>
+  <text x="350" y="40" text-anchor="middle" fill="#d97706" font-size="14" font-weight="600">👤 You (orchestrator)</text>
+
+  <!-- Arrow: You → Parent Agent -->
+  <line x1="350" y1="60" x2="350" y2="88" stroke="#d97706" stroke-width="1.5" marker-end="url(#arrowDown)"/>
+
+  <!-- Parent Agent -->
+  <rect x="250" y="90" width="200" height="55" rx="12" fill="#1a3a4a" stroke="#97CACE" stroke-width="2"/>
+  <text x="350" y="115" text-anchor="middle" fill="#fff" font-size="14" font-weight="600">🤖 Parent Agent</text>
+  <text x="350" y="134" text-anchor="middle" fill="#97CACE" font-size="10">coordinates &amp; delegates</text>
+
+  <!-- Arrows: Parent → Subagents -->
+  <line x1="270" y1="145" x2="120" y2="198" stroke="#97CACE" stroke-width="1.5" marker-end="url(#arrowDown)"/>
+  <line x1="350" y1="145" x2="350" y2="198" stroke="#97CACE" stroke-width="1.5" marker-end="url(#arrowDown)"/>
+  <line x1="430" y1="145" x2="580" y2="198" stroke="#97CACE" stroke-width="1.5" marker-end="url(#arrowDown)"/>
+
+  <!-- Subagent 1 -->
+  <rect x="30" y="200" width="180" height="80" rx="12" fill="#1a3a4a" stroke="#007079" stroke-width="1.5"/>
+  <text x="120" y="228" text-anchor="middle" fill="#fff" font-size="12" font-weight="600">🔧 Subagent 1</text>
+  <text x="120" y="248" text-anchor="middle" fill="rgba(255,255,255,0.6)" font-size="10">"Build the API"</text>
+  <text x="120" y="265" text-anchor="middle" fill="#007079" font-size="9">isolated context</text>
+
+  <!-- Subagent 2 -->
+  <rect x="260" y="200" width="180" height="80" rx="12" fill="#1a3a4a" stroke="#007079" stroke-width="1.5"/>
+  <text x="350" y="228" text-anchor="middle" fill="#fff" font-size="12" font-weight="600">🎨 Subagent 2</text>
+  <text x="350" y="248" text-anchor="middle" fill="rgba(255,255,255,0.6)" font-size="10">"Build the UI"</text>
+  <text x="350" y="265" text-anchor="middle" fill="#007079" font-size="9">isolated context</text>
+
+  <!-- Subagent 3 -->
+  <rect x="490" y="200" width="180" height="80" rx="12" fill="#1a3a4a" stroke="#007079" stroke-width="1.5"/>
+  <text x="580" y="228" text-anchor="middle" fill="#fff" font-size="12" font-weight="600">🔍 Subagent 3</text>
+  <text x="580" y="248" text-anchor="middle" fill="rgba(255,255,255,0.6)" font-size="10">"Write the tests"</text>
+  <text x="580" y="265" text-anchor="middle" fill="#007079" font-size="9">isolated context</text>
+
+  <!-- Return arrows -->
+  <line x1="130" y1="280" x2="280" y2="330" stroke="#40d38f" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#arrowUp)"/>
+  <line x1="350" y1="280" x2="350" y2="330" stroke="#40d38f" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#arrowUp)"/>
+  <line x1="570" y1="280" x2="420" y2="330" stroke="#40d38f" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#arrowUp)"/>
+
+  <!-- Results box -->
+  <rect x="230" y="332" width="240" height="50" rx="12" fill="#1a3a4a" stroke="#40d38f" stroke-width="1.5"/>
+  <text x="350" y="355" text-anchor="middle" fill="#40d38f" font-size="12" font-weight="600">✓ Results merge back</text>
+  <text x="350" y="372" text-anchor="middle" fill="rgba(255,255,255,0.5)" font-size="10">parallel work, focused context, faster output</text>
+
+  <!-- Parallel indicator -->
+  <text x="350" y="190" text-anchor="middle" fill="rgba(255,255,255,0.3)" font-size="10">⚡ runs in parallel</text>
+</svg>

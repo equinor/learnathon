@@ -77,7 +77,7 @@ Once running, add to `~/.claude/mcp_servers.json`:
 Then in any Claude Code session:
 ```
 "What teams have completed Lab 1?"
-"Mark our bingo square for 'Use agent mode to scaffold'"
+"Mark our bingo square for 'Use an MCP tool'"
 "Show me all gotchas submitted so far"
 ```
 

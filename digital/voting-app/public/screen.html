@@ -152,6 +152,19 @@
     .result-row.winner .result-team { color: #fbbf24; }
     .result-row.winner .result-count { color: #fbbf24; }
 
+    .tie-banner {
+      background: #2d1a00;
+      border: 2px solid #d97706;
+      border-radius: 12px;
+      padding: 0.8rem 1.5rem;
+      margin-top: 1.2rem;
+      font-size: 1.3rem;
+      color: #fbbf24;
+      animation: pulse 1.5s infinite;
+    }
+
+    .tie-banner .tie-icon { font-size: 1.5rem; margin-right: 0.5rem; }
+
     /* All done */
     #done-screen {
       display: none;
@@ -323,6 +336,16 @@
             <div class="result-count">${item.count}</div>
           </div>
         `).join('');
+
+        // Tie detection — prompt facilitator to check bingo cards
+        const isTie = sorted.length >= 2 && sorted[0].count > 0 && sorted[0].count === sorted[1].count;
+        if (isTie) {
+          resultsEl.innerHTML += `
+            <div class="tie-banner">
+              <span class="tie-icon">⚖️</span>
+              It's a tie! Check bingo card progress to decide the winner.
+            </div>`;
+        }
       }
     }
 

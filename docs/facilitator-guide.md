@@ -1,7 +1,7 @@
 # Facilitator Guide
 
 **Event:** Learnathon 2026 — EDC, March 18
-**Format:** Full day, 8:15–16:15, ~60 participants, ~20 teams of 3
+**Format:** Full day, 8:15–16:00, ~60 participants, ~20 teams of 3
 **Facilitators needed:** ~5–6 (1 lead + 4–5 coaches on the floor)
 
 ---
@@ -12,16 +12,15 @@
 |------|-------|------|
 | 8:15 | Welcome, team formation, Codespace setup check | Lead |
 | 8:45 | Learn: Toolbox + Live Demo | Lead (demo) |
-| 9:30 | Coffee break | — |
 | 9:45 | Lab 1: Mini-spec + Plan | Coaches on floor |
 | 10:30 | Lab 2: Build Sprint 1 | Coaches on floor |
-| 12:00 | Lunch | — |
-| 12:30 | Security Pulse (15 min) | Lead (brief) |
-| 12:45 | Lab 3: Build Sprint 2 | Coaches on floor |
-| 14:00 | Break — prep for demos | — |
-| 14:15 | Show & Tell | Lead (MC) |
-| 15:45 | Vote + Awards | Lead |
-| 16:15 | Done | — |
+| 11:30 | Lunch | — |
+| 12:15 | Security Pulse (15 min) | Lead (brief) |
+| 12:30 | Lab 3: Build Sprint 2 | Coaches on floor |
+| 13:45 | Break — prep for demos | — |
+| 14:00 | Show & Tell | Lead (MC) |
+| 15:30 | Vote + Awards | Lead |
+| 16:00 | Done | — |
 
 ---
 
@@ -88,7 +87,7 @@ At 11:45: announce "15 minutes to lunch — commit what you have."
 
 ---
 
-### 12:30 — Security Pulse (15 min)
+### 12:15 — Security Pulse (15 min)
 
 **Not a full audit — a quick honest check.**
 
@@ -106,7 +105,7 @@ This is a **15-minute** phase. Keep it tight. Don't let it run into Lab 3.
 
 ---
 
-### 12:45 — Lab 3: Build Sprint 2 (75 min)
+### 12:30 — Lab 3: Build Sprint 2 (75 min)
 
 **Goal:** Polish, fix, prepare the demo. Scope *down* if needed.
 
@@ -121,7 +120,7 @@ At 13:45: announce "Wrap up features. Spend last 15 min preparing what you'll sa
 
 ---
 
-### 14:15 — Show & Tell (90 min)
+### 14:00 — Show & Tell (90 min)
 
 **Format per team: 5 min**
 - 2 min: demo
@@ -138,7 +137,7 @@ Rough schedule for 20 teams × 5 min = 100 min. You have 90 min — keep it movi
 
 ---
 
-### 15:45 — Vote + Awards (30 min)
+### 15:30 — Vote + Awards (30 min)
 
 Run this from the voting app admin panel (`/admin.html`). The panel tells you what to do next at every step — follow the coloured guidance banner at the top.
 
@@ -227,7 +226,7 @@ Don't rush past it. Say one thing about *why* they won — reference the specifi
 
 - **Recency bias is real.** Teams that demoed last are more memorable. The nominees step counteracts this by reminding the room of earlier teams.
 - **If one team is sweeping.** After they win their second category, gently say: *"If you've already voted for this team today, maybe give someone else a moment."* It's an honour system — that's fine.
-- **Ties.** Award it to both. More generous, more fun, more stickers. If you want drama: *"We have a tie! 30-second tiebreaker!"* — your call.
+- **Ties.** Check bingo card progress — the team with more squares/lines wins the tiebreaker. If still tied, award it to both. The voting app will prompt you to check bingo cards when there's a tie.
 - **People's Choice last.** It's the fairest category because the audience has seen all 20 demos by then. It's also the most democratic — no nominees, no coaching. Pure crowd vote.
 
 #### Ending it

@@ -32,6 +32,6 @@ An interactive bingo card web app for the Learnathon.
 
 | | | |
 |:---:|:---:|:---:|
-| Use agent mode to scaffold | Implement at least 1 AI suggestion | Create architecture drawing |
-| Customize your AI | ⭐ **TRY A NEW TOOL** ⭐ | Don't touch the keyboard |
-| Ask AI to explain code | Generate tests for your code | Identify a RISK with AI output |
+| Use plan mode before building | Create architecture drawing | Use an MCP tool |
+| Customize your AI | ⭐ **TRY A NEW TOOL** ⭐ | Deploy to Radix playground |
+| Help another team | Use or create a skill | Identify a RISK with AI output |

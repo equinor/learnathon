@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 500" font-family="Equinor, Helvetica, sans-serif">
+  <!-- Water line -->
+  <rect x="0" y="140" width="600" height="360" fill="rgba(0,112,121,0.08)"/>
+  <line x1="0" y1="140" x2="600" y2="140" stroke="#97CACE" stroke-width="1.5" stroke-dasharray="8,4" opacity="0.6"/>
+  <text x="580" y="155" text-anchor="end" fill="#97CACE" font-size="10" opacity="0.6">context boundary</text>
+
+  <!-- Level 1: Tip (above water) -->
+  <polygon points="300,20 230,130 370,130" fill="#007079" stroke="#97CACE" stroke-width="2"/>
+  <text x="300" y="85" text-anchor="middle" fill="#fff" font-size="12" font-weight="600">METADATA</text>
+  <text x="300" y="102" text-anchor="middle" fill="rgba(255,255,255,0.8)" font-size="9">name + description</text>
+
+  <!-- Label for level 1 -->
+  <rect x="400" y="50" width="180" height="55" rx="8" fill="#1a3a4a" stroke="#97CACE" stroke-width="1"/>
+  <text x="490" y="70" text-anchor="middle" fill="#97CACE" font-size="11" font-weight="600">Level 1 — Always loaded</text>
+  <text x="490" y="87" text-anchor="middle" fill="rgba(255,255,255,0.6)" font-size="10">~30 tokens per skill</text>
+  <text x="490" y="100" text-anchor="middle" fill="rgba(255,255,255,0.6)" font-size="10">YAML frontmatter only</text>
+  <line x1="370" y1="80" x2="398" y2="78" stroke="#97CACE" stroke-width="1"/>
+
+  <!-- Level 2: Middle (below water) -->
+  <polygon points="230,145 170,280 430,280 370,145" fill="#0a4a50" stroke="#007079" stroke-width="2"/>
+  <text x="300" y="200" text-anchor="middle" fill="#fff" font-size="13" font-weight="600">INSTRUCTIONS</text>
+  <text x="300" y="220" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-size="10">full SKILL.md body</text>
+  <text x="300" y="238" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-size="10">workflows &amp; rules</text>
+
+  <!-- Label for level 2 -->
+  <rect x="430" y="185" width="160" height="55" rx="8" fill="#1a3a4a" stroke="#007079" stroke-width="1"/>
+  <text x="510" y="205" text-anchor="middle" fill="#007079" font-size="11" font-weight="600">Level 2 — On trigger</text>
+  <text x="510" y="222" text-anchor="middle" fill="rgba(255,255,255,0.6)" font-size="10">Loaded when the agent</text>
+  <text x="510" y="235" text-anchor="middle" fill="rgba(255,255,255,0.6)" font-size="10">thinks skill is relevant</text>
+  <line x1="430" y1="215" x2="415" y2="215" stroke="#007079" stroke-width="1"/>
+
+  <!-- Level 3: Deep (far below) -->
+  <polygon points="170,295 90,450 510,450 430,295" fill="#062a2e" stroke="#064e55" stroke-width="2"/>
+  <text x="300" y="355" text-anchor="middle" fill="#fff" font-size="14" font-weight="600">LINKED FILES</text>
+  <text x="300" y="378" text-anchor="middle" fill="rgba(255,255,255,0.6)" font-size="10">scripts, templates, API docs</text>
+  <text x="300" y="396" text-anchor="middle" fill="rgba(255,255,255,0.6)" font-size="10">examples, schemas, datasets</text>
+  <text x="300" y="430" text-anchor="middle" fill="rgba(255,255,255,0.4)" font-size="10">navigated &amp; discovered on demand</text>
+
+  <!-- Label for level 3 -->
+  <rect x="20" y="350" width="155" height="55" rx="8" fill="#1a3a4a" stroke="#064e55" stroke-width="1"/>
+  <text x="97" y="370" text-anchor="middle" fill="#064e55" font-size="11" font-weight="600">Level 3 — On demand</text>
+  <text x="97" y="387" text-anchor="middle" fill="rgba(255,255,255,0.6)" font-size="10">Zero cost until</text>
+  <text x="97" y="400" text-anchor="middle" fill="rgba(255,255,255,0.6)" font-size="10">actually referenced</text>
+  <line x1="175" y1="375" x2="192" y2="375" stroke="#064e55" stroke-width="1"/>
+</svg>
