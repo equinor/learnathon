@@ -68,16 +68,9 @@ The learning matters more than the polish.
 
 ### The workflow
 
-**Spec → Plan → Build → Verify → Secure → Ship**
+@embed(/presentations/images/workflow-loop.svg, width=80%)
 
 This is the loop. You'll use it all day.
-
-1. Write a mini-spec — *what* and *why*
-2. Let the agent plan — review it, push back
-3. Build in small steps — commit after each
-4. Verify — does it actually work?
-5. Security check — ask the hard questions
-6. Ship — demo it
 
 -----
 
@@ -147,12 +140,7 @@ It's not about better prompts. It's about better **input**.
 
 ### Anthropic's four pillars
 
-| Pillar | What it means |
-|--------|--------------|
-| **Write** | Create durable context: specs, instructions, rules |
-| **Select** | Choose what goes into context and what doesn't |
-| **Compress** | Summarise, trim, keep context lean |
-| **Isolate** | Split tasks so each gets focused context |
+@embed(/presentations/images/four-pillars.svg, width=90%)
 
 ---
 
@@ -197,31 +185,15 @@ Your job:
 
 ### Subagents
 
-Agents can spawn **other agents**.
-
-- Break large tasks into parallel subtasks
-- Each subagent gets its own focused context
-- Results flow back to the parent
+@embed(/presentations/images/subagent-delegation.svg, width=85%)
 
 Think of it as **delegation** — same as managing a team.
-
-You don't do everything yourself. Neither should your agent.
 
 ---
 
 ### MCPs vs Skills
 
-> "Skills are the recipe. MCP is the kitchen."
-
-**MCP** (Model Context Protocol) = the infrastructure layer
-
-- The plumbing, wiring, appliances
-- Connects agents to external systems
-
-**Skills** = the guidance layer
-
-- Reusable workflows and instructions
-- Tell the agent *what* to do and *how*
+@embed(/presentations/images/kitchen-vs-recipe.svg, width=90%)
 
 ---
 
@@ -256,18 +228,7 @@ Any team member can invoke them.
 
 ### Progressive disclosure
 
-Agent Skills use a **three-level** loading system:
-
-**Level 1 — YAML frontmatter** *(always loaded)*
-Just enough for the agent to know *when* each skill should be used — without loading all of it into context.
-
-**Level 2 — SKILL.md body** *(loaded when relevant)*
-The agent thinks this skill matches the current task → full instructions and guidance load in.
-
-**Level 3 — Linked files** *(loaded on demand)*
-Additional files in the skill directory — scripts, templates, docs — that the agent navigates and discovers only as needed.
-
-Many skills. Zero context bloat.
+@embed(/presentations/images/progressive-disclosure-iceberg.svg, width=60%)
 
 ---
 
@@ -314,15 +275,7 @@ When things go wrong (and they will):
 
 ### The context cliff
 
-Your conversation has a **finite memory**.
-
-Long sessions → agent forgets earlier decisions → contradictions → chaos.
-
-**How to avoid it:**
-- Commit often — your save button
-- Keep decisions in files (`CLAUDE.md`, `mini-spec.md`), not just chat
-- Start fresh chats for new tasks
-- If the agent contradicts itself — it's time for a new chat
+@embed(/presentations/images/context-cliff.svg, width=85%)
 
 ---
 
