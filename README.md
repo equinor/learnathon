@@ -282,6 +282,8 @@ Teams choose one mission:
 
 Each team gets a bingo card with methods to try. Not mandatory — but earns recognition!
 
+**🎮 [Open Interactive Bingo Card](bingo.html)** — Click to use the digital version!
+
 | | | |
 |:---:|:---:|:---:|
 | Use agent mode to scaffold | Implement at least 1 AI suggestion | Create architecture drawing |
