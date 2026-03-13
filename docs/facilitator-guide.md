@@ -12,16 +12,15 @@
 |------|-------|------|
 | 8:15 | Welcome, team formation, Codespace setup check | Lead |
 | 8:45 | Learn: Toolbox + Live Demo | Lead (demo) |
-| 9:30 | Coffee break | — |
 | 9:45 | Lab 1: Mini-spec + Plan | Coaches on floor |
 | 10:30 | Lab 2: Build Sprint 1 | Coaches on floor |
-| 12:00 | Lunch | — |
-| 12:30 | Security Pulse (15 min) | Lead (brief) |
-| 12:45 | Lab 3: Build Sprint 2 | Coaches on floor |
-| 14:00 | Break — prep for demos | — |
-| 14:15 | Show & Tell | Lead (MC) |
-| 15:45 | Vote + Awards | Lead |
-| 16:15 | Done | — |
+| 11:30 | Lunch | — |
+| 12:15 | Security Pulse (15 min) | Lead (brief) |
+| 12:30 | Lab 3: Build Sprint 2 | Coaches on floor |
+| 13:45 | Break — prep for demos | — |
+| 14:00 | Show & Tell | Lead (MC) |
+| 15:30 | Vote + Awards | Lead |
+| 16:00 | Done | — |
 
 ---
 
