@@ -173,6 +173,31 @@ Your job:
 
 ---
 
+### Think like a studio lead
+
+Define your agent team like a real dev org:
+
+| Role | Responsibility |
+|------|---------------|
+| **Architect** | Plans structure, picks patterns |
+| **Builder** | Writes code on feature branches |
+| **QA** | Runs tests, validates before merge |
+| **Reviewer** | Checks main after big changes |
+
+**Explicit roles > one agent doing everything.**
+
+---
+
+### Branch discipline
+
+- All subagents work on **branches** — never main
+- QA, test, and user-test agents **gate the merge**
+- Orchestrator runs QA on main after big changes
+
+**Same rules you'd give a junior dev.**
+
+---
+
 ### Subagents
 
 @embed(/presentations/images/subagent-delegation.svg, width=85%)
@@ -213,6 +238,24 @@ Examples at this event:
 Skills live in your repo as `SKILL.md` files.
 
 Any team member can invoke them.
+
+---
+
+### Useful MCPs & Plugins
+
+Level up your agent with ready-made tools.
+
+| Tool | What it does | API key? |
+|------|-------------|----------|
+| **Superpowers** | TDD, debugging, subagent code review | No |
+| **Playwright MCP** | Browser automation — test & verify your UI | No |
+| **Figma MCP** | Design → code from Figma files | No |
+| **Context7** | Injects real, versioned library docs | Yes |
+| **Security MCPs** | SAST, secrets scanning, PR review | Varies |
+
+Claude Code also has `/security-review` built in.
+
+**Try one new tool = bingo square.**
 
 ---
 
@@ -272,6 +315,33 @@ When things go wrong (and they will):
 ### How to avoid the cliff
 
 @embed(/presentations/images/context-cliff.svg, width=85%)
+
+---
+
+### Token economics
+
+Tokens = money. Every wasted cycle costs real cash.
+
+| Rule | Why |
+|------|-----|
+| Pick the right model per task | Don't use Opus for formatting |
+| Compact context often | Smaller windows = cheaper calls |
+| Explicit version control instructions | Agents fumble git — tell them exactly when to commit |
+| Store mistakes to memory | So agents don't rediscover the same lesson |
+
+---
+
+### The open-source-first rule
+
+Before building anything hard:
+
+1. Search for an **open source library**
+2. Find a **research paper** describing the approach
+3. If neither exists — **don't attempt it**
+
+Saves time, headaches, and tokens.
+
+**"Never manually implement what someone already solved."**
 
 ---
 
