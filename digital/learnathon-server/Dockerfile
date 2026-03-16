@@ -1,6 +1,6 @@
 FROM node:22-alpine
 
-RUN adduser -D -u 1001 appuser
+RUN apk upgrade --no-cache && adduser -D -u 1001 appuser
 
 WORKDIR /app
 
