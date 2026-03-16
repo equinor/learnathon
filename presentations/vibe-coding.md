@@ -34,7 +34,7 @@ Go to the **template repo** link *(on screen / in chat)*
 
 `github.com/settings/codespaces` → **New secret**
 
-- **Name:** `ANTHROPIC_API_KEY`
+- **Name:** `CLAUDE_KEY`
 - **Value:** *(from the event invite)*
 - **Repository access:** your new repo
 
@@ -69,8 +69,6 @@ The learning matters more than the polish.
 ### The workflow
 
 @embed(/presentations/images/workflow-loop.svg, width=80%)
-
-This is the loop. You'll use it all day.
 
 -----
 
@@ -133,12 +131,6 @@ That's what the rest of this talk is about.
 
 ---
 
-### Anthropic's four pillars
-
-@embed(/presentations/images/four-pillars.svg, width=90%)
-
----
-
 ### Where context lives in your repo
 
 | File | Purpose |
@@ -155,8 +147,6 @@ That's what the rest of this talk is about.
 ### Agent engineering
 
 ![Captain Phillips](/presentations/images/captainnow.jpg) <!-- .element style="max-height:350px" -->
-
-**Copilot Agent Mode** and **Claude Code** are both agents.
 
 ---
 
@@ -212,35 +202,6 @@ Think of it as **delegation** — same as managing a team.
 
 ---
 
-### MCP in practice
-
-```
-Agent ←→ MCP Server ←→ External System
-```
-
-Examples at this event:
-- Mark a bingo square
-- Cast a vote
-- Search Confluence
-- Read from a database
-
-**MCP gives agents new capabilities.**
-
----
-
-### Skills in practice
-
-```
-/submit-gotcha  → creates a GitHub issue with your AI pitfall
-/submit-project → registers your team's project
-```
-
-Skills live in your repo as `SKILL.md` files.
-
-Any team member can invoke them.
-
----
-
 ### Useful MCPs & Plugins
 
 Level up your agent with ready-made tools.
@@ -265,12 +226,6 @@ Claude Code also has `/security-review` built in.
 
 ---
 
-### Example workflow
-
-*(Sean's Miro illustration)*
-
----
-
 ### Step by step
 
 ```
@@ -280,7 +235,7 @@ Claude Code also has `/security-review` built in.
 4. "Build step 1"            ← review → commit
 5. "Build step 2"            ← review → commit
 6. "Run the tests"           ← fix what breaks
-7. "Check for security"      ← ask the hard questions
+7. "Check for security"      ← do a security review
 8. Ship it
 ```
 

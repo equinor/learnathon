@@ -29,7 +29,7 @@
   <!-- 5. Secure (bottom left) -->
   <rect x="320" y="300" width="160" height="70" rx="12" fill="#1a3a4a" stroke="#d97706" stroke-width="2"/>
   <text x="400" y="332" text-anchor="middle" fill="#fff" font-size="15" font-weight="600">5. SECURE</text>
-  <text x="400" y="354" text-anchor="middle" fill="#d97706" font-size="11">ask the hard questions</text>
+  <text x="400" y="354" text-anchor="middle" fill="#d97706" font-size="11">do a security review</text>
 
   <!-- 6. Ship (left) -->
   <rect x="80" y="300" width="160" height="70" rx="12" fill="#1a3a4a" stroke="#40d38f" stroke-width="2"/>
