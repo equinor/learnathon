@@ -19,6 +19,8 @@ spec:
       environmentConfig:
         - environment: prod
           replicas: 1
+          variables:
+            NODE_ENV: "production"
       secrets:
         - ADMIN_TOKEN
         - GITHUB_TOKEN
