@@ -1,11 +1,17 @@
 const express = require('express');
 const path = require('path');
+const RateLimit = require('express-rate-limit');
 
 const app = express();
 app.use(express.json());
 
 const PORT = process.env.PORT || 8080;
 const ADMIN_TOKEN = process.env.ADMIN_TOKEN || 'admin-dev';
+
+const landingPageLimiter = RateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // limit each IP to 100 requests per windowMs for the landing page
+});
 
 // --- Mount app routers ---
 const bingoRouter = require('./bingo-router');
@@ -15,7 +21,7 @@ app.use('/bingo', bingoRouter);
 app.use('/voting', votingRouter);
 
 // --- Landing page ---
-app.get('/', (req, res) => {
+app.get('/', landingPageLimiter, (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
