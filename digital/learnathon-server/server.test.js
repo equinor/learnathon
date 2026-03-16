@@ -759,14 +759,14 @@ describe('MCP server configuration', () => {
     );
   });
 
-  it('defaults to http://localhost:8080 (matching server default port)', () => {
+  it('defaults to Radix production URL', () => {
     const mcpSource = fs.readFileSync(
       path.join(__dirname, '..', 'mcp-server', 'server.js'),
       'utf8'
     );
     assert.ok(
-      mcpSource.includes('http://localhost:8080'),
-      'MCP default URL should match server default port 8080'
+      mcpSource.includes('server-learnathon-prod.playground.radix.equinor.com'),
+      'MCP default URL should point to the Radix production server'
     );
   });
 
