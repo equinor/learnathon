@@ -69,6 +69,12 @@ router.get('/state', (req, res) => res.json(state));
 router.post('/vote', (req, res) => {
   const { team, category } = req.body;
 
+  // Prevent prototype-polluting keys from being used as object properties
+  const forbiddenKeys = ['__proto__', 'constructor', 'prototype'];
+  if (forbiddenKeys.includes(category) || forbiddenKeys.includes(team)) {
+    return res.status(400).json({ error: 'Invalid vote parameters' });
+  }
+
   if (!state.votingOpen) {
     return res.status(400).json({ error: 'Voting is not open' });
   }
