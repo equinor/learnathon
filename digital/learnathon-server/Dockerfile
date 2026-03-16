@@ -11,7 +11,7 @@ COPY . .
 
 RUN chown -R appuser:appuser /app /tmp
 
-USER appuser
+USER 1001
 
 EXPOSE 8080
 
