@@ -38,8 +38,14 @@ before(async () => {
   }
 
   const express = require('express');
+  const RateLimit = require('express-rate-limit');
   const app = express();
   app.use(express.json());
+
+  const fileLimiter = RateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 100, // limit each IP to 100 requests per windowMs for file-serving route
+  });
 
   const bingoRouter = require('./bingo-router');
   const votingRouter = require('./voting-router');
@@ -47,7 +53,7 @@ before(async () => {
   app.use('/bingo', bingoRouter);
   app.use('/voting', votingRouter);
 
-  app.get('/', (req, res) => {
+  app.get('/', fileLimiter, (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
   });
 
