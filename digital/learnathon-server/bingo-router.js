@@ -57,7 +57,7 @@ function checkLines(squares) {
 }
 
 function sanitise(str) {
-  return String(str).trim().replace(/[<>"'&]/g, '').slice(0, 40);
+  return String(str).trim().replace(/[<>"'&]/g, '').replace(/[\x00-\x1f\x7f]/g, '').slice(0, 40);
 }
 
 function isUnsafeKey(key) {
@@ -188,14 +188,23 @@ router.get('/api/issues', async (req, res) => {
   }
 });
 
-// --- Admin reset (requires ADMIN_TOKEN) ---
-router.post('/reset', (req, res) => {
+// --- Admin middleware ---
+function requireAdmin(req, res, next) {
   const token = req.headers['x-admin-token'] || req.query.token;
   const adminToken = process.env.ADMIN_TOKEN || 'admin-dev';
   if (token !== adminToken) {
     return res.status(401).json({ error: 'Unauthorized' });
   }
+  next();
+}
 
+// --- Admin API ---
+
+router.get('/admin/ping', requireAdmin, (req, res) => {
+  res.json({ ok: true });
+});
+
+router.post('/reset', requireAdmin, (req, res) => {
   teams = {};
   saveState();
   broadcast();

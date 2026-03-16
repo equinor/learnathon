@@ -201,8 +201,8 @@
 
     function login() {
       adminToken = document.getElementById('token-input').value.trim();
-      fetch('/voting/state', { headers: { 'x-admin-token': adminToken } })
-        .then(r => { if (r.status === 401) throw new Error(); return r.json(); })
+      fetch('/voting/admin/ping', { headers: { 'x-admin-token': adminToken } })
+        .then(r => { if (!r.ok) throw new Error(); return r.json(); })
         .then(() => {
           document.getElementById('login-screen').style.display = 'none';
           document.getElementById('app').style.display = 'block';

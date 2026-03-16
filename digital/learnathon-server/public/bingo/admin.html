@@ -163,6 +163,19 @@
   </style>
 </head>
 <body>
+  <!-- Login -->
+  <div id="login-screen">
+    <h1>Bingo Admin</h1>
+    <div class="card" style="text-align:center;">
+      <input type="password" id="token-input" placeholder="Admin token"
+        style="width:100%;padding:0.75rem 1rem;background:#1a1a2e;border:1px solid #333;border-radius:8px;color:#fff;font-size:1rem;margin-bottom:0.75rem;" />
+      <button class="btn-reset" onclick="login()" style="color:#a78bfa;border-color:#7c3aed;">Sign in</button>
+      <p id="login-error" style="color:#ef4444;margin-top:0.5rem;font-size:0.85rem;"></p>
+    </div>
+  </div>
+
+  <!-- App -->
+  <div id="app" style="display:none;">
   <h1>Bingo Admin</h1>
 
   <div class="toast" id="toast">All cards reset</div>
@@ -197,20 +210,42 @@
   <div class="links">
     <a href="/bingo/card.html">Card view</a> &middot; <a href="/bingo/wall.html">Wall view</a>
   </div>
+  </div>
 
   <script>
+    let adminToken = '';
+
+    function login() {
+      adminToken = document.getElementById('token-input').value.trim();
+      fetch('/bingo/admin/ping', { headers: { 'x-admin-token': adminToken } })
+        .then(r => { if (!r.ok) throw new Error(); return r.json(); })
+        .then(() => {
+          document.getElementById('login-screen').style.display = 'none';
+          document.getElementById('app').style.display = 'block';
+          connectSSE();
+        })
+        .catch(() => {
+          document.getElementById('login-error').textContent = 'Wrong token';
+        });
+    }
+
+    document.getElementById('token-input').addEventListener('keydown', e => {
+      if (e.key === 'Enter') login();
+    });
+
     function updateStats(teams) {
       const list = Object.values(teams);
       document.getElementById('team-count').textContent = list.length;
       document.getElementById('legend-count').textContent = list.filter(t => t.isLegend).length;
     }
 
-    // SSE for live stats
-    const es = new EventSource('/bingo/events');
-    es.onmessage = e => {
-      const data = JSON.parse(e.data);
-      updateStats(data.teams);
-    };
+    function connectSSE() {
+      const es = new EventSource('/bingo/events');
+      es.onmessage = e => {
+        const data = JSON.parse(e.data);
+        updateStats(data.teams);
+      };
+    }
 
     function showConfirm() {
       document.getElementById('confirm-box').style.display = 'block';
@@ -222,13 +257,18 @@
 
     function doReset() {
       hideConfirm();
-      fetch('/bingo/reset', { method: 'POST' })
+      fetch('/bingo/reset', {
+        method: 'POST',
+        headers: { 'x-admin-token': adminToken },
+      })
         .then(r => r.json())
         .then(data => {
           if (data.ok) {
             const toast = document.getElementById('toast');
             toast.classList.add('visible');
             setTimeout(() => toast.classList.remove('visible'), 2000);
+          } else if (data.error) {
+            alert('Error: ' + data.error);
           }
         });
     }

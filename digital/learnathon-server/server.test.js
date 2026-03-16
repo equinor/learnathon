@@ -66,7 +66,11 @@ before(async () => {
   app.post('/admin/restore', (req, res) => {
     const token = req.headers['x-admin-token'] || req.query.token;
     if (token !== ADMIN_TOKEN) return res.status(401).json({ error: 'Unauthorized' });
-    const { bingo, voting } = req.body;
+    const body = req.body || {};
+    if (typeof body !== 'object' || Array.isArray(body)) {
+      return res.status(400).json({ error: 'Invalid JSON payload' });
+    }
+    const { bingo, voting } = body;
     if (bingo) bingoRouter.setState(bingo);
     if (voting) votingRouter.setState(voting);
     res.json({ ok: true });
@@ -952,6 +956,128 @@ describe('Radix: HTML display URLs use window.location.origin', () => {
     assert.ok(
       html.includes('window.location.origin'),
       'admin.html should use window.location.origin for the vote URL display'
+    );
+  });
+});
+
+// =====================================================
+// Admin ping endpoints for login validation
+// =====================================================
+
+describe('Admin ping endpoints', () => {
+  it('GET /voting/admin/ping without token returns 401', async () => {
+    const { status } = await json('/voting/admin/ping');
+    assert.equal(status, 401);
+  });
+
+  it('GET /voting/admin/ping with valid token returns 200', async () => {
+    const { status, body } = await json('/voting/admin/ping', {
+      headers: ADMIN_HEADERS,
+    });
+    assert.equal(status, 200);
+    assert.equal(body.ok, true);
+  });
+
+  it('GET /bingo/admin/ping without token returns 401', async () => {
+    const { status } = await json('/bingo/admin/ping');
+    assert.equal(status, 401);
+  });
+
+  it('GET /bingo/admin/ping with valid token returns 200', async () => {
+    const { status, body } = await json('/bingo/admin/ping', {
+      headers: ADMIN_HEADERS,
+    });
+    assert.equal(status, 200);
+    assert.equal(body.ok, true);
+  });
+});
+
+// =====================================================
+// Admin restore handles missing/invalid body
+// =====================================================
+
+describe('Admin restore body validation', () => {
+  it('POST /admin/restore with empty body succeeds (no-op)', async () => {
+    const { status, body } = await json('/admin/restore', {
+      method: 'POST',
+      headers: ADMIN_HEADERS,
+      body: JSON.stringify({}),
+    });
+    assert.equal(status, 200);
+    assert.equal(body.ok, true);
+  });
+});
+
+// =====================================================
+// Control character sanitisation
+// =====================================================
+
+describe('Sanitisation: control characters stripped from team names', () => {
+  it('voting admin/teams strips control chars', async () => {
+    const { body } = await json('/voting/admin/teams', {
+      method: 'POST',
+      headers: ADMIN_HEADERS,
+      body: JSON.stringify({ teams: ['Good\nTeam', 'Bad\rName', 'Tab\there'] }),
+    });
+    assert.equal(body.ok, true);
+    for (const team of body.teams) {
+      assert.ok(!/[\x00-\x1f\x7f]/.test(team), `team name should not contain control chars: ${JSON.stringify(team)}`);
+    }
+    // Clean up
+    await json('/voting/admin/reset', { method: 'POST', headers: ADMIN_HEADERS, body: '{}' });
+  });
+
+  it('bingo join strips control chars', async () => {
+    const { body } = await json('/bingo/join', {
+      method: 'POST',
+      body: JSON.stringify({ name: 'Team\nNewline' }),
+    });
+    assert.equal(body.ok, true);
+    assert.ok(!/[\x00-\x1f\x7f]/.test(body.team.name), `team name should not contain control chars: ${JSON.stringify(body.team.name)}`);
+    // Clean up
+    await json('/bingo/reset', { method: 'POST', headers: ADMIN_HEADERS });
+  });
+});
+
+// =====================================================
+// Bingo admin has login flow and token in reset
+// =====================================================
+
+describe('Bingo admin HTML login flow', () => {
+  it('bingo admin.html has login screen with token input', () => {
+    const html = fs.readFileSync(path.join(__dirname, 'public', 'bingo', 'admin.html'), 'utf8');
+    assert.ok(html.includes('id="login-screen"'), 'should have login screen');
+    assert.ok(html.includes('id="token-input"'), 'should have token input');
+    assert.ok(html.includes('/bingo/admin/ping'), 'should validate against /bingo/admin/ping');
+  });
+
+  it('bingo admin.html sends x-admin-token header in doReset', () => {
+    const html = fs.readFileSync(path.join(__dirname, 'public', 'bingo', 'admin.html'), 'utf8');
+    assert.ok(html.includes("'x-admin-token': adminToken"), 'doReset should send admin token header');
+  });
+});
+
+// =====================================================
+// Voting admin login validates against admin/ping
+// =====================================================
+
+describe('Voting admin HTML login flow', () => {
+  it('voting admin.html validates against /voting/admin/ping', () => {
+    const html = fs.readFileSync(path.join(__dirname, 'public', 'voting', 'admin.html'), 'utf8');
+    assert.ok(html.includes('/voting/admin/ping'), 'login should use /voting/admin/ping endpoint');
+  });
+});
+
+// =====================================================
+// MCP server normalises BASE_URL
+// =====================================================
+
+describe('MCP server URL normalisation', () => {
+  it('strips trailing slashes from BASE_URL', () => {
+    const mcpSource = fs.readFileSync(path.join(__dirname, '..', 'mcp-server', 'server.js'), 'utf8');
+    assert.ok(
+      mcpSource.includes('.replace(/\\/+$/, \'\')') || mcpSource.includes('.replace(/\\/+$/,'),
+      'MCP server should strip trailing slashes from LEARNATHON_URL'
     );
   });
 });

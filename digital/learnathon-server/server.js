@@ -50,7 +50,11 @@ app.post('/admin/restore', (req, res) => {
     return res.status(401).json({ error: 'Unauthorized' });
   }
 
-  const { bingo, voting } = req.body;
+  const body = req.body || {};
+  if (typeof body !== 'object' || Array.isArray(body)) {
+    return res.status(400).json({ error: 'Invalid JSON payload' });
+  }
+  const { bingo, voting } = body;
   if (bingo) bingoRouter.setState(bingo);
   if (voting) votingRouter.setState(voting);
   console.log('Admin: State restored from backup.');
