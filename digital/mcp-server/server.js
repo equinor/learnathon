@@ -151,6 +151,35 @@ server.tool(
   }
 );
 
+// --- Collective learning tools ---
+
+server.tool(
+  "get_gotchas",
+  "Fetch gotchas (AI pitfalls and lessons learned) submitted by all teams during the event. This is the collective hivemind — every team's mistakes become everyone's wisdom. Check this when you hit a problem or before starting something new.",
+  {},
+  async () => {
+    try {
+      const res = await fetch(`${BINGO_URL}/api/issues?label=gotcha`);
+      if (!res.ok) {
+        return { content: [{ type: "text", text: `Could not fetch gotchas: ${res.status} ${res.statusText}` }] };
+      }
+      const issues = await res.json();
+
+      if (issues.length === 0) {
+        return { content: [{ type: "text", text: "No gotchas submitted yet. Be the first — use /submit-gotcha to share a lesson learned!" }] };
+      }
+
+      const formatted = issues.map(issue =>
+        `### ${issue.title}\n${issue.body}\n---`
+      ).join("\n\n");
+
+      return { content: [{ type: "text", text: `## Collective Gotchas (${issues.length} submitted by teams today)\n\nThese are real mistakes and lessons from other teams at this event. Learn from the hivemind.\n\n${formatted}` }] };
+    } catch (err) {
+      return { content: [{ type: "text", text: `Could not reach the Learnathon server at ${BASE_URL}. Is LEARNATHON_URL set correctly? Error: ${err.message}` }] };
+    }
+  }
+);
+
 // --- Start ---
 
 const transport = new StdioServerTransport();
