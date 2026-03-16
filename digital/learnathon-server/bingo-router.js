@@ -216,9 +216,14 @@ router.post('/reset', requireAdmin, (req, res) => {
 router.getState = () => teams;
 router.setState = (data) => {
   // Sanitise restored team names to prevent stored XSS via innerHTML
-  const cleaned = {};
-  for (const [key, team] of Object.entries(data)) {
-    const safeName = sanitise(team.name || key);
+  // Use a null-prototype object and skip unsafe keys to avoid prototype pollution
+  const cleaned = Object.create(null);
+  const unsafeKeys = ['__proto__', 'constructor', 'prototype'];
+  for (const [key, team] of Object.entries(data || {})) {
+    const safeName = sanitise((team && team.name) || key);
+    if (!safeName || unsafeKeys.includes(safeName)) {
+      continue;
+    }
     cleaned[safeName] = { ...team, name: safeName };
   }
   teams = cleaned;
