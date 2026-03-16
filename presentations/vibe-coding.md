@@ -541,19 +541,23 @@ Back at **12:15**
 
 ---
 
-### 5 minutes. One prompt.
+### 5 minutes. One command.
 
-<!-- TODO: Consider creating a /security-check skill instead of a raw prompt -->
-
-Run this on your codebase:
-
+**Claude Code:**
 ```
-Review this codebase for:
+/security-review
+```
+
+**GitHub Copilot** — paste this into Copilot Chat:
+```
+Review this codebase for security issues:
 1. Hardcoded secrets or API keys
 2. User input used without sanitisation
 3. Packages we can't explain
 4. Calls to external services we didn't intend
 ```
+
+Both work. Pick your tool.
 
 ---
 
