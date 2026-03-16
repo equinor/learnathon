@@ -6,7 +6,24 @@ const app = express();
 app.use(express.json());
 
 const PORT = process.env.PORT || 8080;
+const isProdLikeEnv =
+  process.env.NODE_ENV === 'production' ||
+  !!process.env.RADIX_CLUSTERNAME ||
+  !!process.env.RADIX_ENVIRONMENT_NAME;
+
+if (!process.env.ADMIN_TOKEN && isProdLikeEnv) {
+  console.error(
+    'FATAL: ADMIN_TOKEN environment variable must be set in production/Radix environments.'
+  );
+  process.exit(1);
+}
+
 const ADMIN_TOKEN = process.env.ADMIN_TOKEN || 'admin-dev';
+
+// Helper to ensure we only accept plain objects (not null/arrays/primitives)
+function isPlainObject(value) {
+  return value !== null && typeof value === 'object' && !Array.isArray(value);
+}
 
 const landingPageLimiter = RateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
@@ -54,9 +71,19 @@ app.post('/admin/restore', (req, res) => {
   if (typeof body !== 'object' || Array.isArray(body)) {
     return res.status(400).json({ error: 'Invalid JSON payload' });
   }
+
   const { bingo, voting } = body;
-  if (bingo) bingoRouter.setState(bingo);
-  if (voting) votingRouter.setState(voting);
+
+  // Validate that any provided state is a plain object (not null/array)
+  if (bingo !== undefined && !isPlainObject(bingo)) {
+    return res.status(400).json({ error: "Invalid 'bingo' state: expected an object" });
+  }
+  if (voting !== undefined && !isPlainObject(voting)) {
+    return res.status(400).json({ error: "Invalid 'voting' state: expected an object" });
+  }
+
+  if (bingo !== undefined) bingoRouter.setState(bingo);
+  if (voting !== undefined) votingRouter.setState(voting);
   console.log('Admin: State restored from backup.');
   res.json({ ok: true });
 });

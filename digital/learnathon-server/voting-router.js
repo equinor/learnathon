@@ -110,10 +110,18 @@ router.get('/admin/ping', requireAdmin, (req, res) => {
 
 router.post('/admin/teams', requireAdmin, (req, res) => {
   const { teams } = req.body;
-  if (!Array.isArray(teams)) {
-    return res.status(400).json({ error: 'teams must be an array' });
+  if (!Array.isArray(teams) || !teams.every(t => typeof t === 'string')) {
+    return res.status(400).json({ error: 'teams must be an array of strings' });
   }
-  state.teams = teams.map(t => t.trim().replace(/[<>"'&]/g, '').replace(/[\x00-\x1f\x7f]/g, '').slice(0, 40)).filter(Boolean);
+  state.teams = teams
+    .map(t =>
+      String(t)
+        .trim()
+        .replace(/[<>"'&]/g, '')
+        .replace(/[\x00-\x1f\x7f]/g, '')
+        .slice(0, 40)
+    )
+    .filter(Boolean);
   saveState();
   broadcast();
   res.json({ ok: true, teams: state.teams });
