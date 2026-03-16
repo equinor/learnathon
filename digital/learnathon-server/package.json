@@ -1,0 +1,14 @@
+{
+  "name": "learnathon-server",
+  "version": "1.0.0",
+  "description": "Unified Learnathon 2026 server — bingo + voting",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node --test server.test.js"
+  },
+  "dependencies": {
+    "express": "^4.21.0",
+    "express-rate-limit": "^8.3.1"
+  }
+}
