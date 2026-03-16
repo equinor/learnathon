@@ -60,6 +60,10 @@ function sanitise(str) {
   return String(str).trim().replace(/[<>"'&]/g, '').slice(0, 40);
 }
 
+function isUnsafeKey(key) {
+  return key === '__proto__' || key === 'constructor' || key === 'prototype';
+}
+
 // --- SSE ---
 const clients = new Set();
 
@@ -87,6 +91,9 @@ router.get('/state', (req, res) => res.json({ teams, squares: SQUARES }));
 router.post('/join', (req, res) => {
   const name = sanitise(req.body.name || '');
   if (!name) return res.status(400).json({ error: 'Team name required' });
+  if (isUnsafeKey(name)) {
+    return res.status(400).json({ error: 'Invalid team name' });
+  }
 
   if (!teams[name]) {
     teams[name] = newTeam(name);
@@ -103,6 +110,9 @@ router.post('/mark', (req, res) => {
   const square = Number(req.body.square);
   const marked = Boolean(req.body.marked);
 
+  if (isUnsafeKey(name)) {
+    return res.status(400).json({ error: 'Invalid team name' });
+  }
   if (!teams[name]) return res.status(404).json({ error: 'Team not found. Join first.' });
   if (isNaN(square) || square < 0 || square > 8) {
     return res.status(400).json({ error: 'Invalid square index' });
