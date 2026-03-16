@@ -13,7 +13,7 @@ const STATE_FILE = '/tmp/voting-state.json';
 function loadState(defaults) {
   try {
     const saved = JSON.parse(fs.readFileSync(STATE_FILE, 'utf8'));
-    return { ...saved, categories: defaults.categories };
+    return { ...defaults, ...saved, categories: defaults.categories };
   } catch {
     return defaults;
   }
@@ -104,12 +104,16 @@ function requireAdmin(req, res, next) {
 
 // --- Admin API ---
 
+router.get('/admin/ping', requireAdmin, (req, res) => {
+  res.json({ ok: true });
+});
+
 router.post('/admin/teams', requireAdmin, (req, res) => {
   const { teams } = req.body;
   if (!Array.isArray(teams)) {
     return res.status(400).json({ error: 'teams must be an array' });
   }
-  state.teams = teams.map(t => t.trim().replace(/[<>"'&]/g, '').slice(0, 40)).filter(Boolean);
+  state.teams = teams.map(t => t.trim().replace(/[<>"'&]/g, '').replace(/[\x00-\x1f\x7f]/g, '').slice(0, 40)).filter(Boolean);
   saveState();
   broadcast();
   res.json({ ok: true, teams: state.teams });
@@ -159,7 +163,7 @@ router.getState = () => state;
 router.setState = (data) => {
   // Sanitise restored team names to prevent stored XSS via innerHTML
   const sanitisedTeams = (data.teams || []).map(
-    t => String(t).trim().replace(/[<>"'&]/g, '').slice(0, 40)
+    t => String(t).trim().replace(/[<>"'&]/g, '').replace(/[\x00-\x1f\x7f]/g, '').slice(0, 40)
   ).filter(Boolean);
   state = { ...data, categories: CATEGORIES, teams: sanitisedTeams };
   saveState();

@@ -2,7 +2,7 @@ import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { z } from "zod";
 
-const BASE_URL = process.env.LEARNATHON_URL || "http://localhost:8080";
+const BASE_URL = (process.env.LEARNATHON_URL || "http://localhost:8080").replace(/\/+$/, '');
 const BINGO_URL = `${BASE_URL}/bingo`;
 const VOTING_URL = `${BASE_URL}/voting`;
 
