@@ -59,8 +59,9 @@ Available during any timed phase:
 {
   phase: 'idle' | 'queue' | 'setup' | 'presenting' | 'voting' | 'reveal' | 'tiebreaker' | 'done',
 
-  // Teams
-  teams: ['Team Alpha', 'Team Beta', ...],           // 18 teams, pulled from bingo
+  // Teams — pulled from bingo via Object.keys(bingoState.teams), dynamic count
+  teams: ['Team Alpha', 'Team Beta', ...],           // extracted from bingo, could be any count
+  teamCount: 18,                                      // teams.length, used for progress display
   presentationOrder: [3, 17, 0, ...],                 // shuffled indices into teams[]
   currentIndex: -1,                                    // position in presentationOrder (-1 = not started)
   completed: [],                                       // team names that have presented
@@ -103,17 +104,26 @@ Available during any timed phase:
   currentReveal: null | {
     awardId: string,                                   // category ID or 'overall'
     phase: 'finalists' | 'winner',
-    finalists: [{ team, rank }],
+    finalists: [{ team, rank, score }],                // score = avg stars for categories, total points for overall
     winner: string | null
   },
+
+  // Overall Winner computation (populated when revealing 'overall')
+  overallStandings: null | [
+    { team, points, rankedIn: 5, ranks: { 'best-creation': 2, ... } }  // points = sum of ranks
+  ],
 
   // Tiebreaker state
   tiebreaker: null | {
     awardId: string,
     teams: ['Team A', 'Team B'],
     stage: 'bingo-check' | 'compliment' | 'vote' | 'accepted-tie',
-    bingoData: { 'Team A': { legend, lines, squares }, ... },
-    bingoRevealStep: 'legend' | 'lines' | 'squares' | null,
+    // Derived from bingo state: { teams: { name: { isLegend, completedLines: [[]], squares: [bool] } } }
+    bingoData: {
+      'Team A': { isLegend: bool, lineCount: number, squareCount: number },  // computed from bingo state
+      // ...
+    },
+    bingoRevealStep: 'legend' | 'lines' | 'squares' | null,  // facilitator advances via reveal-next during tiebreaker
     currentComplimenter: 0,                            // index into teams[]
     votes: { 'Alice': 'Team A', 'Bob': 'Team A', 'Carol': 'Team B', ... }  // per-person pick-one votes
   }
@@ -127,13 +137,15 @@ Each individual registers with a name and team before voting:
 - **MCP agent**: Calls `register_voter(name, team)` to register on behalf of its user.
 - Server maintains a `voters` registry mapping person names to teams.
 - Registration is required before submitting any ratings.
+- Re-registration with a different team is rejected (voter name is locked to first team). To fix mistakes, admin can reset a voter via `/admin/reset-voter`.
 
 ### Scoring Rules
 
 - **Per-category ranking**: Average of all star ratings (1-5) received for that category.
 - **Minimum vote threshold**: A team must receive ratings from at least 3 different individuals on a category to be ranked for that category.
 - **People's Choice**: Uses the "Overall impression" (category 6) ratings. Same 3-vote minimum.
-- **Overall Winner**: Aggregate ranking across all 6 categories. Each category ranking gives points (1st = 1 point, 2nd = 2, etc.). Lowest total wins. Team must be ranked in at least 3 of 6 categories to qualify for Overall Winner.
+- **Overall Winner**: Aggregate ranking across all 6 categories. Each category ranking gives points (1st = 1 point, 2nd = 2, etc.). Lowest total wins. Team must be ranked in at least 3 of 6 categories to qualify for Overall Winner. If no team qualifies, the Overall Winner award is skipped.
+- **Unranked handling**: Teams with < 3 ratings on a category are simply omitted from that category's ranking. If a category has fewer than 2 ranked teams, the award is skipped (no meaningful competition). The facilitator sees this on the admin panel before starting reveals.
 - **Self-voting block**: Server looks up the voter's team and rejects ratings where the voter's team matches the presenting team (hard enforcement).
 
 ### One Vote Per Person
@@ -160,6 +172,7 @@ Each individual gets exactly one vote per presenting team. The vote is identifie
 | POST | `/admin/next-complimenter` | — | Advance compliment battle to next team |
 | POST | `/admin/start-tiebreak-vote` | — | Open pick-one audience vote |
 | POST | `/admin/accept-tie` | — | Accept tie, co-winners, move on |
+| POST | `/admin/reset-voter` | `{ voter: 'Alice' }` | Remove a voter registration (for fixing mistakes) |
 | POST | `/admin/reset` | — | Reset all state |
 | GET | `/admin/results` | — | Full raw ratings, averages, rankings |
 
@@ -170,7 +183,7 @@ Each individual gets exactly one vote per presenting team. The vote is identifie
 | GET | `/state` | — | Filtered state (next 3 teams only, no raw ratings) |
 | GET | `/events` | — | SSE stream |
 | POST | `/register` | `{ voter: 'Alice', team: 'Team Alpha' }` | Register a voter to a team |
-| POST | `/rate` | `{ voter: 'Alice', ratings: { categoryId: 1-5 } }` | Submit star ratings for current presenting team |
+| POST | `/rate` | `{ voter: 'Alice', forTeam: 'Team X', ratings: { categoryId: 1-5 } }` | Submit star ratings. `forTeam` must match currently presenting team (prevents race conditions on phase transition) |
 | POST | `/tiebreak-vote` | `{ voter: 'Alice', vote: 'Team X' }` | Cast pick-one tiebreak vote |
 
 ### State Filtering for `/state` and SSE
@@ -247,7 +260,8 @@ Post-ceremony lookup page, accessible with admin token:
 - Rankings per category with average star ratings
 - Raw score distributions per team per category
 - Overall winner aggregation breakdown
-- Exportable/viewable after the event
+- JSON download button for raw data export
+- Viewable after the event
 
 ### 4.4 Removed: `screen.html`
 
@@ -289,14 +303,14 @@ Server fetches bingo state from `/bingo/state`. Resolution priority:
 2. **Line count** — more completed lines wins
 3. **Square count** — more marked squares wins
 
-Displayed with dramatic animation:
+Displayed with dramatic animation (facilitator-paced — each click of "Reveal Next" during tiebreaker advances `bingoRevealStep`):
 - Show tied teams' bingo cards side by side
-- Reveal legend status with suspense pause per team
-- If still tied, reveal line counts with animated counters
-- If still tied, reveal square counts
-- Each step pauses before showing result
+- Reveal legend status with suspense pause per team (facilitator click)
+- If still tied, reveal line counts with animated counters (facilitator click)
+- If still tied, reveal square counts (facilitator click)
+- Each step pauses before showing result, facilitator controls the pace
 
-If resolved: winner announced with celebration effects.
+If resolved at any step: winner announced with celebration effects, tiebreaker ends.
 
 **Stage 2 — Compliment Battle**
 
@@ -331,7 +345,7 @@ If audience vote is also tied:
 |------|-----------|-------------|
 | `get_ceremony_status` | — | Current phase, presenting team, timer, next 3 teams, progress |
 | `register_voter` | `name: string, team: string` | Register a person to a team. Must be called before voting. Agent must clearly identify who it is registering. |
-| `rate_team` | `voter: string, ratings: { 'best-creation': 4, ... }` | Submit star ratings for current presenting team. Voter must be registered. Agent must explicitly state who it is voting on behalf of. All 6 categories, values 1-5. |
+| `rate_team` | `voter: string, for_team: string, ratings: { 'best-creation': 4, ... }` | Submit star ratings. `for_team` must match currently presenting team. Voter must be registered. Agent must explicitly state who it is voting on behalf of. All 6 categories, values 1-5. |
 | `cast_tiebreak_vote` | `voter: string, vote: string` | Pick-one vote during tiebreaker. Voter must be registered. Agent must explicitly state who it is voting on behalf of. |
 
 ### Removed Tools
@@ -348,6 +362,10 @@ All MCP tools that submit votes require the `voter` parameter — the name of th
 3. Make it clear in its responses to the user who it voted for and on which team's behalf
 
 Same HTTP proxy pattern, same Zod validation, same stdio transport.
+
+### Documentation Update
+
+`AGENTS.md` must be updated to reflect the new tool names and descriptions. The old `cast_vote` and `get_voting_status` documentation is replaced with the new ceremony tools. Participants' agents read `AGENTS.md` for tool guidance.
 
 ---
 
@@ -368,7 +386,7 @@ Same HTTP proxy pattern, same Zod validation, same stdio transport.
 - `admin.html` — complete rewrite: ceremony control panel
 
 ### What's new
-- `sounds.js` — shared Web Audio sound module (extracted from bingo, extended)
+- `sounds.js` — new shared Web Audio sound module (bingo currently uses inline audio; this centralizes and extends it)
 - `results.html` — post-ceremony detailed results page
 - Timer system — server-authoritative (`endsAt` timestamps), auto-phase-advance via `setTimeout`
 - Bingo API client — server-side fetch to bingo state for tiebreaker
