@@ -1,6 +1,6 @@
-# Learnathon Voting App
+# Learnathon Ceremony + Voting App
 
-Live audience voting for the awards ceremony — vote once on all categories, reveal winners one by one.
+Phase-based ceremony system for the awards — teams present one at a time, get rated by the audience, then winners are revealed in a dramatic staggered sequence.
 
 > **Primary candidate for the live demo at 8:45** — see `rehearsal-script.md`
 
@@ -8,26 +8,29 @@ Live audience voting for the awards ceremony — vote once on all categories, re
 
 ## How It Works
 
-1. Facilitator enters team names in the admin panel
-2. Opens voting — participants see all 6 categories on their phone and vote one team per category
-3. After 2–3 min, facilitator closes voting
-4. Facilitator reveals winners one at a time on the big screen (gameshow-style)
+1. Facilitator enters team names and sets the presentation queue in the admin panel
+2. Teams present one at a time (pecha-kucha style, ~2.5 min each)
+3. After each presentation, participants rate that team with 5-star ratings across all 6 categories (self-vote blocking prevents rating your own team)
+4. After all teams have presented, the facilitator reveals winners one category at a time with staggered finalist animation
+5. Tiebreakers are resolved via a multi-stage process: bingo check → compliment battle → audience vote → accept tie
 
-Three views:
-- **`/vote.html`** — mobile voting page for participants
-- **`/screen.html`** — projector view with bar charts and reveals
+**Phases:** idle → queue → setup → presenting → voting → reveal → tiebreaker → done
+
+Two views:
+- **`/vote.html`** — mobile page for participants (register, rate teams, tiebreak votes)
 - **`/admin.html`** — facilitator control panel with guidance banners
 
 ---
 
 ## Award Categories (reveal order)
 
-1. Best Creation
-2. Most Creative AI Use
+1. Best Fail Story
+2. Best Risk Catch
 3. Best Safety Practice
-4. Best Risk Catch
-5. Best Fail Story
+4. Most Creative AI Use
+5. Best Creation
 6. People's Choice
+7. Overall Winner (aggregate of all categories)
 
 ---
 

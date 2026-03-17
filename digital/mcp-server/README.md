@@ -1,6 +1,6 @@
 # Learnathon MCP Server
 
-An MCP (Model Context Protocol) server that connects AI coding agents to the Learnathon 2026 bingo and voting apps. Runs locally via stdio transport in each participant's Codespace.
+An MCP (Model Context Protocol) server that connects AI coding agents to the Learnathon 2026 bingo and ceremony/voting apps. Runs locally via stdio transport in each participant's Codespace.
 
 ---
 
@@ -11,8 +11,10 @@ An MCP (Model Context Protocol) server that connects AI coding agents to the Lea
 | `get_bingo_status` | Get bingo board status for all teams or a specific team |
 | `list_bingo_squares` | List all bingo squares with their index numbers and labels |
 | `mark_bingo_square` | Mark (or unmark) a bingo square — auto-creates the team if new |
-| `get_voting_status` | Get voting state — teams, categories, open/closed, results |
-| `cast_vote` | Cast a vote for a team in a category (pre-validates everything) |
+| `get_ceremony_status` | Get current ceremony phase, presenting team, timer, and upcoming teams |
+| `register_voter` | Register yourself to your team before voting (required before rating) |
+| `rate_team` | Submit 5-star ratings (1–5) for the presenting team across all 6 categories |
+| `cast_tiebreak_vote` | Cast a pick-one vote during a tiebreaker round |
 
 ---
 
@@ -62,6 +64,6 @@ LEARNATHON_URL=http://localhost:8080 node server.js
 The MCP server proxies to the unified learnathon server:
 
 - **Bingo API:** `{LEARNATHON_URL}/bingo/*`
-- **Voting API:** `{LEARNATHON_URL}/voting/*`
+- **Ceremony/Voting API:** `{LEARNATHON_URL}/voting/*`
 
 The backend is deployed on Radix Playground at `server-learnathon-prod.playground.radix.equinor.com`.
