@@ -26,17 +26,18 @@ Go to the **template repo** link *(on screen / in chat)*
 
 **Use this template** → **Create a new repository** → Open in **Codespaces**
 
+> **Recommended:** Run in GitHub Codespaces — the environment is tested and should work without issues for everyone.
+
 *This takes a minute — let it run while we continue.*
 
 ---
 
 ### 3. Set up API key
 
-`github.com/settings/codespaces` → **New secret**
+`github.com/Equinor-Playground/YOUR_REPO/settings/secrets/codespaces` → **New secret**
 
-- **Name:** `ANTHROPIC_API_KEY`
+- **Name:** `CLAUDE_KEY`
 - **Value:** *(from the event invite)*
-- **Repository access:** your new repo
 
 ---
 
@@ -49,28 +50,6 @@ claude --version
 Version number? You're good. ✓
 
 *Having issues? Raise your hand — coaches are on the floor.*
-
------
-
-## The Learnathon
-
----
-
-### What we're doing today
-
-Teams of 3 build something real using AI-assisted tools.
-
-At the end of the day: **Show & Tell** — you demo what you built *and* share what you learned.
-
-The learning matters more than the polish.
-
----
-
-### The workflow
-
-@embed(/presentations/images/workflow-loop.svg, width=80%)
-
-This is the loop. You'll use it all day.
 
 -----
 
@@ -119,186 +98,41 @@ Vibe coding is **perfect** for these.
 
 But what about when you *do* care?
 
-That's what the rest of this talk is about.
+-----
+
+## The Learnathon
+
+---
+
+### What we're doing today
+
+Teams of 3 build something real using AI-assisted tools.
+
+At the end of the day: **Show & Tell** — you demo what you built *and* share what you learned.
+
+The learning matters more than the polish.
 
 -----
 
 ## How to vibe code
 
----
+1. What do you want to build? 
+2. Press enter
+3. Wait
 
-### Context engineering
+--- 
 
-![Galaxy brain](/presentations/images/galaxybrain.jpg) <!-- .element style="max-height:380px" -->
+### The workflow
 
----
-
-### Anthropic's four pillars
-
-@embed(/presentations/images/four-pillars.svg, width=90%)
+@embed(/presentations/images/workflow-loop.svg, width=80%)
 
 ---
 
-### Where context lives in your repo
+### But this sounds like a lot, right?
 
-| File | Purpose |
-|------|---------|
-| `CLAUDE.md` | Always loaded — project rules, conventions, boundaries |
-| `AGENTS.md` | Tool-agnostic instructions for any AI assistant |
-| `.github/copilot-instructions.md` | Copilot-specific context |
-| `mini-spec.md` | What you're building and why |
+There are tools at your disposal that handle this out of the box — **Superpowers**, **Get Shit Done**, and many more.
 
-**Write these first. Code second.**
-
----
-
-### Agent engineering
-
-![Captain Phillips](/presentations/images/captainnow.jpg) <!-- .element style="max-height:350px" -->
-
-**Copilot Agent Mode** and **Claude Code** are both agents.
-
----
-
-### You are the orchestrator
-
-Your job:
-
-1. Set the context
-2. Give a clear, scoped task
-3. Review the output
-4. Steer when it drifts
-
-**Small tasks. Tight feedback loops.**
-
----
-
-### Think like a studio lead
-
-Define your agent team like a real dev org:
-
-| Role | Responsibility |
-|------|---------------|
-| **Architect** | Plans structure, picks patterns |
-| **Builder** | Writes code on feature branches |
-| **QA** | Runs tests, validates before merge |
-| **Reviewer** | Checks main after big changes |
-
-**Explicit roles > one agent doing everything.**
-
----
-
-### Branch discipline
-
-- All subagents work on **branches** — never main
-- QA, test, and user-test agents **gate the merge**
-- Orchestrator runs QA on main after big changes
-
-**Same rules you'd give a junior dev.**
-
----
-
-### Subagents
-
-@embed(/presentations/images/subagent-delegation.svg, width=85%)
-
-Think of it as **delegation** — same as managing a team.
-
----
-
-### MCPs vs Skills
-
-@embed(/presentations/images/kitchen-vs-recipe.svg, width=90%)
-
----
-
-### MCP in practice
-
-```
-Agent ←→ MCP Server ←→ External System
-```
-
-Examples at this event:
-- Mark a bingo square
-- Cast a vote
-- Search Confluence
-- Read from a database
-
-**MCP gives agents new capabilities.**
-
----
-
-### Skills in practice
-
-```
-/submit-gotcha  → creates a GitHub issue with your AI pitfall
-/submit-project → registers your team's project
-```
-
-Skills live in your repo as `SKILL.md` files.
-
-Any team member can invoke them.
-
----
-
-### Useful MCPs & Plugins
-
-Level up your agent with ready-made tools.
-
-| Tool | What it does | API key? |
-|------|-------------|----------|
-| **Superpowers** | TDD, debugging, subagent code review | No |
-| **Playwright MCP** | Browser automation — test & verify your UI | No |
-| **Figma MCP** | Design → code from Figma files | No |
-| **Context7** | Injects real, versioned library docs | Yes |
-| **Security MCPs** | SAST, secrets scanning, PR review | Varies |
-
-Claude Code also has `/security-review` built in.
-
-**Try one new tool = bingo square.**
-
----
-
-### Progressive disclosure
-
-@embed(/presentations/images/progressive-disclosure-iceberg.svg, width=60%)
-
----
-
-### Example workflow
-
-*(Sean's Miro illustration)*
-
----
-
-### Step by step
-
-```
-1. Write a mini-spec         ← what, why, constraints
-2. "Plan this"               ← agent creates a plan
-3. Review the plan           ← push back, adjust scope
-4. "Build step 1"            ← review → commit
-5. "Build step 2"            ← review → commit
-6. "Run the tests"           ← fix what breaks
-7. "Check for security"      ← ask the hard questions
-8. Ship it
-```
-
-**Spec → Plan → Build → Verify → Secure → Ship**
-
----
-
-### Vibe debugging
-
-When things go wrong (and they will):
-
-- **"Explain what this code does"** — make the agent teach you
-- **"What could go wrong here?"** — make it think adversarially
-- **"Fix only this function, nothing else"** — scope the fix
-- **Start a new chat** if the agent contradicts itself
-- **Save progress to files** — don't keep decisions only in chat
-
-**Trust the running code, not the explanation.**
+These days they come as **plugins** for both Claude and Copilot.
 
 -----
 
@@ -318,16 +152,85 @@ When things go wrong (and they will):
 
 ---
 
-### Token economics
+### Set the context
 
-Tokens = money. Every wasted cycle costs real cash.
+The quality of AI output = the quality of context you give it.
 
-| Rule | Why |
-|------|-----|
-| Pick the right model per task | Don't use Opus for formatting |
-| Compact context often | Smaller windows = cheaper calls |
-| Explicit version control instructions | Agents fumble git — tell them exactly when to commit |
-| Store mistakes to memory | So agents don't rediscover the same lesson |
+![Galaxy brain](/presentations/images/galaxybrain.jpg) <!-- .element style="max-height:380px" -->
+
+---
+
+### Where context lives in your repo
+
+| Layer | Examples | Loaded when? |
+|-------|----------|-------------|
+| **Agent instructions** | `CLAUDE.md` · `copilot-instructions.md` | Always — equivalent per tool |
+| **Project docs** | `mini-spec.md` · `AGENTS.md` | Always or on reference |
+| **Agent-managed** | `plans/` · `tasks/` · `memory/` | Agent reads/writes as needed |
+| **Skills** | `.claude/skills/` · `.github/workflows/` | On invocation — carry own context |
+| **Subagents** | Agent definitions & prompts | Scoped context per agent role |
+
+**Write the top layers first. Code second.**
+
+---
+
+### Level up with tools
+
+@embed(/presentations/images/kitchen-vs-recipe.svg, width=90%)
+
+---
+
+### Progressive disclosure in skills
+
+Skills use the same idea — load only what's needed, when it's needed.
+
+@embed(/presentations/images/progressive-disclosure-iceberg.svg, width=60%)
+
+---
+
+### Stay in control
+
+![Captain Phillips](/presentations/images/captainnow.jpg) <!-- .element style="max-height:350px" -->
+
+Your job: **set context, give scoped tasks, review output, steer when it drifts.**
+
+---
+
+### The orchestrator in practice
+
+- Give **small, scoped tasks** — not "build the whole app"
+- Use **explicit roles** — architect, builder, QA, reviewer
+- All work happens on **branches** — never directly on main
+- QA and test agents **gate the merge**
+
+**Same rules you'd give a junior dev.**
+
+---
+
+### Subagents
+
+When your project grows, split work across focused agents.
+
+@embed(/presentations/images/subagent-delegation.svg, width=85%)
+
+---
+
+### Useful MCPs & Plugins
+
+Level up your agent with ready-made tools.
+
+| Tool | What it does | API key? |
+|------|-------------|----------|
+| **frontend-design** | Generate UI from descriptions & screenshots | No |
+| **superpowers** | TDD, debugging, subagent code review | No |
+| **code-simplifier** | Review & simplify code for quality | No |
+| **playwright** | Browser automation — test & verify your UI | No |
+| **security-guidance** | Security review & threat modelling | No |
+| **claude-md-management** | Manage CLAUDE.md project instructions | No |
+| **skill-creator** | Create reusable Claude Code skills | No |
+| **Context7** | Injects real, versioned library docs | Yes |
+
+**Try one new tool = bingo square.**
 
 ---
 
@@ -342,6 +245,20 @@ Before building anything hard:
 Saves time, headaches, and tokens.
 
 **"Never manually implement what someone already solved."**
+
+---
+
+### When things go wrong
+
+And they will.
+
+- **Give the agent what you see** — browser dev tools, error logs, screenshots
+- **Use tools** — Playwright for UI bugs, `fetch` for API debugging
+- **Ask it to search** — "find a solution for this online"
+- **Know when to restart** — sometimes a new chat is cheaper than a deeper hole
+- **Save learnings to memory** — so the agent doesn't repeat the same mistakes
+
+**Trust the running code, not the explanation.**
 
 ---
 
@@ -361,7 +278,7 @@ They can:
 - Install packages you didn't ask for
 - Delete files
 - Make network requests
-- Push to git
+- Send your `.env` file somewhere nice
 
 **Review what the agent does.**
 
@@ -369,55 +286,23 @@ They can:
 
 -----
 
-## Examples
-
----
-
-### This bingo app
-
-Built entirely with AI-assisted coding.
-
-Express + vanilla JS · SSE for real-time · Dashboard + wall view + team cards
-
-**~2500 lines. One session.**
-
----
-
-### The voting app
-
-Live audience voting with animated ceremony reveal.
-
-Admin controls · SSE-powered live screen · Category-by-category reveals
-
-**Spec to working app in ~30 minutes.**
-
----
-
-### The MCP server
-
-Connects any AI assistant to event infrastructure.
-
-```
-> "Mark bingo square 'Use an MCP tool' for our team"
-✓ Marked! You now have 2 lines.
-```
-
-**Custom tools in ~200 lines of focused code.**
-
------
-
 ## Let's go!
 
 ---
 
-### Pick your challenge
+### How to vibe code as a team
 
-| Challenge | What you build |
-|-----------|---------------|
-| 🎮 **Conference Stand Game** | Fun interactive game for EDC booth |
-| 🔌 **Useful MCP Server** | Reusable tool for the community |
-| 🤖 **Custom Agent** | Shareable agent configuration |
-| 💡 **Bring Your Own Idea** | Your passion project — demoable in 3–5 min |
+**Step 1: Scaffold the app together** — write the mini-spec, plan, and set up the repo as a team.
+
+Then pick your style:
+
+| Style | How it works |
+|-------|-------------|
+| 🧑‍🤝‍🧑 **Mob vibing** | One driver shares screen. Everyone contributes prompts and ideas. Rotate the driver. |
+| 🔀 **Distributed vibing** | Each person owns a specific part. Write a `role.md` per person and reference them from `CLAUDE.md`. |
+| 🎲 **Free for all** | Everyone vibes simultaneously. See what happens. Merge the chaos at the end. |
+
+*No wrong answer — but know which one you're doing.*
 
 ---
 
@@ -484,6 +369,17 @@ The learning story matters more than the polish.
 
 **Spec → Plan → Build → Verify → Secure → Ship**
 
+---
+
+### Pick your challenge
+
+| Challenge | What you build |
+|-----------|---------------|
+| 🎮 **Conference Stand Game** | Fun interactive game for EDC booth |
+| 🔌 **Useful MCP Server** | Reusable tool for the community |
+| 🤖 **Custom Agent** | Shareable agent configuration |
+| 💡 **Bring Your Own Idea** | Your passion project — demoable in 3–5 min |
+
 -----
 
 ## Lab 1: Mini-spec + Plan
@@ -494,10 +390,11 @@ The learning story matters more than the polish.
 
 ### What to do now
 
-1. **Write your mini-spec** — use the template in your repo
-2. **Ask your agent to plan** — "Plan this based on the mini-spec"
-3. **Review the plan** — push back, adjust scope, agree
-4. **Commit** the spec and plan
+1. **Check `/plugins`** — pick the tools that fit your project and install them
+2. **Write your mini-spec** — use the template in your repo
+3. **Ask your agent to plan** — "Plan this based on the mini-spec"
+4. **Review the plan** — push back, adjust scope, agree
+5. **Commit** the spec and plan
 
 ---
 
