@@ -47,6 +47,7 @@ function createInitialState() {
     ratings: {},
     categories: CATEGORIES,
     revealedAwards: [],
+    revealedWinners: {},
     currentReveal: null,
     overallStandings: null,
     tiebreaker: null,
@@ -461,6 +462,7 @@ router.post('/admin/start-reveal', requireAdmin, (req, res) => {
   }
   state.phase = 'reveal';
   state.revealedAwards = [];
+  state.revealedWinners = {};
   state.currentReveal = null;
   broadcastAll();
   res.json({ ok: true });
@@ -505,6 +507,7 @@ router.post('/admin/reveal-next', requireAdmin, (req, res) => {
         state.currentReveal.winner = winner;
         state.currentReveal.phase = 'winner';
         state.revealedAwards.push(state.currentReveal.awardId);
+        state.revealedWinners[state.currentReveal.awardId] = winner;
         state.phase = 'reveal';
         state.tiebreaker = null;
       }
@@ -536,6 +539,7 @@ router.post('/admin/reveal-next', requireAdmin, (req, res) => {
     state.currentReveal.winner = ranking[0].team;
     state.currentReveal.phase = 'winner';
     state.revealedAwards.push(state.currentReveal.awardId);
+    state.revealedWinners[state.currentReveal.awardId] = ranking[0].team;
     broadcastAll();
     return res.json({ ok: true, winner: ranking[0].team });
   }
@@ -676,6 +680,7 @@ function resolveTiebreakVote() {
     state.currentReveal.winner = sorted[0][0];
     state.currentReveal.phase = 'winner';
     state.revealedAwards.push(state.tiebreaker.awardId);
+    state.revealedWinners[state.tiebreaker.awardId] = sorted[0][0];
     state.tiebreaker = null;
     state.phase = 'reveal';
   } else {
@@ -688,9 +693,11 @@ function resolveTiebreakVote() {
 router.post('/admin/accept-tie', requireAdmin, (req, res) => {
   if (!state.tiebreaker) return res.status(400).json({ error: 'no tiebreaker active' });
 
-  state.currentReveal.winner = state.tiebreaker.teams.join(' & ');
+  const coWinner = state.tiebreaker.teams.join(' & ');
+  state.currentReveal.winner = coWinner;
   state.currentReveal.phase = 'winner';
   state.revealedAwards.push(state.tiebreaker.awardId);
+  state.revealedWinners[state.tiebreaker.awardId] = coWinner;
   state.tiebreaker = null;
   state.phase = 'reveal';
   clearTimer();

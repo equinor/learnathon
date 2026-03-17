@@ -549,14 +549,18 @@
       // ── Reveal progress ────────────────────────────────────
       const revealSection = document.getElementById('reveal-section');
       const revealedAwards = s.revealedAwards || [];
+      const revealedWinners = s.revealedWinners || {};
       if (revealedAwards.length > 0 || s.phase === 'reveal' || s.phase === 'done') {
         document.getElementById('reveal-list').innerHTML = REVEAL_ORDER.map(id => {
           const revealed = revealedAwards.includes(id);
           const isCurrent = s.currentReveal?.awardId === id;
           const icon = revealed ? '✓' : (isCurrent ? '▶' : '○');
-          const winner = isCurrent && s.currentReveal?.winner
-            ? ` <span style="color:#fbbf24">&rarr; ${escapeHtml(s.currentReveal.winner)}</span>`
-            : '';
+          let winner = '';
+          if (isCurrent && s.currentReveal?.winner) {
+            winner = ` <span style="color:#fbbf24">&rarr; ${escapeHtml(s.currentReveal.winner)}</span>`;
+          } else if (revealed && revealedWinners[id]) {
+            winner = ` <span style="color:#fbbf24">&rarr; ${escapeHtml(revealedWinners[id])}</span>`;
+          }
           return `<div class="reveal-item ${revealed ? 'revealed' : ''} ${isCurrent ? 'current' : ''}">
             <span>${icon}</span>
             <span>${escapeHtml(id)}${winner}</span>
