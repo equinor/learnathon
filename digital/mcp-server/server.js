@@ -91,62 +91,118 @@ server.tool(
   }
 );
 
-// --- Voting tools ---
+// --- Ceremony Tools ---
 
-server.tool(
-  "get_voting_status",
-  "Get current voting state — teams, categories, whether voting is open, and results",
-  {},
-  async () => {
+server.tool('get_ceremony_status', 'Get current ceremony status: phase, presenting team, timer, next teams, progress', {}, async () => {
+  try {
+    const res = await fetch(`${VOTING_URL}/state`);
+    const state = await res.json();
+    const lines = [];
+    lines.push(`Phase: ${state.phase}`);
+    if (state.currentTeam) lines.push(`Current team: ${state.currentTeam}`);
+    if (state.timer) {
+      const remaining = state.timer.paused
+        ? state.timer.remaining
+        : Math.max(0, Math.round((new Date(state.timer.endsAt) - Date.now()) / 1000));
+      lines.push(`Timer: ${remaining}s remaining${state.timer.paused ? ' (PAUSED)' : ''}`);
+    }
+    if (state.upNext?.length > 0) lines.push(`Up next: ${state.upNext.join(', ')}`);
+    lines.push(`Progress: ${state.completed?.length || 0} of ${state.teamCount} presented`);
+    if (state.tiebreaker) lines.push(`Tiebreaker: ${state.tiebreaker.stage} for ${state.tiebreaker.awardId}`);
+    return { content: [{ type: 'text', text: lines.join('\n') }] };
+  } catch (err) {
+    return { content: [{ type: 'text', text: `Error: ${err.message}. Is LEARNATHON_URL set?` }] };
+  }
+});
+
+// Backward compatibility alias — same output as get_ceremony_status
+server.tool('get_voting_status', 'Get current ceremony/voting status (alias for get_ceremony_status)', {}, async () => {
+  try {
+    const res = await fetch(`${VOTING_URL}/state`);
+    const state = await res.json();
+    const lines = [];
+    lines.push(`Phase: ${state.phase}`);
+    if (state.currentTeam) lines.push(`Current team: ${state.currentTeam}`);
+    if (state.timer) {
+      const remaining = state.timer.paused
+        ? state.timer.remaining
+        : Math.max(0, Math.round((new Date(state.timer.endsAt) - Date.now()) / 1000));
+      lines.push(`Timer: ${remaining}s remaining${state.timer.paused ? ' (PAUSED)' : ''}`);
+    }
+    if (state.upNext?.length > 0) lines.push(`Up next: ${state.upNext.join(', ')}`);
+    lines.push(`Progress: ${state.completed?.length || 0} of ${state.teamCount} presented`);
+    return { content: [{ type: 'text', text: lines.join('\n') }] };
+  } catch (err) {
+    return { content: [{ type: 'text', text: `Error: ${err.message}` }] };
+  }
+});
+
+server.tool('register_voter',
+  'Register a person to a team for voting. Must be called before submitting any ratings. The agent must clearly state who it is registering.',
+  z.object({
+    name: z.string().describe('The person\'s name (who the agent is acting on behalf of)'),
+    team: z.string().describe('The team name this person belongs to'),
+  }),
+  async ({ name, team }) => {
     try {
-      const res = await fetch(`${VOTING_URL}/state`);
-      const state = await res.json();
-      return { content: [{ type: "text", text: JSON.stringify(state, null, 2) }] };
+      const res = await fetch(`${VOTING_URL}/register`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ voter: name, team }),
+      });
+      const data = await res.json();
+      if (!res.ok) return { content: [{ type: 'text', text: `Error: ${data.error}. ${data.teams ? 'Available teams: ' + data.teams.join(', ') : ''}` }] };
+      return { content: [{ type: 'text', text: `Registered ${name} to ${team}` }] };
     } catch (err) {
-      return { content: [{ type: "text", text: `Could not reach the Learnathon server at ${BASE_URL}. Is LEARNATHON_URL set correctly? Error: ${err.message}` }] };
+      return { content: [{ type: 'text', text: `Error: ${err.message}` }] };
     }
   }
 );
 
-server.tool(
-  "cast_vote",
-  "Cast a vote for a team in a category (only works when voting is open). Use get_voting_status first to see available teams and categories.",
-  {
-    team: z.string().describe("Team name to vote for"),
-    category: z.string().describe("Vote category — use get_voting_status to see the available categories"),
-  },
-  async ({ team, category }) => {
+server.tool('rate_team',
+  'Submit 5-star ratings for the currently presenting team. The agent MUST state who it is voting on behalf of.',
+  z.object({
+    voter: z.string().describe('Name of the person this vote is on behalf of (must be registered)'),
+    for_team: z.string().describe('The team being rated (must match currently presenting team)'),
+    ratings: z.record(z.number()).describe(
+      'Ratings per category (1-5 stars each). Keys: best-creation, most-creative, best-safety, best-risk-catch, best-fail, peoples-choice'
+    ),
+  }),
+  async ({ voter, for_team, ratings }) => {
     try {
-      // Pre-check: fetch voting state to validate inputs
-      const stateRes = await fetch(`${VOTING_URL}/state`);
-      const state = await stateRes.json();
-
-      if (!state.votingOpen) {
-        return { content: [{ type: "text", text: "Voting is not currently open. Wait for the facilitator to open voting." }] };
-      }
-
-      if (!state.teams.includes(team)) {
-        return { content: [{ type: "text", text: `Team "${team}" not found. Available teams: ${state.teams.join(", ") || "none"}` }] };
-      }
-
-      const categoryIds = state.categories.map((c) => c.id);
-      if (!categoryIds.includes(category)) {
-        return { content: [{ type: "text", text: `Category "${category}" not found. Available categories: ${categoryIds.join(", ")}` }] };
-      }
-
-      const res = await fetch(`${VOTING_URL}/vote`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ team, category }),
+      const res = await fetch(`${VOTING_URL}/rate`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ voter, forTeam: for_team, ratings }),
       });
-
-      const result = await res.json();
-      if (result.error) {
-        return { content: [{ type: "text", text: `Error: ${result.error}` }] };
-      }
-      return { content: [{ type: "text", text: `Vote cast for "${team}" in ${category}.` }] };
+      const data = await res.json();
+      if (!res.ok) return { content: [{ type: 'text', text: `Error: ${data.error}` }] };
+      return { content: [{ type: 'text', text: `Ratings submitted by ${voter} for ${for_team}` }] };
     } catch (err) {
-      return { content: [{ type: "text", text: `Could not reach the Learnathon server at ${BASE_URL}. Is LEARNATHON_URL set correctly? Error: ${err.message}` }] };
+      return { content: [{ type: 'text', text: `Error: ${err.message}` }] };
+    }
+  }
+  }
+);
+
+server.tool('cast_tiebreak_vote',
+  'Cast a pick-one vote during a tiebreaker. The agent MUST state who it is voting on behalf of.',
+  {
+    voter: { type: 'string', description: 'Name of the person this vote is on behalf of (must be registered)' },
+    vote: { type: 'string', description: 'The team to vote for (must be one of the tied teams)' },
+  },
+  async ({ voter, vote }) => {
+    try {
+      const res = await fetch(`${VOTING_URL}/tiebreak-vote`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ voter, vote }),
+      });
+      const data = await res.json();
+      if (!res.ok) return { content: [{ type: 'text', text: `Error: ${data.error}. ${data.options ? 'Options: ' + data.options.join(', ') : ''}` }] };
+      return { content: [{ type: 'text', text: `${voter} voted for ${vote} in tiebreaker` }] };
+    } catch (err) {
+      return { content: [{ type: 'text', text: `Error: ${err.message}` }] };
     }
   }
 );

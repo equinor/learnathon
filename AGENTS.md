@@ -37,8 +37,11 @@ If the MCP server is configured, you have access to:
 - `get_bingo_status` — Check your team's bingo card progress
 - `list_bingo_squares` — List all available bingo squares
 - `mark_bingo_square` — Mark a bingo square as completed
-- `get_voting_status` — Check the current voting status
-- `cast_vote` — Cast a vote for a team in a category
+- `get_ceremony_status` — Get current ceremony phase, presenting team, timer, and upcoming teams
+- `register_voter(name, team)` — Register yourself to your team before voting (required)
+- `rate_team(voter, for_team, ratings)` — Submit 5-star ratings (1-5) for the presenting team across all categories
+- `cast_tiebreak_vote(voter, vote)` — Cast a pick-one vote during a tiebreaker round
+- `get_voting_status` — Alias for get_ceremony_status (backward compatible)
 - `get_gotchas` — Get the community-contributed list of AI gotchas
 
 ## Challenge Tracks
