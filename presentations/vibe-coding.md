@@ -220,7 +220,7 @@ Agent ←→ MCP Server ←→ External System
 
 Examples at this event:
 - Mark a bingo square
-- Rate a team during the ceremony
+- Cast a vote
 - Search Confluence
 - Read from a database
 
@@ -237,18 +237,7 @@ Examples at this event:
 
 Skills live in your repo as `SKILL.md` files.
 
-Any team member can invoke them. Just type the command in Claude Code.
-
----
-
-### How to use a skill
-
-1. Open Claude Code (terminal or VS Code)
-2. Type `/submit-gotcha` or `/submit-project`
-3. Answer the questions — Claude gathers the details
-4. Review the draft, confirm, done
-
-**No setup needed. Already in your repo.**
+Any team member can invoke them.
 
 ---
 
@@ -656,29 +645,25 @@ The learning story matters more than the polish.
 
 -----
 
-## 🗳️ Ceremony + Awards
+## 🗳️ Vote + Awards
 
 *15:40 — 16:10*
 
 ---
 
-### How voting works
+### Phones out!
 
-You rated each team **during their presentation** — 5 stars across 6 categories.
+Vote for your favourites in **all 6 categories**.
 
-Your agent can do this too: `rate_team` via MCP.
-
-*(Can't rate your own team — the system blocks it.)*
+You've got **2 minutes**.
 
 ---
 
 ### And the winners are...
 
-🥇 🎨 🔐 🚨 😂 🤝 🏆
+🥇 🎨 🔐 🚨 😂 🤝
 
-*Revealed one by one — 3rd, 2nd, 1st.*
-
-*Tied? Bingo progress breaks it. Still tied? Compliment battle + audience vote.*
+*One by one.*
 
 -----
 
