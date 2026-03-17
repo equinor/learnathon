@@ -65,6 +65,38 @@
       color: #a8a29e;
     }
 
+    /* Countdown timer */
+    #countdown-wrap {
+      display: none;
+      text-align: center;
+      margin-bottom: 1.25rem;
+    }
+
+    #countdown {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: #d97706;
+      font-variant-numeric: tabular-nums;
+      letter-spacing: 0.04em;
+    }
+
+    #countdown-label {
+      font-size: 0.75rem;
+      color: #888;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-top: 0.15rem;
+    }
+
+    #countdown.urgent {
+      animation: countdownPulse 1s ease-in-out infinite;
+    }
+
+    @keyframes countdownPulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+
     /* Category section */
     .category-section {
       margin-bottom: 1.5rem;
@@ -95,25 +127,26 @@
     .team-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 0.4rem;
+      gap: 0.6rem;
     }
 
     .team-btn {
       background: #1a1a2e;
       border: 2px solid #2a2a3e;
       color: #ccc;
-      padding: 0.55rem 0.4rem;
+      padding: 0.8rem 0.5rem;
       border-radius: 8px;
       font-size: 0.8rem;
       font-weight: 600;
       cursor: pointer;
-      transition: all 0.12s ease;
+      transition: all 0.15s ease;
       text-align: center;
       -webkit-tap-highlight-color: transparent;
       user-select: none;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+      min-height: 44px;
     }
 
     .team-btn:active { transform: scale(0.97); }
@@ -125,23 +158,150 @@
       color: #c4b5fd;
     }
 
+    .team-btn.vote-anim {
+      animation: voteConfirm 0.35s ease;
+      box-shadow: 0 0 16px rgba(74, 222, 128, 0.4);
+    }
+
+    @keyframes voteConfirm {
+      0% { transform: scale(1); }
+      40% { transform: scale(1.15); }
+      100% { transform: scale(1); }
+    }
+
     .divider {
       border: none;
       border-top: 1px solid #1e1e30;
       margin: 1.5rem 0;
     }
+
+    /* Mute toggle */
+    #mute-btn {
+      position: fixed;
+      bottom: 1rem;
+      right: 1rem;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: #1a1a2e;
+      border: 1px solid #2a2a3e;
+      color: #888;
+      font-size: 1.1rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    /* Vote toast */
+    #vote-toast {
+      position: fixed;
+      bottom: 3.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #14532d;
+      border: 1px solid #15803d;
+      color: #4ade80;
+      padding: 0.5rem 1.2rem;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+      pointer-events: none;
+      z-index: 99;
+    }
+
+    #vote-toast.show {
+      opacity: 1;
+    }
+
+    /* Loading spinner */
+    #loading-overlay {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 0;
+      color: #555;
+      font-size: 0.9rem;
+    }
+
+    .spinner {
+      width: 24px;
+      height: 24px;
+      border: 3px solid #2a2a3e;
+      border-top-color: #7c3aed;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      margin-bottom: 0.75rem;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Submitting overlay on buttons */
+    .team-btn.submitting {
+      position: relative;
+      color: transparent;
+    }
+
+    .team-btn.submitting::after {
+      content: '...';
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      color: #ccc;
+      font-size: 1rem;
+      letter-spacing: 0.15em;
+      animation: dotPulse 0.6s ease-in-out infinite;
+    }
+
+    @keyframes dotPulse {
+      0%, 100% { opacity: 0.4; }
+      50% { opacity: 1; }
+    }
+
+    /* Mobile: screens < 400px */
+    @media (max-width: 400px) {
+      .team-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .team-btn {
+        font-size: 0.85rem;
+        padding: 0.9rem 0.6rem;
+      }
+    }
   </style>
 </head>
 <body>
-  <header>🎓 Learnathon 2026 — Awards</header>
-  <div id="progress"></div>
-  <div id="all-done">
-    <span class="icon">✅</span>
-    <p>All votes cast!</p>
-    <small>Watch the big screen for results.</small>
+  <header>Learnathon 2026 — Awards</header>
+  <div id="loading-overlay">
+    <div class="spinner"></div>
+    Connecting...
   </div>
-  <div id="status-banner"></div>
-  <div id="categories"></div>
+  <div id="main-content" style="display: none;">
+    <div id="progress"></div>
+    <div id="all-done">
+      <span class="icon">&#10003;</span>
+      <p>All votes cast!</p>
+      <small>Watch the big screen for results.</small>
+    </div>
+    <div id="status-banner"></div>
+    <div id="countdown-wrap">
+      <div id="countdown">3:00</div>
+      <div id="countdown-label">time remaining</div>
+    </div>
+    <div id="categories"></div>
+  </div>
+
+  <div id="vote-toast">Voted!</div>
+  <button id="mute-btn" onclick="toggleMute()" title="Toggle sound" style="display: none;">&#x1f50a;</button>
 
   <script>
     function escapeHtml(str) {
@@ -151,12 +311,148 @@
     }
 
     let myVotes = JSON.parse(localStorage.getItem('learnathon-votes') || '{}');
+    let sseConnected = false;
+    let currentState = null;
+    let submittingCategory = null;
+
+    // --- Sound system (Web Audio API) ---
+    let audioCtx = null;
+    let soundMuted = false;
+
+    function getAudioCtx() {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
+      return audioCtx;
+    }
+
+    // Pentatonic notes: C4, D4, E4, G4, A4 (frequencies in Hz)
+    const pentatonic = [261.63, 293.66, 329.63, 392.00, 440.00];
+
+    function playVoteChime() {
+      if (soundMuted) return;
+      try {
+        const ctx = getAudioCtx();
+        const freq = pentatonic[Math.floor(Math.random() * pentatonic.length)];
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.value = freq;
+        gain.gain.setValueAtTime(0.08, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.2);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(ctx.currentTime);
+        osc.stop(ctx.currentTime + 0.2);
+      } catch (e) { /* ignore audio errors */ }
+    }
+
+    function playAllDoneChime() {
+      if (soundMuted) return;
+      try {
+        const ctx = getAudioCtx();
+        // Two-note ascending chime: E4 -> A4
+        const notes = [329.63, 440.00];
+        notes.forEach((freq, i) => {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = 'sine';
+          osc.frequency.value = freq;
+          const startTime = ctx.currentTime + i * 0.15;
+          gain.gain.setValueAtTime(0.12, startTime);
+          gain.gain.exponentialRampToValueAtTime(0.001, startTime + 0.3);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start(startTime);
+          osc.stop(startTime + 0.3);
+        });
+      } catch (e) { /* ignore audio errors */ }
+    }
+
+    function toggleMute() {
+      soundMuted = !soundMuted;
+      document.getElementById('mute-btn').innerHTML = soundMuted ? '&#x1f507;' : '&#x1f50a;';
+    }
+
+    // --- Countdown timer ---
+    const COUNTDOWN_SECONDS = 180; // 3 minutes
+    let countdownInterval = null;
+    let countdownEnd = null;
+    let countdownStorageKey = 'learnathon-countdown-end';
+
+    function startCountdown() {
+      // Check if we already have a running countdown stored
+      const stored = localStorage.getItem(countdownStorageKey);
+      if (stored) {
+        countdownEnd = parseInt(stored, 10);
+        // If it's already expired, reset
+        if (countdownEnd <= Date.now()) {
+          countdownEnd = Date.now() + COUNTDOWN_SECONDS * 1000;
+          localStorage.setItem(countdownStorageKey, countdownEnd);
+        }
+      } else {
+        countdownEnd = Date.now() + COUNTDOWN_SECONDS * 1000;
+        localStorage.setItem(countdownStorageKey, countdownEnd);
+      }
+      if (countdownInterval) clearInterval(countdownInterval);
+      countdownInterval = setInterval(updateCountdown, 250);
+      updateCountdown();
+    }
+
+    function stopCountdown() {
+      if (countdownInterval) {
+        clearInterval(countdownInterval);
+        countdownInterval = null;
+      }
+      countdownEnd = null;
+      localStorage.removeItem(countdownStorageKey);
+    }
+
+    function updateCountdown() {
+      if (!countdownEnd) return;
+      const remaining = Math.max(0, Math.ceil((countdownEnd - Date.now()) / 1000));
+      const min = Math.floor(remaining / 60);
+      const sec = remaining % 60;
+      const el = document.getElementById('countdown');
+      el.textContent = min + ':' + String(sec).padStart(2, '0');
+      if (remaining <= 30) {
+        el.classList.add('urgent');
+      } else {
+        el.classList.remove('urgent');
+      }
+      if (remaining <= 0) {
+        stopCountdown();
+      }
+    }
+
+    // --- Toast ---
+    let toastTimeout = null;
+    function showVoteToast() {
+      const t = document.getElementById('vote-toast');
+      t.classList.add('show');
+      if (toastTimeout) clearTimeout(toastTimeout);
+      toastTimeout = setTimeout(() => t.classList.remove('show'), 1000);
+    }
+
+    // --- Vote animation ---
+    function animateButton(categoryId, team) {
+      const btns = document.querySelectorAll(`[data-cat="${categoryId}"][data-team="${CSS.escape(team)}"]`);
+      btns.forEach(btn => {
+        btn.classList.add('vote-anim');
+        btn.addEventListener('animationend', () => btn.classList.remove('vote-anim'), { once: true });
+      });
+    }
 
     function saveMyVotes() {
       localStorage.setItem('learnathon-votes', JSON.stringify(myVotes));
     }
 
     function vote(categoryId, team) {
+      // Show submitting state on the button
+      submittingCategory = categoryId;
+      const btns = document.querySelectorAll(`[data-cat="${categoryId}"][data-team="${CSS.escape(team)}"]`);
+      btns.forEach(btn => btn.classList.add('submitting'));
+
       fetch('/voting/vote', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -164,44 +460,90 @@
       })
         .then(r => r.json())
         .then(data => {
+          submittingCategory = null;
+          btns.forEach(btn => btn.classList.remove('submitting'));
           if (data.ok) {
+            const prevVotedCount = Object.keys(myVotes).filter(k =>
+              currentState && currentState.categories.some(c => c.id === k)
+            ).length;
+
             myVotes[categoryId] = team;
             saveMyVotes();
+
+            // Play sound & animate
+            playVoteChime();
+            animateButton(categoryId, team);
+            showVoteToast();
+
+            // Check if all categories voted after this vote
+            if (currentState) {
+              const newVotedCount = currentState.categories.filter(c => myVotes[c.id]).length;
+              if (newVotedCount >= currentState.categories.length && prevVotedCount < currentState.categories.length) {
+                setTimeout(playAllDoneChime, 400);
+              }
+            }
+
             // re-render from current state
             fetch('/voting/state').then(r => r.json()).then(render);
           } else {
             alert(data.error || 'Vote failed');
           }
+        })
+        .catch(() => {
+          submittingCategory = null;
+          btns.forEach(btn => btn.classList.remove('submitting'));
+          alert('Network error — try again');
         });
     }
 
     function render(state) {
+      currentState = state;
+
+      // Hide loading, show main content
+      document.getElementById('loading-overlay').style.display = 'none';
+      document.getElementById('main-content').style.display = 'block';
+
       const banner = document.getElementById('status-banner');
       const catsEl = document.getElementById('categories');
       const progressEl = document.getElementById('progress');
       const doneEl = document.getElementById('all-done');
+      const countdownWrap = document.getElementById('countdown-wrap');
+      const muteBtn = document.getElementById('mute-btn');
 
       if (!state.votingOpen && state.revealedUpTo < 0) {
         banner.className = 'closed';
-        banner.textContent = '⏳ Voting hasn\'t opened yet — hang tight!';
+        banner.textContent = 'Voting hasn\'t opened yet — hang tight!';
         catsEl.innerHTML = '';
         progressEl.textContent = '';
         doneEl.style.display = 'none';
+        countdownWrap.style.display = 'none';
+        muteBtn.style.display = 'none';
+        stopCountdown();
         return;
       }
 
       if (!state.votingOpen && state.revealedUpTo >= 0) {
         banner.className = 'closed';
-        banner.textContent = '🎉 Voting closed — watch the screen for reveals!';
+        banner.textContent = 'Voting closed — watch the screen for reveals!';
         catsEl.innerHTML = '';
         progressEl.textContent = '';
         doneEl.style.display = 'none';
+        countdownWrap.style.display = 'none';
+        muteBtn.style.display = 'none';
+        stopCountdown();
         return;
       }
 
       // Voting is open — show all categories
       banner.className = 'open';
-      banner.textContent = '● Voting is open — one team per category';
+      banner.textContent = 'Voting is open — one team per category';
+      muteBtn.style.display = 'flex';
+
+      // Countdown
+      countdownWrap.style.display = 'block';
+      if (!countdownInterval) {
+        startCountdown();
+      }
 
       const votedCount = state.categories.filter(c => myVotes[c.id]).length;
       const total = state.categories.length;
@@ -220,7 +562,9 @@
           const isSelected = selected === team;
           const safeTeam = escapeHtml(team);
           const jsTeam = team.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+          const escapedTeam = team.replace(/"/g, '&quot;');
           return `<button class="team-btn ${isSelected ? 'selected' : ''}"
+            data-cat="${cat.id}" data-team="${escapedTeam}"
             onclick="vote('${cat.id}', '${jsTeam}')"
             ${!state.votingOpen ? 'disabled' : ''}>${safeTeam}</button>`;
         }).join('');
@@ -230,7 +574,7 @@
             <div class="cat-header">
               <span class="cat-emoji">${cat.emoji}</span>
               <span class="cat-label">${cat.label}</span>
-              ${selected ? `<span class="cat-voted">✓ ${escapeHtml(selected)}</span>` : ''}
+              ${selected ? `<span class="cat-voted">&#10003; ${escapeHtml(selected)}</span>` : ''}
             </div>
             <div class="team-grid">${teamButtons}</div>
           </div>
@@ -241,7 +585,10 @@
 
     // SSE
     const es = new EventSource('/voting/events');
-    es.onmessage = e => render(JSON.parse(e.data));
+    es.onmessage = e => {
+      sseConnected = true;
+      render(JSON.parse(e.data));
+    };
     es.onerror = () => console.warn('SSE reconnecting...');
   </script>
 </body>

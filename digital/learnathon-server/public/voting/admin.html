@@ -118,6 +118,34 @@
       background: #4ade80; color: #000; padding: 0.6rem 1.25rem; border-radius: 8px;
       font-weight: 600; font-size: 0.9rem; display: none;
     }
+
+    /* Loading spinner for SSE */
+    #sse-loading {
+      display: none;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.6rem 1rem;
+      background: #1a1a2e;
+      border: 1px solid #2a2a3e;
+      border-radius: 10px;
+      margin-bottom: 1.25rem;
+      font-size: 0.85rem;
+      color: #555;
+    }
+
+    .spinner-sm {
+      width: 16px;
+      height: 16px;
+      border: 2px solid #2a2a3e;
+      border-top-color: #7c3aed;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      flex-shrink: 0;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
   </style>
 </head>
 <body>
@@ -134,6 +162,11 @@
   <div id="app">
     <h1>🎓 Learnathon 2026 — Admin</h1>
     <p class="subtitle">Facilitator control panel — vote once, reveal one by one</p>
+
+    <div id="sse-loading" style="display: flex;">
+      <div class="spinner-sm"></div>
+      Connecting to server...
+    </div>
 
     <div id="guidance">
       <span id="guidance-icon"></span>
@@ -252,6 +285,7 @@
     }
 
     function applyState(state) {
+      document.getElementById('sse-loading').style.display = 'none';
       const allRevealed = state.revealedUpTo >= state.categories.length - 1;
 
       // --- Guidance ---

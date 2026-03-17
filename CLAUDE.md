@@ -15,9 +15,8 @@ Read `AGENTS.md` in this repository root for full context: event info, workflow,
 AGENTS.md             Tool-agnostic instructions (read this first)
 learning/             Participant-facing learning content
 docs/                 Facilitator and organiser docs
-templates/            Starter repos per challenge track
+templates/            Mini-spec template
 digital/              Products built by organisers (bingo, voting, MCP server)
-environments/         Sandbox setup and agent config files
 ```
 
 ## Content Conventions

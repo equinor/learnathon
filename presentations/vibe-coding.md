@@ -402,7 +402,7 @@ Connects any AI assistant to event infrastructure.
 ✓ Marked! You now have 2 lines.
 ```
 
-**Custom tools in ~50 lines of code.**
+**Custom tools in ~200 lines of focused code.**
 
 -----
 
@@ -625,7 +625,7 @@ Frame your demo around your strongest category:
 
 ## 🎤 Show & Tell
 
-*14:00 — 15:30*
+*14:00 — 15:40*
 
 ---
 
@@ -647,7 +647,7 @@ The learning story matters more than the polish.
 
 ## 🗳️ Vote + Awards
 
-*15:30 — 16:00*
+*15:40 — 16:10*
 
 ---
 

@@ -50,6 +50,22 @@ Not set up in the Codespace, but available on the web. Try them if you're curiou
 
 ---
 
+## MCP Tools
+
+**Model Context Protocol (MCP)** lets AI agents call external tools — like giving your assistant hands to interact with the world.
+
+Your Codespace comes with a pre-configured MCP server that connects to the event infrastructure. If it's set up, your agent can:
+
+- Check and mark squares on your team's **bingo card**
+- Check voting status and **cast votes** during the ceremony
+- Read the community **gotchas** list
+
+You don't need to configure anything — just ask your agent (e.g. "mark the MCP bingo square" or "what's on our bingo card?").
+
+The **MCP Server challenge track** is about building your *own* MCP server that does something useful. Your event MCP server is a working example of the pattern.
+
+---
+
 ## OpenCode vs Claude Code — Closer Look
 
 Both are terminal-based autonomous agents. The differences:

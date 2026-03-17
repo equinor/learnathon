@@ -32,6 +32,55 @@
       margin-bottom: 1rem;
     }
 
+    /* Mute toggle */
+    .mute-toggle {
+      position: fixed;
+      bottom: 16px;
+      right: 16px;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: #1e1e30;
+      border: 1px solid #333;
+      color: #888;
+      font-size: 1.1rem;
+      cursor: pointer;
+      z-index: 60;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: border-color 0.2s, background 0.2s;
+    }
+
+    .mute-toggle:hover {
+      border-color: #7c3aed;
+      background: #1a1a2e;
+    }
+
+    /* Connection indicator */
+    .connection-status {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      text-align: center;
+      padding: 0.3rem;
+      background: #1a1520;
+      color: #a78bfa;
+      font-size: 0.7rem;
+      font-weight: 600;
+      z-index: 70;
+      display: none;
+      animation: connectPulse 1.5s ease-in-out infinite;
+    }
+
+    .connection-status.visible { display: block; }
+
+    @keyframes connectPulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+
     /* Team name modal */
     #join-modal {
       position: fixed;
@@ -212,14 +261,35 @@
       user-select: none;
       position: relative;
       overflow: hidden;
-      display: -webkit-box;
-      -webkit-line-clamp: 3;
-      -webkit-box-orient: vertical;
+    }
+
+    /* Loading spinner overlay for square */
+    .square.loading::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(10, 10, 20, 0.5);
+      z-index: 2;
+    }
+
+    .square.loading::after {
+      content: '';
+      position: absolute;
+      width: 18px;
+      height: 18px;
+      border: 2px solid transparent;
+      border-top-color: #a78bfa;
+      border-radius: 50%;
+      z-index: 3;
+      animation: squareSpin 0.6s linear infinite;
+    }
+
+    @keyframes squareSpin {
+      to { transform: rotate(360deg); }
     }
 
     .square:active { transform: scale(0.96); }
 
-    /* Hover/focus state for unmarked squares */
     @media (hover: hover) {
       .square:not(.marked):hover {
         border-color: #444;
@@ -276,7 +346,15 @@
       background: rgba(217, 119, 6, 0.15);
     }
 
-    /* Line completion highlight */
+    /* Loading state overrides the checkmark */
+    .square.loading::after {
+      content: '';
+      top: auto;
+      right: auto;
+      font-size: 0;
+      background: transparent;
+    }
+
     .square.in-line {
       background: #1c1917;
       border-color: #d97706;
@@ -290,7 +368,6 @@
       50% { box-shadow: 0 0 20px #d97706, 0 0 40px #d97706aa, 0 0 60px #d9770644; }
     }
 
-    /* Primary button */
     .btn-primary {
       background: #7c3aed;
       color: #fff;
@@ -314,11 +391,30 @@
       overflow: hidden;
       word-break: break-word;
     }
+
+    /* Mobile touch target fix */
+    @media (max-width: 768px) {
+      .square {
+        min-height: 80px;
+        min-width: 44px;
+        padding: 0.5rem 0.35rem;
+      }
+
+      #grid {
+        gap: 0.4rem;
+      }
+    }
   </style>
 </head>
 <body>
 
   <header>Learnathon 2026</header>
+
+  <!-- Connection status -->
+  <div class="connection-status" id="connection-status">Connecting...</div>
+
+  <!-- Mute toggle -->
+  <button class="mute-toggle" id="mute-toggle" onclick="toggleMute()" title="Toggle sound effects">🔊</button>
 
   <!-- Line completion toast -->
   <div id="line-toast">Line completed!</div>
@@ -363,6 +459,95 @@
     let squares = new Array(9).fill(false);
     let serverSquares = [];
     let prevLineCount = 0;
+    let loadingSquares = new Set();
+
+    // --- Web Audio API sound effects ---
+    let audioCtx = null;
+    let soundMuted = localStorage.getItem('learnathon-bingo-muted') === 'true';
+
+    // Pentatonic scale frequencies: C4, D4, E4, G4, A4
+    const PENTATONIC = [261.63, 293.66, 329.63, 392.00, 440.00];
+
+    function getAudioCtx() {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
+      return audioCtx;
+    }
+
+    function playMarkSound() {
+      if (soundMuted) return;
+      try {
+        const ctx = getAudioCtx();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.value = PENTATONIC[Math.floor(Math.random() * PENTATONIC.length)];
+        gain.gain.setValueAtTime(0.08, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.15);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(ctx.currentTime);
+        osc.stop(ctx.currentTime + 0.15);
+      } catch (e) { /* ignore audio errors */ }
+    }
+
+    function playLineSound() {
+      if (soundMuted) return;
+      try {
+        const ctx = getAudioCtx();
+        // Ascending arpeggio: C4 -> E4 -> G4
+        const notes = [261.63, 329.63, 392.00];
+        notes.forEach((freq, i) => {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = 'sine';
+          osc.frequency.value = freq;
+          const startTime = ctx.currentTime + i * 0.12;
+          gain.gain.setValueAtTime(0.12, startTime);
+          gain.gain.exponentialRampToValueAtTime(0.001, startTime + 0.25);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start(startTime);
+          osc.stop(startTime + 0.25);
+        });
+      } catch (e) { /* ignore audio errors */ }
+    }
+
+    function playLegendSound() {
+      if (soundMuted) return;
+      try {
+        const ctx = getAudioCtx();
+        // Warm chord: C4 + E4 + G4 together
+        const chord = [261.63, 329.63, 392.00];
+        chord.forEach(freq => {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = 'sine';
+          osc.frequency.value = freq;
+          gain.gain.setValueAtTime(0.15, ctx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.8);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start(ctx.currentTime);
+          osc.stop(ctx.currentTime + 0.8);
+        });
+      } catch (e) { /* ignore audio errors */ }
+    }
+
+    function toggleMute() {
+      soundMuted = !soundMuted;
+      localStorage.setItem('learnathon-bingo-muted', soundMuted);
+      document.getElementById('mute-toggle').textContent = soundMuted ? '🔇' : '🔊';
+      // Initialize audio context on user gesture
+      if (!soundMuted) getAudioCtx();
+    }
+
+    // Set initial mute button state
+    document.getElementById('mute-toggle').textContent = soundMuted ? '🔇' : '🔊';
+
+    // --- Connection status ---
+    const connStatus = document.getElementById('connection-status');
 
     function join() {
       const input = document.getElementById('name-input').value.trim();
@@ -399,13 +584,16 @@
       if (e.key === 'Enter') join();
     });
 
-    // Hide error on input change
     document.getElementById('name-input').addEventListener('input', () => {
       document.getElementById('join-error').classList.remove('visible');
     });
 
     function toggleSquare(index) {
+      if (loadingSquares.has(index)) return;
       const newVal = !squares[index];
+      loadingSquares.add(index);
+      renderSquareLoading(index, true);
+
       fetch('/bingo/mark', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -413,12 +601,32 @@
       })
         .then(r => r.json())
         .then(data => {
-          if (data.error) { alert(data.error); return; }
+          loadingSquares.delete(index);
+          if (data.error) { alert(data.error); render(); return; }
           squares[index] = newVal;
-          if (data.newLine) celebrateLine();
-          if (data.newLegend) celebrateLegend();
+          if (newVal) playMarkSound();
+          if (data.newLine) {
+            celebrateLine();
+            playLineSound();
+          }
+          if (data.newLegend) {
+            celebrateLegend();
+            playLegendSound();
+          }
+          render();
+        })
+        .catch(() => {
+          loadingSquares.delete(index);
           render();
         });
+    }
+
+    function renderSquareLoading(index, loading) {
+      const gridEl = document.getElementById('grid');
+      const squareEl = gridEl.children[index];
+      if (squareEl) {
+        squareEl.classList.toggle('loading', loading);
+      }
     }
 
     function getCompletedLines() {
@@ -434,12 +642,10 @@
       const inLineSquares = new Set(completedLines.flat());
       const marked = squares.filter(Boolean).length;
 
-      // Progress bar
       document.getElementById('progress-bar-fill').style.width = `${(marked / 9) * 100}%`;
       document.getElementById('progress-line').textContent =
         `${marked}/9 squares \u00b7 ${completedLines.length} line${completedLines.length !== 1 ? 's' : ''}`;
 
-      // Legend banner
       const legendBanner = document.getElementById('legend-banner');
       if (squares.every(Boolean)) {
         legendBanner.classList.add('visible');
@@ -452,11 +658,13 @@
       document.getElementById('grid').innerHTML = serverSquares.map((sq, i) => {
         const isMarked = squares[i];
         const inLine = inLineSquares.has(i);
+        const isLoading = loadingSquares.has(i);
         const classes = [
           'square',
           sq.center ? 'center' : '',
           isMarked ? 'marked' : '',
           inLine ? 'in-line' : '',
+          isLoading ? 'loading' : '',
         ].filter(Boolean).join(' ');
 
         return `<div class="${classes}" onclick="toggleSquare(${i})"><span class="square-label">${sq.label}</span></div>`;
@@ -479,15 +687,23 @@
     }
 
     function connectSSE() {
+      connStatus.classList.add('visible');
       const es = new EventSource('/bingo/events');
+      es.onopen = () => {
+        connStatus.classList.remove('visible');
+      };
       es.onmessage = e => {
+        connStatus.classList.remove('visible');
         const data = JSON.parse(e.data);
         serverSquares = data.squares;
-        // Sync our squares from server state
         if (data.teams[teamName]) {
           squares = data.teams[teamName].squares;
         }
         render();
+      };
+      es.onerror = () => {
+        connStatus.classList.add('visible');
+        connStatus.textContent = 'Reconnecting...';
       };
     }
 

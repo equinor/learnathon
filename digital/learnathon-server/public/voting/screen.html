@@ -203,11 +203,41 @@
 
     .cat-dot.revealed { background: #7c3aed; }
     .cat-dot.current { background: #fbbf24; box-shadow: 0 0 10px #fbbf24; }
+
+    /* Loading overlay */
+    #loading-overlay {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      color: #555;
+      font-size: 1.2rem;
+    }
+
+    .spinner {
+      width: 32px;
+      height: 32px;
+      border: 3px solid #2a2a3e;
+      border-top-color: #7c3aed;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      margin-bottom: 1rem;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
   </style>
 </head>
 <body>
 
-  <div id="idle-screen">
+  <div id="loading-overlay">
+    <div class="spinner"></div>
+    Connecting...
+  </div>
+
+  <div id="idle-screen" style="display: none;">
     <div class="logo">🎓</div>
     <h1>Learnathon 2026</h1>
     <p>Awards ceremony starting soon...</p>
@@ -258,6 +288,7 @@
     }
 
     function applyState(state) {
+      document.getElementById('loading-overlay').style.display = 'none';
       hideAll();
 
       const allRevealed = state.revealedUpTo >= state.categories.length - 1;

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Learnathon Bingo — Wall</title>
+  <title>Learnathon Bingo — Team Cards (Projector)</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -67,6 +67,26 @@
       box-shadow: 0 0 6px #22c55e88;
     }
 
+    /* Connection banner */
+    .connection-banner {
+      display: none;
+      text-align: center;
+      padding: 0.4rem;
+      background: #1a1520;
+      color: #a78bfa;
+      font-size: 0.75rem;
+      font-weight: 600;
+      animation: connectPulse 1.5s ease-in-out infinite;
+      margin-bottom: 1rem;
+    }
+
+    .connection-banner.visible { display: block; }
+
+    @keyframes connectPulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+
     /* Legends section */
     #legends-section {
       display: none;
@@ -84,7 +104,6 @@
       transform: translateY(0);
     }
 
-    /* Use animation to handle display + opacity together */
     @keyframes legendsEnter {
       from { opacity: 0; transform: translateY(-10px); }
       to { opacity: 1; transform: translateY(0); }
@@ -212,22 +231,35 @@
 
     .mini-lines.has-line { color: #d97706; font-weight: 700; }
 
-    /* Idle state */
+    /* --- Idle State --- */
     #idle {
+      display: none;
       text-align: center;
-      margin-top: 4rem;
+      margin-top: 3rem;
+      position: relative;
     }
 
-    #idle-text {
-      color: #777;
-      font-size: 1.3rem;
-      font-weight: 600;
-      animation: idlePulse 3s ease-in-out infinite;
+    #idle.visible { display: block; }
+
+    .idle-title {
+      font-size: 3rem;
+      font-weight: 900;
+      background: linear-gradient(135deg, #7c3aed, #3b82f6, #a78bfa, #7c3aed);
+      background-size: 300% 300%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: idleGradient 4s ease-in-out infinite, idleTitlePulse 3s ease-in-out infinite;
+      margin-bottom: 0.5rem;
     }
 
-    @keyframes idlePulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.5; }
+    @keyframes idleGradient {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+
+    @keyframes idleTitlePulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.02); }
     }
 
     #idle-url {
@@ -247,6 +279,35 @@
       letter-spacing: 0.1em;
     }
 
+    .idle-squares {
+      margin-top: 2rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      justify-content: center;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .idle-square-label {
+      background: #111120;
+      border: 1px solid #222;
+      border-radius: 20px;
+      padding: 0.35rem 0.85rem;
+      font-size: 0.75rem;
+      color: #666;
+      opacity: 0;
+      animation: idleSquareFloat 8s ease-in-out infinite;
+    }
+
+    @keyframes idleSquareFloat {
+      0% { opacity: 0; transform: translateY(8px); }
+      15% { opacity: 1; transform: translateY(0); }
+      85% { opacity: 1; transform: translateY(0); }
+      100% { opacity: 0; transform: translateY(-8px); }
+    }
+
     /* Confetti canvas */
     #confetti-canvas {
       position: fixed;
@@ -254,14 +315,26 @@
       pointer-events: none;
       z-index: 999;
     }
+
+    /* Mobile */
+    @media (max-width: 768px) {
+      #team-grid {
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      }
+
+      .idle-title {
+        font-size: 2rem;
+      }
+    }
   </style>
 </head>
 <body>
   <!-- Connection indicator -->
   <div class="connection-dot" id="connection-dot"></div>
+  <div class="connection-banner" id="connection-banner">Connecting to live feed...</div>
 
   <div class="title-area">
-    <h1>Learnathon 2026 — Bingo Wall</h1>
+    <h1>Learnathon 2026 — Team Cards</h1>
     <div class="title-accent"></div>
     <div id="team-count"></div>
   </div>
@@ -274,9 +347,10 @@
   <div id="team-grid"></div>
 
   <div id="idle">
-    <div id="idle-text">Waiting for teams to join...</div>
-    <div id="idle-url-label">Open on your phone</div>
+    <div class="idle-title">Learnathon 2026</div>
+    <div id="idle-url-label">Join at</div>
     <div id="idle-url"></div>
+    <div class="idle-squares" id="idle-squares"></div>
   </div>
 
   <canvas id="confetti-canvas"></canvas>
@@ -291,9 +365,14 @@
     let prevTeams = {};
     let legends = new Set();
     let legendsShown = false;
+    let squareDefs = [];
 
     // Show join URL
     document.getElementById('idle-url').textContent = window.location.origin + '/bingo/card.html';
+
+    // Show idle initially
+    document.getElementById('idle').classList.add('visible');
+    document.getElementById('connection-banner').classList.add('visible');
 
     // --- Confetti ---
     const canvas = document.getElementById('confetti-canvas');
@@ -350,7 +429,7 @@
       particles.forEach(p => {
         p.x += p.vx;
         p.y += p.vy;
-        p.vy += 0.08; // gravity
+        p.vy += 0.08;
         p.rot += p.rotV;
         if (p.y > canvas.height + 20) p.life = 0;
 
@@ -389,17 +468,32 @@
       return div.innerHTML;
     }
 
+    // --- Idle square labels ---
+    function showIdleSquareLabels(squares) {
+      const container = document.getElementById('idle-squares');
+      if (!squares || squares.length === 0) return;
+      container.innerHTML = squares.map((sq, i) =>
+        `<span class="idle-square-label" style="animation-delay:${(i * 0.6).toFixed(1)}s">${escapeHtml(sq.label)}</span>`
+      ).join('');
+    }
+
     // --- State rendering ---
     function getCompletedLines(squares) {
       return LINES.filter(line => line.every(i => squares[i]));
     }
 
-    function applyState({ teams, squares: squareDefs }) {
+    function applyState({ teams, squares: sqDefs }) {
+      squareDefs = sqDefs;
       const teamList = Object.values(teams);
 
       // Show/hide idle
       const idle = document.getElementById('idle');
-      idle.style.display = teamList.length === 0 ? 'block' : 'none';
+      if (teamList.length === 0) {
+        idle.classList.add('visible');
+        showIdleSquareLabels(sqDefs);
+      } else {
+        idle.classList.remove('visible');
+      }
 
       // Team count badge
       const countEl = document.getElementById('team-count');
@@ -439,7 +533,6 @@
         if (!legendsShown) {
           legendsShown = true;
           legendsSection.style.display = 'block';
-          // Trigger reflow then animate in
           void legendsSection.offsetWidth;
           legendsSection.style.animation = 'legendsEnter 0.5s ease forwards';
           legendsSection.classList.add('visible');
@@ -450,7 +543,6 @@
 
       // Team grid
       const sorted = teamList.sort((a, b) => {
-        // Legends first, then by line count, then by squares marked
         if (a.isLegend !== b.isLegend) return b.isLegend - a.isLegend;
         const aLines = getCompletedLines(a.squares).length;
         const bLines = getCompletedLines(b.squares).length;
@@ -462,7 +554,7 @@
         const completedLines = getCompletedLines(team.squares);
         const inLineSquares = new Set(completedLines.flat());
 
-        const miniSquares = squareDefs.map((sq, i) => {
+        const miniSquares = sqDefs.map((sq, i) => {
           const classes = [
             'mini-sq',
             sq.center ? 'center' : '',
@@ -493,21 +585,27 @@
       const el = document.getElementById(`name-${CSS.escape(name)}`);
       if (!el) return;
       el.classList.remove('blink');
-      void el.offsetWidth; // reflow to restart animation
+      void el.offsetWidth;
       el.classList.add('blink');
     }
 
     // --- SSE ---
     const dot = document.getElementById('connection-dot');
+    const banner = document.getElementById('connection-banner');
     const es = new EventSource('/bingo/events');
 
-    es.onopen = () => dot.classList.add('connected');
+    es.onopen = () => {
+      dot.classList.add('connected');
+      banner.classList.remove('visible');
+    };
     es.onmessage = e => {
       dot.classList.add('connected');
+      banner.classList.remove('visible');
       applyState(JSON.parse(e.data));
     };
     es.onerror = () => {
       dot.classList.remove('connected');
+      banner.classList.add('visible');
       console.warn('SSE reconnecting...');
     };
   </script>

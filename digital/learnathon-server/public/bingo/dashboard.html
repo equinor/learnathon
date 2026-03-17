@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Learnathon 2026 — Dashboard</title>
+  <title>Learnathon 2026 — Live Scoreboard</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -16,27 +16,91 @@
       flex-direction: column;
     }
 
-    /* Header */
+    /* Header / Stats Bar */
     .header {
-      text-align: center;
-      padding: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.5rem 1rem;
       border-bottom: 1px solid #1a1a2e;
+      background: #0a0a14;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
     }
 
     .header h1 {
-      font-size: 1.1rem;
+      font-size: 0.85rem;
       font-weight: 800;
       color: #999;
       text-transform: uppercase;
       letter-spacing: 0.1em;
+      white-space: nowrap;
     }
 
     .header-accent {
-      width: 80px;
+      width: 40px;
       height: 3px;
       background: linear-gradient(90deg, #7c3aed, #a78bfa);
       border-radius: 3px;
-      margin: 0.4rem auto 0;
+    }
+
+    .header-stats {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .header-stat {
+      text-align: center;
+      min-width: 3rem;
+    }
+
+    .header-stat-value {
+      font-size: 1rem;
+      font-weight: 800;
+      color: #a78bfa;
+      line-height: 1;
+    }
+
+    .header-stat-value.amber { color: #d97706; }
+    .header-stat-value.gold { color: #f59e0b; }
+
+    .header-stat-label {
+      font-size: 0.5rem;
+      color: #555;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .sidebar-toggle {
+      background: #1e1e30;
+      border: 1px solid #333;
+      color: #888;
+      padding: 0.3rem 0.6rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.7rem;
+      font-weight: 600;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+
+    .sidebar-toggle:hover {
+      border-color: #7c3aed;
+      color: #a78bfa;
+    }
+
+    .sidebar-toggle.active {
+      background: #7c3aed;
+      border-color: #7c3aed;
+      color: #fff;
     }
 
     /* Connection dot */
@@ -57,25 +121,41 @@
       box-shadow: 0 0 6px #22c55e88;
     }
 
-    /* Main grid */
-    .dashboard-grid {
+    /* Connection banner */
+    .connection-banner {
+      display: none;
+      text-align: center;
+      padding: 0.4rem;
+      background: #1a1520;
+      color: #a78bfa;
+      font-size: 0.75rem;
+      font-weight: 600;
+      animation: connectPulse 1.5s ease-in-out infinite;
+    }
+
+    .connection-banner.visible { display: block; }
+
+    @keyframes connectPulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+
+    /* Main layout */
+    .main-layout {
       flex: 1;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      grid-template-rows: 1fr 1fr;
-      gap: 1px;
-      background: #1a1a2e;
+      display: flex;
       min-height: 0;
     }
 
-    .panel {
-      background: #07070f;
+    /* Wall section (primary) */
+    .wall-section {
+      flex: 1;
       padding: 1rem;
       overflow-y: auto;
       min-height: 0;
     }
 
-    .panel-title {
+    .wall-title {
       font-size: 0.75rem;
       font-weight: 700;
       color: #666;
@@ -87,7 +167,7 @@
       gap: 0.5rem;
     }
 
-    .panel-title .count {
+    .wall-title .count {
       background: #1e1e30;
       color: #a78bfa;
       padding: 0.1rem 0.5rem;
@@ -95,31 +175,86 @@
       font-size: 0.65rem;
     }
 
-    /* --- Bingo Cards Panel --- */
+    /* Legends section */
+    .legends-section {
+      display: none;
+      margin-bottom: 1rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid #1a1a2e;
+      opacity: 0;
+      transform: translateY(-10px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+
+    .legends-section.visible {
+      display: block;
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @keyframes legendsEnter {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .legends-title {
+      text-align: center;
+      font-size: 1.4rem;
+      font-weight: 900;
+      background: linear-gradient(135deg, #f59e0b, #ef4444);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 0.75rem;
+      letter-spacing: 0.04em;
+    }
+
+    .legends-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      justify-content: center;
+    }
+
+    .legend-badge {
+      background: linear-gradient(135deg, #92400e, #d97706);
+      border-radius: 50px;
+      padding: 0.4rem 1.2rem;
+      font-size: 0.95rem;
+      font-weight: 800;
+      animation: legendFloat 3s ease-in-out infinite;
+    }
+
+    @keyframes legendFloat {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-4px); }
+    }
+
+    /* Bingo Cards Grid */
     .bingo-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-      gap: 0.6rem;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 0.75rem;
     }
 
     .mini-card {
       background: #111120;
       border: 1px solid #222;
-      border-radius: 8px;
-      padding: 0.5rem;
+      border-radius: 10px;
+      padding: 0.65rem;
+      transition: border-color 0.3s, background 0.3s, box-shadow 0.3s;
     }
 
     .mini-card.has-line { border-color: #d97706; }
     .mini-card.is-legend {
       border-color: #f59e0b;
       background: #1c1204;
-      box-shadow: 0 0 12px #d9770633;
+      box-shadow: 0 0 16px #d9770633;
     }
 
     .mini-card-name {
-      font-size: 0.7rem;
+      font-size: 0.8rem;
       font-weight: 700;
-      margin-bottom: 0.35rem;
+      margin-bottom: 0.4rem;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -128,49 +263,118 @@
 
     .mini-card.is-legend .mini-card-name { color: #fbbf24; }
 
+    .mini-card-name.blink {
+      animation: nameBlink 0.4s ease-in-out 6;
+    }
+
+    @keyframes nameBlink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.1; }
+    }
+
     .mini-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 2px;
+      gap: 3px;
     }
 
     .mini-sq {
       aspect-ratio: 1;
       border-radius: 2px;
       background: #1e1e30;
+      transition: background 0.2s;
     }
 
     .mini-sq.marked { background: #5b21b6; }
-    .mini-sq.in-line { background: #d97706; }
+    .mini-sq.in-line {
+      background: #d97706;
+      animation: squarePulse 0.6s ease-in-out 8;
+    }
     .mini-sq.center { border: 1px solid #4c1d95; }
     .mini-sq.center.marked { background: #7c3aed; }
     .mini-sq.center.in-line { background: #f59e0b; }
 
-    /* --- Leaderboard Panel --- */
-    .leaderboard-list {
-      list-style: none;
+    @keyframes squarePulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
     }
+
+    .mini-lines {
+      font-size: 0.6rem;
+      color: #555;
+      margin-top: 0.35rem;
+      text-align: right;
+    }
+
+    .mini-lines.has-line { color: #d97706; font-weight: 700; }
+
+    /* Sidebar */
+    .sidebar {
+      width: 320px;
+      border-left: 1px solid #1a1a2e;
+      display: flex;
+      flex-direction: column;
+      background: #0a0a14;
+      transition: margin-right 0.3s ease;
+      overflow: hidden;
+    }
+
+    .sidebar.collapsed {
+      width: 0;
+      border-left: none;
+    }
+
+    .sidebar-panel {
+      flex: 1;
+      padding: 0.75rem;
+      overflow-y: auto;
+      min-height: 0;
+      border-bottom: 1px solid #1a1a2e;
+    }
+
+    .sidebar-panel:last-child { border-bottom: none; }
+
+    .panel-title {
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: #666;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .panel-title .count {
+      background: #1e1e30;
+      color: #a78bfa;
+      padding: 0.1rem 0.5rem;
+      border-radius: 10px;
+      font-size: 0.6rem;
+    }
+
+    /* Leaderboard */
+    .leaderboard-list { list-style: none; }
 
     .leaderboard-item {
       display: flex;
       align-items: center;
-      gap: 0.6rem;
-      padding: 0.4rem 0.5rem;
+      gap: 0.5rem;
+      padding: 0.3rem 0.4rem;
       border-radius: 6px;
-      margin-bottom: 0.3rem;
-      font-size: 0.8rem;
+      margin-bottom: 0.2rem;
+      font-size: 0.75rem;
     }
 
-    .leaderboard-item:nth-child(-n+3) {
-      background: #111120;
-    }
+    .leaderboard-item:nth-child(-n+3) { background: #111120; }
 
     .lb-rank {
-      width: 1.5rem;
+      width: 1.3rem;
       text-align: center;
       font-weight: 800;
       color: #555;
-      font-size: 0.75rem;
+      font-size: 0.7rem;
     }
 
     .leaderboard-item:nth-child(1) .lb-rank { color: #f59e0b; }
@@ -188,7 +392,7 @@
     .lb-legend .lb-name { color: #fbbf24; font-weight: 700; }
 
     .lb-stats {
-      font-size: 0.65rem;
+      font-size: 0.6rem;
       color: #666;
       white-space: nowrap;
     }
@@ -196,25 +400,23 @@
     .lb-stats .lines { color: #d97706; font-weight: 700; }
     .lb-stats .legend-tag { color: #f59e0b; font-weight: 700; }
 
-    /* --- Activity Feed Panel --- */
-    .activity-list {
-      list-style: none;
-    }
+    /* Activity Feed */
+    .activity-list { list-style: none; }
 
     .activity-item {
-      padding: 0.35rem 0;
+      padding: 0.25rem 0;
       border-bottom: 1px solid #111120;
-      font-size: 0.75rem;
+      font-size: 0.7rem;
       color: #999;
       display: flex;
-      gap: 0.5rem;
+      gap: 0.4rem;
     }
 
     .activity-time {
       color: #555;
-      font-size: 0.65rem;
+      font-size: 0.6rem;
       white-space: nowrap;
-      min-width: 3.5rem;
+      min-width: 3rem;
     }
 
     .activity-text { flex: 1; }
@@ -224,21 +426,21 @@
     .activity-item.event-mark { color: #a78bfa; }
     .activity-item.event-join { color: #22c55e; }
 
-    /* --- Issues Panel (Gotchas + Projects) --- */
+    /* Issues (Gotchas + Projects) */
     .tabs {
       display: flex;
-      gap: 0.5rem;
-      margin-bottom: 0.75rem;
+      gap: 0.4rem;
+      margin-bottom: 0.5rem;
     }
 
     .tab-btn {
       background: #1e1e30;
       border: 1px solid #222;
       color: #666;
-      padding: 0.3rem 0.8rem;
+      padding: 0.2rem 0.6rem;
       border-radius: 6px;
       cursor: pointer;
-      font-size: 0.7rem;
+      font-size: 0.65rem;
       font-weight: 600;
       transition: all 0.2s;
     }
@@ -258,70 +460,39 @@
       background: #111120;
       border: 1px solid #222;
       border-radius: 8px;
-      padding: 0.6rem 0.75rem;
-      margin-bottom: 0.5rem;
+      padding: 0.5rem 0.6rem;
+      margin-bottom: 0.4rem;
     }
 
     .issue-title {
-      font-size: 0.8rem;
+      font-size: 0.75rem;
       font-weight: 700;
       color: #ccc;
-      margin-bottom: 0.25rem;
+      margin-bottom: 0.15rem;
     }
 
     .issue-meta {
-      font-size: 0.65rem;
+      font-size: 0.6rem;
       color: #555;
     }
 
     .issue-body {
-      font-size: 0.7rem;
+      font-size: 0.65rem;
       color: #888;
-      margin-top: 0.35rem;
+      margin-top: 0.25rem;
       line-height: 1.4;
-      max-height: 3.5rem;
+      max-height: 2.5rem;
       overflow: hidden;
     }
 
     .no-issues {
       color: #444;
-      font-size: 0.8rem;
+      font-size: 0.75rem;
       text-align: center;
-      padding: 2rem 0;
+      padding: 1rem 0;
     }
 
-    /* --- Stats Bar --- */
-    .stats-bar {
-      display: flex;
-      justify-content: center;
-      gap: 2rem;
-      padding: 0.6rem 1rem;
-      background: #0a0a14;
-      border-top: 1px solid #1a1a2e;
-      flex-wrap: wrap;
-    }
-
-    .stat {
-      text-align: center;
-    }
-
-    .stat-value {
-      font-size: 1.1rem;
-      font-weight: 800;
-      color: #a78bfa;
-    }
-
-    .stat-label {
-      font-size: 0.6rem;
-      color: #555;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-
-    .stat-value.amber { color: #d97706; }
-    .stat-value.gold { color: #f59e0b; }
-
-    /* --- Confetti & Fire Effects --- */
+    /* Confetti & Fire Effects */
     .confetti-container {
       position: fixed;
       top: 0;
@@ -408,53 +579,204 @@
       80% { transform: translateX(0); opacity: 1; }
       100% { transform: translateX(120%); opacity: 0; }
     }
+
+    /* --- Idle State --- */
+    .idle-screen {
+      display: none;
+      flex: 1;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .idle-screen.visible {
+      display: flex;
+    }
+
+    .idle-bg-canvas {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+    }
+
+    .idle-content {
+      position: relative;
+      z-index: 1;
+    }
+
+    .idle-title {
+      font-size: 3rem;
+      font-weight: 900;
+      background: linear-gradient(135deg, #7c3aed, #3b82f6, #a78bfa, #7c3aed);
+      background-size: 300% 300%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: idleGradient 4s ease-in-out infinite, idlePulse 3s ease-in-out infinite;
+      margin-bottom: 0.5rem;
+    }
+
+    @keyframes idleGradient {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+
+    @keyframes idlePulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.02); }
+    }
+
+    .idle-url {
+      font-size: 1.3rem;
+      color: #a78bfa;
+      font-weight: 700;
+      font-family: monospace;
+      letter-spacing: 0.02em;
+      margin-top: 1rem;
+    }
+
+    .idle-url-label {
+      font-size: 0.8rem;
+      color: #555;
+      margin-top: 0.5rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    .idle-squares {
+      margin-top: 2rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      justify-content: center;
+      max-width: 600px;
+    }
+
+    .idle-square-label {
+      background: #111120;
+      border: 1px solid #222;
+      border-radius: 20px;
+      padding: 0.35rem 0.85rem;
+      font-size: 0.75rem;
+      color: #666;
+      opacity: 0;
+      animation: idleSquareFloat 8s ease-in-out infinite;
+    }
+
+    @keyframes idleSquareFloat {
+      0% { opacity: 0; transform: translateY(8px); }
+      15% { opacity: 1; transform: translateY(0); }
+      85% { opacity: 1; transform: translateY(0); }
+      100% { opacity: 0; transform: translateY(-8px); }
+    }
+
+    /* Mobile layout */
+    @media (max-width: 768px) {
+      .main-layout {
+        flex-direction: column;
+      }
+
+      .sidebar {
+        width: 100%;
+        border-left: none;
+        border-top: 1px solid #1a1a2e;
+        max-height: 40vh;
+      }
+
+      .sidebar.collapsed {
+        width: 100%;
+        max-height: 0;
+        border-top: none;
+      }
+
+      .bingo-grid {
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+      }
+
+      .header {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.4rem;
+      }
+
+      .header-left {
+        justify-content: center;
+      }
+
+      .header-stats {
+        justify-content: center;
+      }
+
+      .idle-title {
+        font-size: 2rem;
+      }
+    }
   </style>
 </head>
 <body>
   <div class="connection-dot" id="connection-dot"></div>
+  <div class="connection-banner" id="connection-banner">Connecting to live feed...</div>
 
   <div class="header">
-    <h1>Learnathon 2026 — Live Dashboard</h1>
-    <div class="header-accent"></div>
+    <div class="header-left">
+      <h1>Learnathon 2026</h1>
+      <div class="header-accent"></div>
+    </div>
+    <div class="header-stats">
+      <div class="header-stat"><div class="header-stat-value" id="stat-teams">0</div><div class="header-stat-label">Teams</div></div>
+      <div class="header-stat"><div class="header-stat-value" id="stat-squares">0</div><div class="header-stat-label">Squares</div></div>
+      <div class="header-stat"><div class="header-stat-value amber" id="stat-lines">0</div><div class="header-stat-label">Lines</div></div>
+      <div class="header-stat"><div class="header-stat-value gold" id="stat-legends">0</div><div class="header-stat-label">Legends</div></div>
+      <div class="header-stat"><div class="header-stat-value" id="stat-popular">-</div><div class="header-stat-label">Most popular</div></div>
+      <button class="sidebar-toggle" id="sidebar-toggle" onclick="toggleSidebar()">Activity &amp; Feed</button>
+    </div>
   </div>
 
-  <div class="dashboard-grid">
-    <!-- Top-left: Bingo Cards -->
-    <div class="panel" id="panel-cards">
-      <div class="panel-title">Bingo Cards <span class="count" id="cards-count">0</span></div>
+  <!-- Idle screen -->
+  <div class="idle-screen" id="idle-screen">
+    <canvas class="idle-bg-canvas" id="idle-canvas"></canvas>
+    <div class="idle-content">
+      <div class="idle-title">Learnathon 2026</div>
+      <div class="idle-url-label">Join at</div>
+      <div class="idle-url" id="idle-url"></div>
+      <div class="idle-squares" id="idle-squares"></div>
+    </div>
+  </div>
+
+  <!-- Main content (wall + sidebar) -->
+  <div class="main-layout" id="main-layout" style="display:none;">
+    <!-- Wall: primary hero section -->
+    <div class="wall-section">
+      <div class="legends-section" id="legends-section">
+        <div class="legends-title">LEARNATHON LEGENDS</div>
+        <div class="legends-list" id="legends-list"></div>
+      </div>
+
+      <div class="wall-title">Team Cards <span class="count" id="cards-count">0</span></div>
       <div class="bingo-grid" id="bingo-grid"></div>
     </div>
 
-    <!-- Top-right: Leaderboard -->
-    <div class="panel" id="panel-leaderboard">
-      <div class="panel-title">Leaderboard</div>
-      <ol class="leaderboard-list" id="leaderboard"></ol>
-    </div>
-
-    <!-- Bottom-left: Activity Feed -->
-    <div class="panel" id="panel-activity">
-      <div class="panel-title">Activity Feed</div>
-      <ul class="activity-list" id="activity-feed"></ul>
-    </div>
-
-    <!-- Bottom-right: Gotchas + Projects -->
-    <div class="panel" id="panel-issues">
-      <div class="panel-title">Community</div>
-      <div class="tabs">
-        <button class="tab-btn active" data-tab="gotcha">Gotchas</button>
-        <button class="tab-btn" data-tab="project">Projects</button>
+    <!-- Collapsible sidebar -->
+    <div class="sidebar" id="sidebar">
+      <div class="sidebar-panel">
+        <div class="panel-title">Leaderboard</div>
+        <ol class="leaderboard-list" id="leaderboard"></ol>
       </div>
-      <div id="issues-content"></div>
+      <div class="sidebar-panel">
+        <div class="panel-title">Activity Feed</div>
+        <ul class="activity-list" id="activity-feed"></ul>
+      </div>
+      <div class="sidebar-panel">
+        <div class="panel-title">Community</div>
+        <div class="tabs">
+          <button class="tab-btn active" data-tab="gotcha">Gotchas</button>
+          <button class="tab-btn" data-tab="project">Projects</button>
+        </div>
+        <div id="issues-content"></div>
+      </div>
     </div>
-  </div>
-
-  <div class="stats-bar" id="stats-bar">
-    <div class="stat"><div class="stat-value" id="stat-teams">0</div><div class="stat-label">Teams</div></div>
-    <div class="stat"><div class="stat-value" id="stat-squares">0</div><div class="stat-label">Squares Marked</div></div>
-    <div class="stat"><div class="stat-value amber" id="stat-lines">0</div><div class="stat-label">Lines</div></div>
-    <div class="stat"><div class="stat-value gold" id="stat-legends">0</div><div class="stat-label">Legends</div></div>
-    <div class="stat"><div class="stat-value" id="stat-popular">-</div><div class="stat-label">Most Popular</div></div>
-    <div class="stat"><div class="stat-value" id="stat-least">-</div><div class="stat-label">Least Popular</div></div>
   </div>
 
   <script>
@@ -466,25 +788,148 @@
 
     let prevTeams = {};
     let squareDefs = [];
-    let activityLog = []; // { time, text, type }
+    let activityLog = [];
+    let legends = new Set();
+    let legendsShown = false;
     const MAX_ACTIVITY = 100;
+    let sidebarOpen = true;
+
+    // --- Idle screen ---
+    document.getElementById('idle-url').textContent = window.location.origin + '/bingo/card.html';
+
+    // Idle canvas particles
+    const idleCanvas = document.getElementById('idle-canvas');
+    const idleCtx = idleCanvas.getContext('2d');
+    let idleParticles = [];
+    let idleAnimFrame = null;
+
+    function resizeIdleCanvas() {
+      idleCanvas.width = idleCanvas.parentElement.offsetWidth;
+      idleCanvas.height = idleCanvas.parentElement.offsetHeight;
+    }
+
+    function initIdleParticles() {
+      resizeIdleCanvas();
+      idleParticles = [];
+      const count = 50;
+      for (let i = 0; i < count; i++) {
+        idleParticles.push({
+          x: Math.random() * idleCanvas.width,
+          y: Math.random() * idleCanvas.height,
+          vx: (Math.random() - 0.5) * 0.3,
+          vy: (Math.random() - 0.5) * 0.3,
+          r: Math.random() * 2 + 1,
+          color: ['#7c3aed', '#a78bfa', '#3b82f6', '#d97706'][Math.floor(Math.random() * 4)],
+          alpha: Math.random() * 0.3 + 0.1,
+        });
+      }
+      if (!idleAnimFrame) animateIdle();
+    }
+
+    function animateIdle() {
+      if (!document.getElementById('idle-screen').classList.contains('visible')) {
+        idleAnimFrame = null;
+        return;
+      }
+      idleCtx.clearRect(0, 0, idleCanvas.width, idleCanvas.height);
+      idleParticles.forEach(p => {
+        p.x += p.vx;
+        p.y += p.vy;
+        if (p.x < 0) p.x = idleCanvas.width;
+        if (p.x > idleCanvas.width) p.x = 0;
+        if (p.y < 0) p.y = idleCanvas.height;
+        if (p.y > idleCanvas.height) p.y = 0;
+        idleCtx.beginPath();
+        idleCtx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        idleCtx.fillStyle = p.color;
+        idleCtx.globalAlpha = p.alpha;
+        idleCtx.fill();
+      });
+      // Draw faint connecting lines between nearby particles
+      idleCtx.globalAlpha = 0.04;
+      idleCtx.strokeStyle = '#a78bfa';
+      for (let i = 0; i < idleParticles.length; i++) {
+        for (let j = i + 1; j < idleParticles.length; j++) {
+          const dx = idleParticles[i].x - idleParticles[j].x;
+          const dy = idleParticles[i].y - idleParticles[j].y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < 120) {
+            idleCtx.beginPath();
+            idleCtx.moveTo(idleParticles[i].x, idleParticles[i].y);
+            idleCtx.lineTo(idleParticles[j].x, idleParticles[j].y);
+            idleCtx.stroke();
+          }
+        }
+      }
+      idleCtx.globalAlpha = 1;
+      idleAnimFrame = requestAnimationFrame(animateIdle);
+    }
+
+    window.addEventListener('resize', () => {
+      if (document.getElementById('idle-screen').classList.contains('visible')) {
+        resizeIdleCanvas();
+      }
+    });
+
+    function showIdleSquareLabels(squares) {
+      const container = document.getElementById('idle-squares');
+      if (!squares || squares.length === 0) return;
+      container.innerHTML = squares.map((sq, i) =>
+        `<span class="idle-square-label" style="animation-delay:${(i * 0.6).toFixed(1)}s">${escapeHtml(sq.label)}</span>`
+      ).join('');
+    }
+
+    // Show idle initially, then start particles
+    document.getElementById('idle-screen').classList.add('visible');
+    document.getElementById('connection-banner').classList.add('visible');
+    initIdleParticles();
+
+    // --- Sidebar toggle ---
+    function toggleSidebar() {
+      sidebarOpen = !sidebarOpen;
+      document.getElementById('sidebar').classList.toggle('collapsed', !sidebarOpen);
+      document.getElementById('sidebar-toggle').classList.toggle('active', sidebarOpen);
+    }
 
     // --- SSE ---
     const dot = document.getElementById('connection-dot');
+    const banner = document.getElementById('connection-banner');
     const es = new EventSource('/bingo/events');
 
-    es.onopen = () => dot.classList.add('connected');
+    es.onopen = () => {
+      dot.classList.add('connected');
+      banner.classList.remove('visible');
+    };
+
     es.onmessage = e => {
       dot.classList.add('connected');
+      banner.classList.remove('visible');
       const state = JSON.parse(e.data);
       squareDefs = state.squares;
+      showIdleSquareLabels(state.squares);
       detectActivity(state.teams);
       prevTeams = JSON.parse(JSON.stringify(state.teams));
+
+      const teamCount = Object.keys(state.teams).length;
+      if (teamCount === 0) {
+        document.getElementById('idle-screen').classList.add('visible');
+        document.getElementById('main-layout').style.display = 'none';
+        if (!idleAnimFrame) initIdleParticles();
+      } else {
+        document.getElementById('idle-screen').classList.remove('visible');
+        document.getElementById('main-layout').style.display = 'flex';
+      }
+
       renderCards(state.teams, state.squares);
       renderLeaderboard(state.teams);
       renderStats(state.teams, state.squares);
+      renderLegends(state.teams);
     };
-    es.onerror = () => dot.classList.remove('connected');
+
+    es.onerror = () => {
+      dot.classList.remove('connected');
+      banner.classList.add('visible');
+    };
 
     // --- Confetti & Fire Effects ---
     function spawnConfetti(colors) {
@@ -528,7 +973,6 @@
       `;
       document.body.appendChild(toast);
       spawnConfetti(['#f59e0b', '#ef4444', '#fbbf24', '#ff6b35', '#ffcc00']);
-      // Second burst after a beat
       setTimeout(() => spawnConfetti(['#f59e0b', '#ef4444', '#fbbf24', '#ff6b35', '#ffcc00']), 800);
       setTimeout(() => toast.remove(), 3500);
     }
@@ -549,7 +993,6 @@
           continue;
         }
 
-        // Check for newly marked squares
         for (let i = 0; i < 9; i++) {
           if (team.squares[i] && !prev.squares[i]) {
             const label = squareDefs[i]?.label || `Square ${i}`;
@@ -557,7 +1000,6 @@
           }
         }
 
-        // Check for new lines
         const prevLines = getCompletedLines(prev.squares).length;
         const currLines = getCompletedLines(team.squares).length;
         if (currLines > prevLines) {
@@ -565,7 +1007,6 @@
           showLineToast(name, currLines);
         }
 
-        // Check for legend
         if (team.isLegend && !prev.isLegend) {
           addActivity(now, `🔥 ${escapeHtml(name)} became a LEGEND! 🔥`, 'legend');
           showLegendToast(name);
@@ -587,6 +1028,27 @@
           <span class="activity-text">${a.text}</span>
         </li>`
       ).join('');
+    }
+
+    // --- Legends ---
+    function renderLegends(teams) {
+      const teamList = Object.values(teams);
+      teamList.forEach(team => {
+        if (team.isLegend) legends.add(team.name);
+      });
+
+      const legendsSection = document.getElementById('legends-section');
+      if (legends.size > 0) {
+        if (!legendsShown) {
+          legendsShown = true;
+          legendsSection.style.display = 'block';
+          void legendsSection.offsetWidth;
+          legendsSection.style.animation = 'legendsEnter 0.5s ease forwards';
+          legendsSection.classList.add('visible');
+        }
+        document.getElementById('legends-list').innerHTML =
+          [...legends].map(name => `<div class="legend-badge">${escapeHtml(name)}</div>`).join('');
+      }
     }
 
     // --- Bingo Cards ---
@@ -618,14 +1080,26 @@
 
         const lineCount = completedLines.length;
         return `
-          <div class="mini-card ${lineCount > 0 ? 'has-line' : ''} ${team.isLegend ? 'is-legend' : ''}">
-            <div class="mini-card-name" title="${escapeHtml(team.name)}">
+          <div class="mini-card ${lineCount > 0 ? 'has-line' : ''} ${team.isLegend ? 'is-legend' : ''}"
+               id="card-${CSS.escape(team.name)}">
+            <div class="mini-card-name" id="name-${CSS.escape(team.name)}" title="${escapeHtml(team.name)}">
               ${team.isLegend ? '\ud83d\udd25 ' : ''}${escapeHtml(team.name)}
             </div>
             <div class="mini-grid">${miniSquares}</div>
+            <div class="mini-lines ${lineCount > 0 ? 'has-line' : ''}">
+              ${lineCount > 0 ? `${lineCount} line${lineCount > 1 ? 's' : ''}` : ''}
+            </div>
           </div>
         `;
       }).join('');
+    }
+
+    function blinkTeamName(name) {
+      const el = document.getElementById(`name-${CSS.escape(name)}`);
+      if (!el) return;
+      el.classList.remove('blink');
+      void el.offsetWidth;
+      el.classList.add('blink');
     }
 
     // --- Leaderboard ---
@@ -669,21 +1143,13 @@
       document.getElementById('stat-lines').textContent = totalLines;
       document.getElementById('stat-legends').textContent = totalLegends;
 
-      // Most/least popular square
       if (totalTeams > 0 && squares.length > 0) {
         const counts = squares.map((_, i) => teamList.filter(t => t.squares[i]).length);
         const maxCount = Math.max(...counts);
-        const minCount = Math.min(...counts);
         const mostIdx = counts.indexOf(maxCount);
-        const leastIdx = counts.indexOf(minCount);
-
         const mostLabel = squares[mostIdx]?.label || '';
-        const leastLabel = squares[leastIdx]?.label || '';
-
-        document.getElementById('stat-popular').textContent = truncate(mostLabel, 18);
+        document.getElementById('stat-popular').textContent = truncate(mostLabel, 14);
         document.getElementById('stat-popular').title = mostLabel;
-        document.getElementById('stat-least').textContent = truncate(leastLabel, 18);
-        document.getElementById('stat-least').title = leastLabel;
       }
     }
 
@@ -691,7 +1157,7 @@
       return str.length > max ? str.slice(0, max - 1) + '\u2026' : str;
     }
 
-    // --- Issues (Gotchas + Projects) ---
+    // --- Issues ---
     let activeTab = 'gotcha';
     let issuesData = { gotcha: [], project: [] };
 
@@ -749,13 +1215,12 @@
             issuesData[label] = await res.json();
           }
         } catch {
-          // Silently ignore — issues panel is optional
+          // Silently ignore
         }
       }
       renderIssues();
     }
 
-    // Poll issues every 30 seconds
     fetchIssues();
     setInterval(fetchIssues, 30_000);
   </script>

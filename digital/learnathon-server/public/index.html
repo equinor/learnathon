@@ -44,8 +44,35 @@
       transition: border-color 0.2s, background 0.2s;
     }
     a:hover { border-color: #7c3aed; background: #1e1e34; }
+    a.primary {
+      border-color: #7c3aed;
+      background: #1a1530;
+    }
+    a.primary:hover {
+      background: #1e1e40;
+      border-color: #a78bfa;
+    }
     .link-title { font-size: 1.1rem; font-weight: 700; color: #a78bfa; margin-bottom: 0.3rem; }
     .link-desc { font-size: 0.8rem; color: #666; }
+    .link-badge {
+      display: inline-block;
+      font-size: 0.6rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 0.15rem 0.4rem;
+      border-radius: 4px;
+      margin-left: 0.4rem;
+      vertical-align: middle;
+    }
+    .badge-primary {
+      background: #7c3aed33;
+      color: #a78bfa;
+    }
+    .badge-secondary {
+      background: #1e1e30;
+      color: #666;
+    }
   </style>
 </head>
 <body>
@@ -56,13 +83,13 @@
       <div class="link-title">Bingo Card</div>
       <div class="link-desc">Mark squares for your team</div>
     </a>
-    <a href="/bingo/wall.html">
-      <div class="link-title">Bingo Wall</div>
-      <div class="link-desc">All teams at a glance</div>
+    <a href="/bingo/dashboard.html" class="primary">
+      <div class="link-title">Live Scoreboard <span class="link-badge badge-primary">Primary</span></div>
+      <div class="link-desc">All teams, leaderboard &amp; live activity</div>
     </a>
-    <a href="/bingo/dashboard.html">
-      <div class="link-title">Dashboard</div>
-      <div class="link-desc">Live stats &amp; activity</div>
+    <a href="/bingo/wall.html">
+      <div class="link-title">Team Cards <span class="link-badge badge-secondary">Projector</span></div>
+      <div class="link-desc">Projector-friendly team cards view</div>
     </a>
     <a href="/voting/vote.html">
       <div class="link-title">Vote</div>

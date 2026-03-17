@@ -7,7 +7,7 @@ A hands-on learning event where teams explore AI-assisted software engineering b
 | | |
 |---|---|
 | **Date** | March 18, 2026 |
-| **Time** | 8:15 – 16:00 |
+| **Time** | 8:15 – 16:10 |
 | **Venue** | EDC, one big room |
 | **Participants** | ~60 people, ~20 teams of 3 |
 
@@ -26,8 +26,8 @@ A hands-on learning event where teams explore AI-assisted software engineering b
 | 12:30 | 🔨 Lab 3: Build Sprint 2 | Polish, fix, prepare your demo |
 | 13:45 | ☕ Break | Prep for demos |
 | 14:00 | 🎤 Show & Tell | Every team presents: 2 min demo, 2 min learnings, 1 min Q&A |
-| 15:30 | 🗳️ Vote & Awards | Audience votes, winners revealed one by one |
-| 16:00 | 🎉 Done | |
+| 15:40 | 🗳️ Vote & Awards | Audience votes, winners revealed one by one |
+| 16:10 | 🎉 Done | |
 
 ---
 
@@ -119,7 +119,7 @@ The learning story matters more than the polish. If your demo breaks live — th
 3. **Add your API key** at `github.com/settings/codespaces` → New secret → `ANTHROPIC_API_KEY`
 4. **Verify**: run `claude --version` in the terminal
 
-See `environments/sandbox-setup.md` for detailed setup instructions.
+The participant environment is at [equinor/edc2026-vibe-environment](https://github.com/equinor/edc2026-vibe-environment).
 
 ---
 
@@ -142,5 +142,6 @@ Use these skills in your repo to share what you've learned:
 | Tool comparison | `learning/tool-comparison.md` |
 | Community gotchas | `learning/gotchas.md` |
 | Mini-spec template | `templates/mini-spec-template.md` |
+| Participant environment | [equinor/edc2026-vibe-environment](https://github.com/equinor/edc2026-vibe-environment) |
 | Facilitator guide | `docs/facilitator-guide.md` |
 | Coach cheatsheet | `docs/coach-cheatsheet.md` |

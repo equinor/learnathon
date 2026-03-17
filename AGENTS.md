@@ -35,9 +35,11 @@ Both Claude Code and Copilot discover these skills automatically via pointers in
 If the MCP server is configured, you have access to:
 
 - `get_bingo_status` — Check your team's bingo card progress
+- `list_bingo_squares` — List all available bingo squares
 - `mark_bingo_square` — Mark a bingo square as completed
 - `get_voting_status` — Check the current voting status
 - `cast_vote` — Cast a vote for a team in a category
+- `get_gotchas` — Get the community-contributed list of AI gotchas
 
 ## Challenge Tracks
 
@@ -50,7 +52,7 @@ Teams pick one track to build in:
 | **Custom Agent** | A specialised AI agent for a specific task |
 | **BYOI** | Bring Your Own Idea — anything goes |
 
-Starter templates are in `templates/` for reference.
+The participant environment (Codespace template) is at [equinor/edc2026-vibe-environment](https://github.com/equinor/edc2026-vibe-environment).
 
 ## Security Conventions
 

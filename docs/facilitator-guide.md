@@ -1,7 +1,7 @@
 # Facilitator Guide
 
 **Event:** Learnathon 2026 — EDC, March 18
-**Format:** Full day, 8:15–16:00, ~60 participants, ~20 teams of 3
+**Format:** Full day, 8:15–16:10, ~60 participants, ~20 teams of 3
 **Facilitators needed:** ~5–6 (1 lead + 4–5 coaches on the floor)
 
 ---
@@ -19,8 +19,8 @@
 | 12:30 | Lab 3: Build Sprint 2 | Coaches on floor |
 | 13:45 | Break — prep for demos | — |
 | 14:00 | Show & Tell | Lead (MC) |
-| 15:30 | Vote + Awards | Lead |
-| 16:00 | Done | — |
+| 15:40 | Vote + Awards | Lead |
+| 16:10 | Done | — |
 
 ---
 
@@ -37,7 +37,7 @@ Say something like:
 - Display team list / pairing help on screen
 - Walk through: open your team repo → Code → New Codespace → wait for setup
 - Verify: everyone can see `claude --version` in terminal
-- Common issues: Codespace slow to start (wait), API key not set (see sandbox-setup.md)
+- Common issues: Codespace slow to start (wait), API key not set (check Codespaces secrets)
 
 ---
 
@@ -120,7 +120,7 @@ At 13:45: announce "Wrap up features. Spend last 15 min preparing what you'll sa
 
 ---
 
-### 14:00 — Show & Tell (90 min)
+### 14:00 — Show & Tell (100 min)
 
 **Format per team: 5 min**
 - 2 min: demo
@@ -133,17 +133,17 @@ MC role:
 - Celebrate honest failure as much as polished demos
 - If a demo breaks live: "That's a Learnathon moment — what happened?"
 
-Rough schedule for 20 teams × 5 min = 100 min. You have 90 min — keep it moving.
+20 teams × 5 min = 100 min. Keep transitions tight to stay on schedule.
 
 ---
 
-### 15:30 — Vote + Awards (30 min)
+### 15:40 — Vote + Awards (30 min)
 
 Run this from the voting app admin panel (`/admin.html`). The panel tells you what to do next at every step — follow the coloured guidance banner at the top.
 
 **Key design:** Participants vote on ALL 6 categories at once (2–3 minutes), then you reveal winners one by one like a gameshow. This saves ~10 minutes compared to voting per round, giving more time for Show & Tell.
 
-**Before 15:45 (during the break at 14:00):**
+**Before 15:40 (during the break at 13:45):**
 1. Open `admin.html` on your laptop → log in with the admin token
 2. Open `screen.html` on the projector (full screen, browser in presentation mode)
 3. Enter all team names in the Team Setup section → click **Save Teams**
