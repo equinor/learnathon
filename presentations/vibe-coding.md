@@ -112,27 +112,51 @@ At the end of the day: **Show & Tell** — you demo what you built *and* share w
 
 The learning matters more than the polish.
 
----
+-----
+
+## How to vibe code
+
+1. What do you want to build? 
+2. Press enter
+3. Wait
+
+--- 
 
 ### The workflow
 
 @embed(/presentations/images/workflow-loop.svg, width=80%)
 
+---
+
+### But this sounds like a lot, right?
+
+There are tools at your disposal that handle this out of the box — **Superpowers**, **Get Shit Done**, and many more.
+
+These days they come as **plugins** for both Claude and Copilot.
+
 -----
 
-## How to vibe code
+## Considerations
 
 ---
 
-### Context engineering
+### The context cliff
+
+![Context cliff](/presentations/images/Gemini_Generated_Image_fzf4y6fzf4y6fzf4.png) <!-- .element style="max-height:380px" -->
+
+---
+
+### How to avoid the cliff
+
+@embed(/presentations/images/context-cliff.svg, width=85%)
+
+---
+
+### Set the context
+
+The quality of AI output = the quality of context you give it.
 
 ![Galaxy brain](/presentations/images/galaxybrain.jpg) <!-- .element style="max-height:380px" -->
-
----
-
-### What is the context?
-
-![Context usage](/presentations/images/context-engineering.png) <!-- .element style="max-height:380px" -->
 
 ---
 
@@ -150,35 +174,34 @@ The learning matters more than the polish.
 
 ---
 
-### Agent engineering
+### Level up with tools
+
+@embed(/presentations/images/kitchen-vs-recipe.svg, width=90%)
+
+---
+
+### Progressive disclosure in skills
+
+Skills use the same idea — load only what's needed, when it's needed.
+
+@embed(/presentations/images/progressive-disclosure-iceberg.svg, width=60%)
+
+---
+
+### Stay in control
 
 ![Captain Phillips](/presentations/images/captainnow.jpg) <!-- .element style="max-height:350px" -->
 
----
-
-### You are the orchestrator
-
 Your job: **set context, give scoped tasks, review output, steer when it drifts.**
 
-Define your agent team like a real dev org:
-
-| Role | Responsibility |
-|------|---------------|
-| **Architect** | Plans structure, picks patterns |
-| **Builder** | Writes code on feature branches |
-| **QA** | Runs tests, validates before merge |
-| **Reviewer** | Checks main after big changes |
-
-**Small tasks. Tight feedback loops. Explicit roles > one agent doing everything.**
-
 ---
 
-### Branch discipline
+### The orchestrator in practice
 
-- All subagents work on **branches** — never main
-- Use **worktrees** to let agents work in parallel without conflicts
-- QA, test, and user-test agents **gate the merge**
-- Orchestrator runs QA on main after big changes
+- Give **small, scoped tasks** — not "build the whole app"
+- Use **explicit roles** — architect, builder, QA, reviewer
+- All work happens on **branches** — never directly on main
+- QA and test agents **gate the merge**
 
 **Same rules you'd give a junior dev.**
 
@@ -186,13 +209,9 @@ Define your agent team like a real dev org:
 
 ### Subagents
 
+When your project grows, split work across focused agents.
+
 @embed(/presentations/images/subagent-delegation.svg, width=85%)
-
----
-
-### MCPs vs Skills
-
-@embed(/presentations/images/kitchen-vs-recipe.svg, width=90%)
 
 ---
 
@@ -215,42 +234,6 @@ Level up your agent with ready-made tools.
 
 ---
 
-### Progressive disclosure in skills
-
-@embed(/presentations/images/progressive-disclosure-iceberg.svg, width=60%)
-
----
-
-### Vibe debugging
-
-When things go wrong (and they will):
-
-- **Give the agent what you see** — browser dev tools, error logs, screenshots
-- **Use tools** — Playwright for UI bugs, `fetch` for API debugging
-- **Ask it to search** — "find a solution for this online"
-- **Know when to restart** — sometimes a new chat is cheaper than a deeper hole
-- **Save learnings to memory** — so the agent doesn't repeat the same mistakes
-
-**Trust the running code, not the explanation.**
-
------
-
-## Considerations
-
----
-
-### The context cliff
-
-![Context cliff](/presentations/images/Gemini_Generated_Image_fzf4y6fzf4y6fzf4.png) <!-- .element style="max-height:380px" -->
-
----
-
-### How to avoid the cliff
-
-@embed(/presentations/images/context-cliff.svg, width=85%)
-
----
-
 ### The open-source-first rule
 
 Before building anything hard:
@@ -262,6 +245,20 @@ Before building anything hard:
 Saves time, headaches, and tokens.
 
 **"Never manually implement what someone already solved."**
+
+---
+
+### When things go wrong
+
+And they will.
+
+- **Give the agent what you see** — browser dev tools, error logs, screenshots
+- **Use tools** — Playwright for UI bugs, `fetch` for API debugging
+- **Ask it to search** — "find a solution for this online"
+- **Know when to restart** — sometimes a new chat is cheaper than a deeper hole
+- **Save learnings to memory** — so the agent doesn't repeat the same mistakes
+
+**Trust the running code, not the explanation.**
 
 ---
 
@@ -281,7 +278,7 @@ They can:
 - Install packages you didn't ask for
 - Delete files
 - Make network requests
-- Push to git
+- Send your `.env` file somewhere nice
 
 **Review what the agent does.**
 
@@ -393,10 +390,11 @@ The learning story matters more than the polish.
 
 ### What to do now
 
-1. **Write your mini-spec** — use the template in your repo
-2. **Ask your agent to plan** — "Plan this based on the mini-spec"
-3. **Review the plan** — push back, adjust scope, agree
-4. **Commit** the spec and plan
+1. **Check `/plugins`** — pick the tools that fit your project and install them
+2. **Write your mini-spec** — use the template in your repo
+3. **Ask your agent to plan** — "Plan this based on the mini-spec"
+4. **Review the plan** — push back, adjust scope, agree
+5. **Commit** the spec and plan
 
 ---
 
