@@ -191,22 +191,107 @@
       top: 0;
       left: 0;
       right: 0;
-      background: linear-gradient(135deg, #92400e, #d97706);
+      background: linear-gradient(135deg, #92400e, #d97706, #f59e0b, #d97706, #92400e);
+      background-size: 300% 100%;
       padding: 0.75rem 1.25rem;
       text-align: center;
       font-weight: 800;
-      font-size: 1.1rem;
+      font-size: 1.2rem;
       z-index: 50;
-      animation: legendPulse 2s infinite;
+      animation: legendShimmer 3s ease infinite;
+      text-shadow: 0 0 10px rgba(251, 191, 36, 0.6), 0 0 30px rgba(251, 191, 36, 0.3);
     }
 
     #legend-banner.visible {
       display: block;
     }
 
-    @keyframes legendPulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.8; }
+    @keyframes legendShimmer {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* Legend overlay - full screen celebration */
+    #legend-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 200;
+      pointer-events: none;
+    }
+
+    #legend-overlay.active { display: block; }
+
+    #legend-overlay canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    #legend-text-overlay {
+      position: fixed;
+      inset: 0;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 210;
+      pointer-events: none;
+    }
+
+    #legend-text-overlay.active {
+      display: flex;
+      animation: legendTextIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    }
+
+    @keyframes legendTextIn {
+      0% { opacity: 0; transform: scale(0.3) rotate(-10deg); }
+      60% { opacity: 1; transform: scale(1.1) rotate(2deg); }
+      100% { opacity: 1; transform: scale(1) rotate(0deg); }
+    }
+
+    .legend-title {
+      font-size: 3rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      background: linear-gradient(135deg, #fbbf24, #f59e0b, #d97706, #f59e0b, #fbbf24);
+      background-size: 200% auto;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: legendGold 2s linear infinite;
+      text-shadow: none;
+      filter: drop-shadow(0 0 20px rgba(251, 191, 36, 0.5));
+    }
+
+    @keyframes legendGold {
+      0% { background-position: 0% center; }
+      100% { background-position: 200% center; }
+    }
+
+    .legend-fire {
+      font-size: 3.5rem;
+      animation: fireFloat 1s ease-in-out infinite alternate;
+    }
+
+    @keyframes fireFloat {
+      0% { transform: translateY(0) scale(1); }
+      100% { transform: translateY(-8px) scale(1.1); }
+    }
+
+    .legend-subtitle {
+      font-size: 1rem;
+      color: #fcd34d;
+      margin-top: 0.5rem;
+      font-weight: 600;
+      opacity: 0;
+      animation: legendSubIn 0.5s ease 1s forwards;
+    }
+
+    @keyframes legendSubIn {
+      to { opacity: 1; }
     }
 
     /* Line toast */
@@ -432,7 +517,18 @@
   </div>
 
   <!-- Legend banner (fixed top) -->
-  <div id="legend-banner">LEARNATHON LEGEND</div>
+  <div id="legend-banner">🔥 LEARNATHON LEGEND 🔥</div>
+
+  <!-- Legend celebration overlay -->
+  <div id="legend-overlay">
+    <canvas id="legend-confetti"></canvas>
+  </div>
+  <div id="legend-text-overlay">
+    <div class="legend-fire">🔥🔥🔥</div>
+    <div class="legend-title">LEGEND</div>
+    <div class="legend-fire">🔥🔥🔥</div>
+    <div class="legend-subtitle">You completed every single square!</div>
+  </div>
 
   <!-- Card -->
   <div id="team-header">
@@ -683,7 +779,161 @@
     }
 
     function celebrateLegend() {
-      if (navigator.vibrate) navigator.vibrate([200, 100, 200, 100, 400]);
+      if (navigator.vibrate) navigator.vibrate([200, 100, 200, 100, 400, 200, 600]);
+
+      // Show text overlay
+      const textOverlay = document.getElementById('legend-text-overlay');
+      textOverlay.classList.add('active');
+
+      // Show confetti overlay
+      const overlay = document.getElementById('legend-overlay');
+      overlay.classList.add('active');
+
+      // Run confetti
+      const canvas = document.getElementById('legend-confetti');
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      const ctx = canvas.getContext('2d');
+
+      const particles = [];
+      const COLORS = ['#fbbf24', '#f59e0b', '#d97706', '#7c3aed', '#a78bfa', '#ef4444', '#22c55e', '#3b82f6', '#ec4899'];
+      const FIRE_EMOJIS = ['🔥', '🔥', '🔥', '✨', '⭐', '🎉', '🏆', '💥'];
+
+      // Create 200 confetti particles
+      for (let i = 0; i < 200; i++) {
+        particles.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height - canvas.height,
+          vx: (Math.random() - 0.5) * 6,
+          vy: Math.random() * 4 + 2,
+          color: COLORS[Math.floor(Math.random() * COLORS.length)],
+          size: Math.random() * 8 + 4,
+          rotation: Math.random() * 360,
+          rotSpeed: (Math.random() - 0.5) * 10,
+          shape: Math.random() > 0.3 ? 'rect' : 'circle',
+          life: 1,
+          decay: 0.002 + Math.random() * 0.002,
+        });
+      }
+
+      // Create floating fire emojis
+      const fireEmojis = [];
+      for (let i = 0; i < 25; i++) {
+        fireEmojis.push({
+          x: Math.random() * canvas.width,
+          y: canvas.height + Math.random() * 200,
+          vy: -(Math.random() * 3 + 1.5),
+          vx: (Math.random() - 0.5) * 1.5,
+          emoji: FIRE_EMOJIS[Math.floor(Math.random() * FIRE_EMOJIS.length)],
+          size: Math.random() * 24 + 20,
+          life: 1,
+          decay: 0.003 + Math.random() * 0.003,
+          wobble: Math.random() * Math.PI * 2,
+          wobbleSpeed: 0.02 + Math.random() * 0.03,
+        });
+      }
+
+      let frame = 0;
+      function animateConfetti() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        let alive = false;
+
+        // Draw confetti
+        particles.forEach(p => {
+          if (p.life <= 0) return;
+          alive = true;
+          p.x += p.vx;
+          p.y += p.vy;
+          p.vy += 0.08;
+          p.rotation += p.rotSpeed;
+          p.life -= p.decay;
+
+          ctx.save();
+          ctx.globalAlpha = Math.min(p.life, 1);
+          ctx.translate(p.x, p.y);
+          ctx.rotate(p.rotation * Math.PI / 180);
+          ctx.fillStyle = p.color;
+          if (p.shape === 'rect') {
+            ctx.fillRect(-p.size / 2, -p.size / 4, p.size, p.size / 2);
+          } else {
+            ctx.beginPath();
+            ctx.arc(0, 0, p.size / 2, 0, Math.PI * 2);
+            ctx.fill();
+          }
+          ctx.restore();
+        });
+
+        // Draw fire emojis floating up
+        fireEmojis.forEach(f => {
+          if (f.life <= 0) return;
+          alive = true;
+          f.y += f.vy;
+          f.x += f.vx + Math.sin(f.wobble) * 0.5;
+          f.wobble += f.wobbleSpeed;
+          f.life -= f.decay;
+
+          ctx.save();
+          ctx.globalAlpha = Math.min(f.life * 1.5, 1);
+          ctx.font = `${f.size}px serif`;
+          ctx.textAlign = 'center';
+          ctx.fillText(f.emoji, f.x, f.y);
+          ctx.restore();
+        });
+
+        frame++;
+
+        // Second burst at frame 60
+        if (frame === 60) {
+          for (let i = 0; i < 100; i++) {
+            particles.push({
+              x: canvas.width / 2 + (Math.random() - 0.5) * 200,
+              y: canvas.height / 2,
+              vx: (Math.random() - 0.5) * 12,
+              vy: (Math.random() - 0.5) * 12,
+              color: COLORS[Math.floor(Math.random() * COLORS.length)],
+              size: Math.random() * 10 + 3,
+              rotation: Math.random() * 360,
+              rotSpeed: (Math.random() - 0.5) * 15,
+              shape: Math.random() > 0.5 ? 'rect' : 'circle',
+              life: 1,
+              decay: 0.005 + Math.random() * 0.005,
+            });
+          }
+          for (let i = 0; i < 15; i++) {
+            fireEmojis.push({
+              x: canvas.width / 2 + (Math.random() - 0.5) * 300,
+              y: canvas.height / 2,
+              vy: -(Math.random() * 4 + 2),
+              vx: (Math.random() - 0.5) * 4,
+              emoji: FIRE_EMOJIS[Math.floor(Math.random() * FIRE_EMOJIS.length)],
+              size: Math.random() * 30 + 24,
+              life: 1,
+              decay: 0.004 + Math.random() * 0.004,
+              wobble: Math.random() * Math.PI * 2,
+              wobbleSpeed: 0.03,
+            });
+          }
+        }
+
+        if (alive) {
+          requestAnimationFrame(animateConfetti);
+        } else {
+          overlay.classList.remove('active');
+        }
+      }
+
+      requestAnimationFrame(animateConfetti);
+
+      // Fade out text overlay after 5 seconds
+      setTimeout(() => {
+        textOverlay.style.transition = 'opacity 1s ease';
+        textOverlay.style.opacity = '0';
+        setTimeout(() => {
+          textOverlay.classList.remove('active');
+          textOverlay.style.opacity = '';
+          textOverlay.style.transition = '';
+        }, 1000);
+      }, 5000);
     }
 
     function connectSSE() {
