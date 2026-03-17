@@ -1,595 +1,724 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
+<html lang="en"><head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-  <title>Learnathon 2026 — Vote</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Learnathon 2026 — Ceremony</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
       background: #0f0f1a;
-      color: #fff;
+      color: #e2e8f0;
+      font-family: system-ui, sans-serif;
       min-height: 100dvh;
-      padding: 1.25rem 1rem 3rem;
     }
 
-    header {
-      text-align: center;
-      font-size: 0.7rem;
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      color: #555;
-      margin-bottom: 0.5rem;
-    }
-
-    #progress {
-      text-align: center;
-      font-size: 0.85rem;
-      color: #888;
-      margin-bottom: 1.5rem;
-    }
-
-    #progress strong { color: #a78bfa; }
-
-    #all-done {
-      display: none;
-      text-align: center;
-      margin-bottom: 1.5rem;
-    }
-
-    #all-done .icon { font-size: 2.5rem; display: block; }
-    #all-done p { color: #4ade80; font-weight: 700; font-size: 1.1rem; margin-top: 0.5rem; }
-    #all-done small { color: #555; font-size: 0.85rem; }
-
-    /* Status banner */
-    #status-banner {
-      text-align: center;
-      font-size: 1rem;
-      padding: 0.75rem;
-      border-radius: 10px;
-      margin-bottom: 1.5rem;
-      font-weight: 600;
-    }
-
-    #status-banner.open {
-      background: #14532d;
-      border: 1px solid #15803d;
-      color: #4ade80;
-    }
-
-    #status-banner.closed {
-      background: #1c1917;
-      border: 1px solid #44403c;
-      color: #a8a29e;
-    }
-
-    /* Countdown timer */
-    #countdown-wrap {
-      display: none;
-      text-align: center;
-      margin-bottom: 1.25rem;
-    }
-
-    #countdown {
-      font-size: 1.8rem;
-      font-weight: 800;
-      color: #d97706;
-      font-variant-numeric: tabular-nums;
-      letter-spacing: 0.04em;
-    }
-
-    #countdown-label {
-      font-size: 0.75rem;
-      color: #888;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      margin-top: 0.15rem;
-    }
-
-    #countdown.urgent {
-      animation: countdownPulse 1s ease-in-out infinite;
-    }
-
-    @keyframes countdownPulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.4; }
-    }
-
-    /* Category section */
-    .category-section {
-      margin-bottom: 1.5rem;
-    }
-
-    .cat-header {
+    /* ── Modal ── */
+    .modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.85);
       display: flex;
       align-items: center;
-      gap: 0.5rem;
-      margin-bottom: 0.6rem;
+      justify-content: center;
+      z-index: 200;
     }
 
-    .cat-emoji { font-size: 1.3rem; }
+    .modal-card {
+      background: #1a1a2e;
+      padding: 24px;
+      border-radius: 16px;
+      max-width: 360px;
+      width: 90%;
+    }
 
-    .cat-label {
-      font-size: 1rem;
-      font-weight: 700;
+    .modal-card h2 {
+      font-size: 20px;
+      font-weight: bold;
+      margin-bottom: 20px;
+      text-align: center;
+      color: #a78bfa;
+    }
+
+    input, select {
+      background: #0f0f1a;
+      color: #e2e8f0;
+      border: 1px solid #2a2a3e;
+      padding: 12px;
+      border-radius: 8px;
+      width: 100%;
+      margin-bottom: 12px;
+      font-size: 16px;
+    }
+
+    select option { background: #1a1a2e; }
+
+    .error {
+      color: #ef4444;
+      font-size: 13px;
+      margin-top: 8px;
+    }
+
+    /* ── Banner ── */
+    #banner {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      background: #1a1a2e;
+      border-bottom: 2px solid #7c3aed;
+      padding: 12px;
+      text-align: center;
+      z-index: 100;
+    }
+
+    #phase-label {
+      color: #a78bfa;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      font-size: 12px;
+    }
+
+    #current-team {
+      font-size: 20px;
+      font-weight: bold;
+    }
+
+    #timer-display {
+      font-size: 16px;
+      color: #a78bfa;
+    }
+
+    #timer-display.warning {
+      color: #ef4444;
+    }
+
+    /* ── Content area ── */
+    #content {
+      max-width: 480px;
+      margin: 0 auto;
+      padding: 90px 16px 100px;
+    }
+
+    .phase { display: none; }
+
+    /* ── Presenting phase ── */
+    .big-team-name {
+      font-size: 28px;
+      font-weight: bold;
+      text-align: center;
+      margin-bottom: 12px;
+    }
+
+    .big-timer {
+      font-size: 64px;
+      font-weight: bold;
+      color: #7c3aed;
+      font-variant-numeric: tabular-nums;
+      text-align: center;
+      margin-bottom: 12px;
+    }
+
+    .hint {
+      color: #64748b;
+      font-size: 13px;
+      text-align: center;
+    }
+
+    /* ── Voting phase ── */
+    .rating-form { padding: 8px 0; }
+
+    .rating-row {
+      background: #1a1a2e;
+      border-radius: 12px;
+      padding: 12px 16px;
+      margin-bottom: 8px;
+    }
+
+    .rating-row.peoples-choice {
+      border: 1px solid #7c3aed;
+    }
+
+    .rating-label {
+      font-size: 14px;
+      margin-bottom: 8px;
       color: #e2e8f0;
     }
 
-    .cat-voted {
-      margin-left: auto;
-      font-size: 0.75rem;
-      color: #4ade80;
-      font-weight: 700;
-    }
+    .stars { display: flex; gap: 6px; }
 
-    .team-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 0.6rem;
-    }
-
-    .team-btn {
-      background: #1a1a2e;
-      border: 2px solid #2a2a3e;
-      color: #ccc;
-      padding: 0.8rem 0.5rem;
-      border-radius: 8px;
-      font-size: 0.8rem;
-      font-weight: 600;
+    .star {
+      font-size: 28px;
       cursor: pointer;
-      transition: all 0.15s ease;
-      text-align: center;
+      color: #4a5568;
+      opacity: 0.4;
       -webkit-tap-highlight-color: transparent;
       user-select: none;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      min-height: 44px;
+      transition: transform 0.1s ease;
     }
 
-    .team-btn:active { transform: scale(0.97); }
-    .team-btn:disabled { opacity: 0.3; cursor: not-allowed; transform: none; }
+    .star:active { transform: scale(1.2); }
 
-    .team-btn.selected {
-      background: #1e1b4b;
-      border-color: #7c3aed;
-      color: #c4b5fd;
-    }
-
-    .team-btn.vote-anim {
-      animation: voteConfirm 0.35s ease;
-      box-shadow: 0 0 16px rgba(74, 222, 128, 0.4);
-    }
-
-    @keyframes voteConfirm {
-      0% { transform: scale(1); }
-      40% { transform: scale(1.15); }
-      100% { transform: scale(1); }
-    }
-
-    .divider {
-      border: none;
-      border-top: 1px solid #1e1e30;
-      margin: 1.5rem 0;
-    }
-
-    /* Mute toggle */
-    #mute-btn {
-      position: fixed;
-      bottom: 1rem;
-      right: 1rem;
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      background: #1a1a2e;
-      border: 1px solid #2a2a3e;
-      color: #888;
-      font-size: 1.1rem;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 100;
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    /* Vote toast */
-    #vote-toast {
-      position: fixed;
-      bottom: 3.5rem;
-      left: 50%;
-      transform: translateX(-50%);
-      background: #14532d;
-      border: 1px solid #15803d;
-      color: #4ade80;
-      padding: 0.5rem 1.2rem;
-      border-radius: 8px;
-      font-weight: 700;
-      font-size: 0.85rem;
-      opacity: 0;
-      transition: opacity 0.2s ease;
-      pointer-events: none;
-      z-index: 99;
-    }
-
-    #vote-toast.show {
+    .star.filled {
+      color: #fbbf24;
       opacity: 1;
     }
 
-    /* Loading spinner */
-    #loading-overlay {
+    #submit-btn {
+      background: #7c3aed;
+      color: white;
+      border: none;
+      padding: 12px 40px;
+      border-radius: 12px;
+      font-size: 16px;
+      width: 100%;
+      cursor: pointer;
+      margin-top: 16px;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    #submit-btn:active { opacity: 0.85; }
+
+    /* ── Reveal phase ── */
+    .finalists { margin-top: 16px; }
+
+    .finalist {
+      padding: 12px 16px;
+      border-radius: 12px;
+      background: #1a1a2e;
+      margin-bottom: 8px;
+      font-weight: bold;
+      font-size: 16px;
+    }
+
+    .finalist.rank-1 { color: #d97706; border: 1px solid #d97706; }
+    .finalist.rank-2 { color: #94a3b8; border: 1px solid #94a3b8; }
+    .finalist.rank-3 { color: #cd7f32; border: 1px solid #cd7f32; }
+
+    .winner-reveal {
+      font-size: 32px;
+      font-weight: bold;
+      color: #d97706;
+      text-align: center;
+      margin-top: 20px;
+      animation: winnerGlow 1.5s ease-in-out infinite alternate;
+    }
+
+    @keyframes winnerGlow {
+      from { text-shadow: 0 0 8px rgba(217,119,6,0.4); }
+      to   { text-shadow: 0 0 24px rgba(217,119,6,0.9), 0 0 40px rgba(217,119,6,0.4); }
+    }
+
+    #phase-reveal h3, #phase-tiebreaker h3 {
+      font-size: 18px;
+      margin-bottom: 12px;
+      color: #a78bfa;
+    }
+
+    /* ── Tiebreaker phase ── */
+    .bingo-compare {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 12px;
+    }
+
+    .bingo-card-mini {
+      background: #1a1a2e;
+      border-radius: 12px;
+      padding: 12px 16px;
+      flex: 1;
+      min-width: 120px;
+    }
+
+    .bingo-card-mini h4 {
+      font-size: 14px;
+      font-weight: bold;
+      margin-bottom: 8px;
+      color: #a78bfa;
+    }
+
+    .bingo-card-mini div {
+      font-size: 13px;
+      margin-bottom: 4px;
+    }
+
+    .compliment-team {
+      background: #1a1a2e;
+      border-radius: 12px;
+      padding: 12px 16px;
+      margin-bottom: 8px;
+      font-size: 16px;
+    }
+
+    .compliment-team.active {
+      border: 1px solid #7c3aed;
+      color: #a78bfa;
+      font-weight: bold;
+    }
+
+    .tiebreak-options {
       display: flex;
       flex-direction: column;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .tiebreak-btn {
+      background: #1a1a2e;
+      border: 2px solid #7c3aed;
+      color: #e2e8f0;
+      padding: 14px 24px;
+      border-radius: 12px;
+      font-size: 16px;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .tiebreak-btn:active { background: #2a1a4e; }
+
+    /* ── Up-next bar ── */
+    #up-next-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: #1a1a2e;
+      border-top: 1px solid #2a2a3e;
+      padding: 8px 12px;
+      z-index: 100;
+    }
+
+    #up-next-list {
+      font-size: 12px;
+      color: #64748b;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .up-next-item {
+      display: inline;
+      margin-right: 10px;
+    }
+
+    .up-next-item.current {
+      color: #a78bfa;
+      font-weight: bold;
+    }
+
+    #progress {
+      font-size: 11px;
+      color: #64748b;
+      margin-top: 2px;
+    }
+
+    /* ── Mute button ── */
+    #mute-btn {
+      position: fixed;
+      bottom: 60px;
+      right: 16px;
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: #1a1a2e;
+      border: 1px solid #2a2a3e;
+      color: #94a3b8;
+      font-size: 16px;
+      cursor: pointer;
+      display: flex;
       align-items: center;
       justify-content: center;
-      padding: 3rem 0;
-      color: #555;
-      font-size: 0.9rem;
+      z-index: 101;
+      -webkit-tap-highlight-color: transparent;
     }
 
-    .spinner {
-      width: 24px;
-      height: 24px;
-      border: 3px solid #2a2a3e;
-      border-top-color: #7c3aed;
-      border-radius: 50%;
-      animation: spin 0.7s linear infinite;
-      margin-bottom: 0.75rem;
+    /* ── Register button ── */
+    #register-btn {
+      background: #7c3aed;
+      color: white;
+      border: none;
+      padding: 12px;
+      border-radius: 8px;
+      width: 100%;
+      font-size: 16px;
+      cursor: pointer;
+      margin-top: 4px;
     }
 
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
+    #register-btn:active { opacity: 0.85; }
 
-    /* Submitting overlay on buttons */
-    .team-btn.submitting {
-      position: relative;
-      color: transparent;
-    }
-
-    .team-btn.submitting::after {
-      content: '...';
-      position: absolute;
-      left: 50%;
-      top: 50%;
-      transform: translate(-50%, -50%);
-      color: #ccc;
-      font-size: 1rem;
-      letter-spacing: 0.15em;
-      animation: dotPulse 0.6s ease-in-out infinite;
-    }
-
-    @keyframes dotPulse {
-      0%, 100% { opacity: 0.4; }
-      50% { opacity: 1; }
-    }
-
-    /* Mobile: screens < 400px */
-    @media (max-width: 400px) {
-      .team-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .team-btn {
-        font-size: 0.85rem;
-        padding: 0.9rem 0.6rem;
-      }
+    /* ── Generic phase text ── */
+    .phase-msg {
+      text-align: center;
+      color: #64748b;
+      padding: 40px 16px;
+      font-size: 16px;
     }
   </style>
-</head>
-<body>
-  <header>Learnathon 2026 — Awards</header>
-  <div id="loading-overlay">
-    <div class="spinner"></div>
-    Connecting...
+</head><body>
+
+  <!-- Registration Modal -->
+  <div id="register-modal" class="modal">
+    <div class="modal-card">
+      <h2>Join the Ceremony</h2>
+      <input id="voter-name" placeholder="Your name" maxlength="40" autocomplete="off">
+      <select id="voter-team"><option value="">Select your team...</option></select>
+      <button id="register-btn" onclick="register()">Join</button>
+      <div id="register-error" class="error"></div>
+    </div>
   </div>
-  <div id="main-content" style="display: none;">
+
+  <!-- Persistent Banner (top) -->
+  <div id="banner">
+    <div id="phase-label">Idle</div>
+    <div id="current-team"></div>
+    <div id="timer-display"></div>
+  </div>
+
+  <!-- Main Content Area -->
+  <div id="content">
+    <div id="phase-idle" class="phase"><p class="phase-msg">Ceremony hasn't started yet</p></div>
+    <div id="phase-queue" class="phase"><p class="phase-msg">Waiting for next team...</p></div>
+    <div id="phase-setup" class="phase"><p class="phase-msg"><span id="setup-team"></span> is getting ready</p></div>
+    <div id="phase-presenting" class="phase">
+      <div id="present-team" class="big-team-name"></div>
+      <div id="present-timer" class="big-timer"></div>
+      <div class="hint">Voting opens after the presentation</div>
+    </div>
+    <div id="phase-voting" class="phase"></div>
+    <div id="phase-voting-self" class="phase"><p class="phase-msg">You're presenting! No self-voting.</p></div>
+    <div id="phase-reveal" class="phase"></div>
+    <div id="phase-tiebreaker" class="phase"></div>
+    <div id="phase-done" class="phase"><p class="phase-msg">Ceremony complete! 🎉</p></div>
+  </div>
+
+  <!-- Up-Next bar (bottom) -->
+  <div id="up-next-bar">
+    <div id="up-next-list"></div>
     <div id="progress"></div>
-    <div id="all-done">
-      <span class="icon">&#10003;</span>
-      <p>All votes cast!</p>
-      <small>Watch the big screen for results.</small>
-    </div>
-    <div id="status-banner"></div>
-    <div id="countdown-wrap">
-      <div id="countdown">3:00</div>
-      <div id="countdown-label">time remaining</div>
-    </div>
-    <div id="categories"></div>
   </div>
 
-  <div id="vote-toast">Voted!</div>
-  <button id="mute-btn" onclick="toggleMute()" title="Toggle sound" style="display: none;">&#x1f50a;</button>
+  <!-- Mute Toggle -->
+  <button id="mute-btn" onclick="doToggleMute()">🔊</button>
 
+  <script src="sounds.js"></script>
   <script>
-    function escapeHtml(str) {
-      const div = document.createElement('div');
-      div.textContent = str;
-      return div.innerHTML;
-    }
-
-    let myVotes = JSON.parse(localStorage.getItem('learnathon-votes') || '{}');
-    let sseConnected = false;
+    // --- State ---
     let currentState = null;
-    let submittingCategory = null;
+    let previousPhase = null;
+    let myVoter = localStorage.getItem('ceremony-voter');
+    let myTeam = localStorage.getItem('ceremony-team');
+    let currentRatings = {};
+    let timerInterval = null;
 
-    // --- Sound system (Web Audio API) ---
-    let audioCtx = null;
-    let soundMuted = false;
-
-    function getAudioCtx() {
-      if (!audioCtx) {
-        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    // --- Registration ---
+    function register() {
+      const name = document.getElementById('voter-name').value.trim();
+      const team = document.getElementById('voter-team').value;
+      if (!name || !team) {
+        document.getElementById('register-error').textContent = 'Please enter your name and select a team.';
+        return;
       }
-      return audioCtx;
-    }
-
-    // Pentatonic notes: C4, D4, E4, G4, A4 (frequencies in Hz)
-    const pentatonic = [261.63, 293.66, 329.63, 392.00, 440.00];
-
-    function playVoteChime() {
-      if (soundMuted) return;
-      try {
-        const ctx = getAudioCtx();
-        const freq = pentatonic[Math.floor(Math.random() * pentatonic.length)];
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-        osc.type = 'sine';
-        osc.frequency.value = freq;
-        gain.gain.setValueAtTime(0.08, ctx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.2);
-        osc.connect(gain);
-        gain.connect(ctx.destination);
-        osc.start(ctx.currentTime);
-        osc.stop(ctx.currentTime + 0.2);
-      } catch (e) { /* ignore audio errors */ }
-    }
-
-    function playAllDoneChime() {
-      if (soundMuted) return;
-      try {
-        const ctx = getAudioCtx();
-        // Two-note ascending chime: E4 -> A4
-        const notes = [329.63, 440.00];
-        notes.forEach((freq, i) => {
-          const osc = ctx.createOscillator();
-          const gain = ctx.createGain();
-          osc.type = 'sine';
-          osc.frequency.value = freq;
-          const startTime = ctx.currentTime + i * 0.15;
-          gain.gain.setValueAtTime(0.12, startTime);
-          gain.gain.exponentialRampToValueAtTime(0.001, startTime + 0.3);
-          osc.connect(gain);
-          gain.connect(ctx.destination);
-          osc.start(startTime);
-          osc.stop(startTime + 0.3);
-        });
-      } catch (e) { /* ignore audio errors */ }
-    }
-
-    function toggleMute() {
-      soundMuted = !soundMuted;
-      document.getElementById('mute-btn').innerHTML = soundMuted ? '&#x1f507;' : '&#x1f50a;';
-    }
-
-    // --- Countdown timer ---
-    const COUNTDOWN_SECONDS = 180; // 3 minutes
-    let countdownInterval = null;
-    let countdownEnd = null;
-    let countdownStorageKey = 'learnathon-countdown-end';
-
-    function startCountdown() {
-      // Check if we already have a running countdown stored
-      const stored = localStorage.getItem(countdownStorageKey);
-      if (stored) {
-        countdownEnd = parseInt(stored, 10);
-        // If it's already expired, reset
-        if (countdownEnd <= Date.now()) {
-          countdownEnd = Date.now() + COUNTDOWN_SECONDS * 1000;
-          localStorage.setItem(countdownStorageKey, countdownEnd);
+      fetch('/voting/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ voter: name, team }),
+      }).then(r => r.json()).then(data => {
+        if (data.ok) {
+          myVoter = name; myTeam = team;
+          localStorage.setItem('ceremony-voter', name);
+          localStorage.setItem('ceremony-team', team);
+          document.getElementById('register-modal').style.display = 'none';
+        } else {
+          document.getElementById('register-error').textContent = data.error;
         }
-      } else {
-        countdownEnd = Date.now() + COUNTDOWN_SECONDS * 1000;
-        localStorage.setItem(countdownStorageKey, countdownEnd);
-      }
-      if (countdownInterval) clearInterval(countdownInterval);
-      countdownInterval = setInterval(updateCountdown, 250);
-      updateCountdown();
-    }
-
-    function stopCountdown() {
-      if (countdownInterval) {
-        clearInterval(countdownInterval);
-        countdownInterval = null;
-      }
-      countdownEnd = null;
-      localStorage.removeItem(countdownStorageKey);
-    }
-
-    function updateCountdown() {
-      if (!countdownEnd) return;
-      const remaining = Math.max(0, Math.ceil((countdownEnd - Date.now()) / 1000));
-      const min = Math.floor(remaining / 60);
-      const sec = remaining % 60;
-      const el = document.getElementById('countdown');
-      el.textContent = min + ':' + String(sec).padStart(2, '0');
-      if (remaining <= 30) {
-        el.classList.add('urgent');
-      } else {
-        el.classList.remove('urgent');
-      }
-      if (remaining <= 0) {
-        stopCountdown();
-      }
-    }
-
-    // --- Toast ---
-    let toastTimeout = null;
-    function showVoteToast() {
-      const t = document.getElementById('vote-toast');
-      t.classList.add('show');
-      if (toastTimeout) clearTimeout(toastTimeout);
-      toastTimeout = setTimeout(() => t.classList.remove('show'), 1000);
-    }
-
-    // --- Vote animation ---
-    function animateButton(categoryId, team) {
-      const btns = document.querySelectorAll(`[data-cat="${categoryId}"][data-team="${CSS.escape(team)}"]`);
-      btns.forEach(btn => {
-        btn.classList.add('vote-anim');
-        btn.addEventListener('animationend', () => btn.classList.remove('vote-anim'), { once: true });
+      }).catch(() => {
+        document.getElementById('register-error').textContent = 'Network error — try again.';
       });
     }
 
-    function saveMyVotes() {
-      localStorage.setItem('learnathon-votes', JSON.stringify(myVotes));
+    // Allow Enter key to submit registration
+    document.getElementById('voter-name').addEventListener('keydown', e => {
+      if (e.key === 'Enter') register();
+    });
+
+    // --- Timer ---
+    function updateTimer() {
+      if (!currentState?.timer) {
+        document.getElementById('timer-display').textContent = '';
+        const bigTimer = document.getElementById('present-timer');
+        if (bigTimer) bigTimer.textContent = '';
+        return;
+      }
+      const t = currentState.timer;
+      let remaining;
+      if (t.paused) {
+        remaining = t.remaining;
+      } else {
+        remaining = Math.max(0, Math.ceil((new Date(t.endsAt) - Date.now()) / 1000));
+      }
+      const mins = Math.floor(remaining / 60);
+      const secs = remaining % 60;
+      const display = mins > 0 ? `${mins}:${String(secs).padStart(2, '0')}` : `${secs}s`;
+      const timerEl = document.getElementById('timer-display');
+      timerEl.textContent = display;
+      timerEl.classList.toggle('warning', remaining <= 30);
+      const bigTimer = document.getElementById('present-timer');
+      if (bigTimer) {
+        bigTimer.textContent = display;
+        bigTimer.classList.toggle('warning', remaining <= 30);
+      }
     }
 
-    function vote(categoryId, team) {
-      // Show submitting state on the button
-      submittingCategory = categoryId;
-      const btns = document.querySelectorAll(`[data-cat="${categoryId}"][data-team="${CSS.escape(team)}"]`);
-      btns.forEach(btn => btn.classList.add('submitting'));
+    // --- Star Rating UI ---
+    function buildVotingUI() {
+      const container = document.getElementById('phase-voting');
+      if (!currentState) return;
+      const categories = currentState.categories || [];
+      let html = '<div class="rating-form">';
+      for (const cat of categories) {
+        const isPeoplesChoice = cat.id === 'peoples-choice';
+        html += `<div class="rating-row${isPeoplesChoice ? ' peoples-choice' : ''}" data-cat="${cat.id}">
+          <div class="rating-label">${cat.emoji} ${cat.question || cat.label}</div>
+          <div class="stars">`;
+        for (let i = 1; i <= 5; i++) {
+          const filled = (currentRatings[cat.id] || 0) >= i;
+          html += `<span class="star ${filled ? 'filled' : ''}" data-cat="${cat.id}" data-val="${i}" onclick="setStar('${cat.id}',${i})">★</span>`;
+        }
+        html += '</div></div>';
+      }
+      html += `<button id="submit-btn" onclick="submitRatings()">Submit Ratings ⭐</button>
+        <div class="hint" style="margin-top:10px;">You can update your ratings until the timer ends</div></div>`;
+      container.innerHTML = html;
+    }
 
-      fetch('/voting/vote', {
+    function setStar(catId, value) {
+      if (currentRatings[catId] === value) {
+        delete currentRatings[catId];
+      } else {
+        currentRatings[catId] = value;
+      }
+      playStarTap();
+      buildVotingUI();
+    }
+
+    function submitRatings() {
+      if (!myVoter || !currentState?.currentTeam) return;
+      const cats = (currentState.categories || []).map(c => c.id);
+      const missing = cats.filter(c => !currentRatings[c]);
+      if (missing.length > 0) {
+        alert('Please rate all categories before submitting');
+        return;
+      }
+      fetch('/voting/rate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ team, category: categoryId }),
-      })
-        .then(r => r.json())
-        .then(data => {
-          submittingCategory = null;
-          btns.forEach(btn => btn.classList.remove('submitting'));
-          if (data.ok) {
-            const prevVotedCount = Object.keys(myVotes).filter(k =>
-              currentState && currentState.categories.some(c => c.id === k)
-            ).length;
+        body: JSON.stringify({ voter: myVoter, forTeam: currentState.currentTeam, ratings: currentRatings }),
+      }).then(r => r.json()).then(data => {
+        if (data.ok) {
+          playVotingCloses();
+          const btn = document.getElementById('submit-btn');
+          if (btn) btn.textContent = 'Updated! ✓';
+        } else {
+          alert(data.error);
+        }
+      }).catch(() => alert('Network error — try again'));
+    }
 
-            myVotes[categoryId] = team;
-            saveMyVotes();
+    // --- Tiebreaker Vote UI ---
+    function buildTiebreakerUI() {
+      const tb = currentState?.tiebreaker;
+      const container = document.getElementById('phase-tiebreaker');
+      if (!tb) return;
 
-            // Play sound & animate
-            playVoteChime();
-            animateButton(categoryId, team);
-            showVoteToast();
-
-            // Check if all categories voted after this vote
-            if (currentState) {
-              const newVotedCount = currentState.categories.filter(c => myVotes[c.id]).length;
-              if (newVotedCount >= currentState.categories.length && prevVotedCount < currentState.categories.length) {
-                setTimeout(playAllDoneChime, 400);
-              }
-            }
-
-            // re-render from current state
-            fetch('/voting/state').then(r => r.json()).then(render);
-          } else {
-            alert(data.error || 'Vote failed');
+      if (tb.stage === 'bingo-check') {
+        let html = '<h3>Tiebreaker: Bingo Check</h3><div class="bingo-compare">';
+        for (const team of tb.teams) {
+          const d = tb.bingoData?.[team] || {};
+          html += `<div class="bingo-card-mini"><h4>${team}</h4>`;
+          if (tb.bingoRevealStep === 'legend' || tb.bingoRevealStep === 'lines' || tb.bingoRevealStep === 'squares') {
+            html += `<div>Legend: ${d.isLegend ? '✓ YES' : '✗ No'}</div>`;
           }
-        })
-        .catch(() => {
-          submittingCategory = null;
-          btns.forEach(btn => btn.classList.remove('submitting'));
-          alert('Network error — try again');
-        });
+          if (tb.bingoRevealStep === 'lines' || tb.bingoRevealStep === 'squares') {
+            html += `<div>Lines: ${d.lineCount}</div>`;
+          }
+          if (tb.bingoRevealStep === 'squares') {
+            html += `<div>Squares: ${d.squareCount}</div>`;
+          }
+          html += '</div>';
+        }
+        html += '</div>';
+        container.innerHTML = html;
+      } else if (tb.stage === 'compliment') {
+        const complimenter = tb.teams[tb.currentComplimenter];
+        let html = '<h3>Compliment Battle!</h3>';
+        for (const team of tb.teams) {
+          const isActive = team === complimenter;
+          html += `<div class="compliment-team ${isActive ? 'active' : ''}">${team}${isActive ? ' 🎤' : ''}</div>`;
+        }
+        container.innerHTML = html;
+      } else if (tb.stage === 'vote') {
+        const voterTeam = myTeam;
+        if (tb.teams.includes(voterTeam)) {
+          container.innerHTML = '<h3>Your team is in the tiebreaker — sit tight!</h3>';
+        } else {
+          let html = '<h3>Vote for the winner!</h3><div class="tiebreak-options">';
+          for (const team of tb.teams) {
+            html += `<button class="tiebreak-btn" onclick="castTiebreakVote('${team}')">${team}</button>`;
+          }
+          html += '</div>';
+          container.innerHTML = html;
+        }
+      } else if (tb.stage === 'accepted-tie') {
+        container.innerHTML = `<h3>Shared Victory!</h3><p>${tb.teams.join(' & ')} are co-winners!</p>`;
+      }
     }
 
-    function render(state) {
-      currentState = state;
+    function castTiebreakVote(team) {
+      fetch('/voting/tiebreak-vote', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ voter: myVoter, vote: team }),
+      }).then(r => r.json()).then(data => {
+        if (!data.ok) alert(data.error);
+      }).catch(() => alert('Network error — try again'));
+    }
 
-      // Hide loading, show main content
-      document.getElementById('loading-overlay').style.display = 'none';
-      document.getElementById('main-content').style.display = 'block';
-
-      const banner = document.getElementById('status-banner');
-      const catsEl = document.getElementById('categories');
-      const progressEl = document.getElementById('progress');
-      const doneEl = document.getElementById('all-done');
-      const countdownWrap = document.getElementById('countdown-wrap');
-      const muteBtn = document.getElementById('mute-btn');
-
-      if (!state.votingOpen && state.revealedUpTo < 0) {
-        banner.className = 'closed';
-        banner.textContent = 'Voting hasn\'t opened yet — hang tight!';
-        catsEl.innerHTML = '';
-        progressEl.textContent = '';
-        doneEl.style.display = 'none';
-        countdownWrap.style.display = 'none';
-        muteBtn.style.display = 'none';
-        stopCountdown();
+    // --- Reveal UI ---
+    function buildRevealUI() {
+      const reveal = currentState?.currentReveal;
+      const container = document.getElementById('phase-reveal');
+      if (!reveal) {
+        container.innerHTML = '<h3>Preparing next award...</h3>';
         return;
       }
+      const cat = CATEGORIES_MAP[reveal.awardId] || { label: 'Overall Winner', emoji: '🏆' };
+      let html = `<h3>${cat.emoji} ${cat.label}</h3>`;
+      if (reveal.phase === 'finalists') {
+        html += '<div class="finalists">';
+        const sorted = [...reveal.finalists].sort((a, b) => b.rank - a.rank);
+        for (const f of sorted) {
+          html += `<div class="finalist rank-${f.rank}">${ordinal(f.rank)} — ${f.team}</div>`;
+        }
+        html += '</div>';
+      } else if (reveal.phase === 'winner') {
+        html += `<div class="winner-reveal">${reveal.winner}</div>`;
+      }
+      container.innerHTML = html;
+    }
 
-      if (!state.votingOpen && state.revealedUpTo >= 0) {
-        banner.className = 'closed';
-        banner.textContent = 'Voting closed — watch the screen for reveals!';
-        catsEl.innerHTML = '';
-        progressEl.textContent = '';
-        doneEl.style.display = 'none';
-        countdownWrap.style.display = 'none';
-        muteBtn.style.display = 'none';
-        stopCountdown();
-        return;
+    const CATEGORIES_MAP = {};
+
+    function ordinal(n) {
+      return n === 1 ? '1st' : n === 2 ? '2nd' : n === 3 ? '3rd' : n + 'th';
+    }
+
+    // --- Render ---
+    function render(s) {
+      currentState = s;
+
+      // Populate teams dropdown and categories map on first state with data
+      if (s.categories && Object.keys(CATEGORIES_MAP).length === 0) {
+        for (const c of s.categories) CATEGORIES_MAP[c.id] = c;
+        const sel = document.getElementById('voter-team');
+        if (sel && sel.options.length <= 1) {
+          for (const t of s.teams || []) {
+            const opt = document.createElement('option');
+            opt.value = t; opt.textContent = t;
+            sel.appendChild(opt);
+          }
+        }
       }
 
-      // Voting is open — show all categories
-      banner.className = 'open';
-      banner.textContent = 'Voting is open — one team per category';
-      muteBtn.style.display = 'flex';
+      // Show/hide registration modal
+      document.getElementById('register-modal').style.display = myVoter ? 'none' : 'flex';
 
-      // Countdown
-      countdownWrap.style.display = 'block';
-      if (!countdownInterval) {
-        startCountdown();
+      // Update banner
+      const phaseLabels = {
+        idle: 'Waiting',
+        queue: 'Up Next',
+        setup: 'Setting Up',
+        presenting: 'Presenting',
+        voting: 'Vote Now!',
+        reveal: 'Awards',
+        tiebreaker: 'Tiebreaker!',
+        done: 'Done!',
+      };
+      document.getElementById('phase-label').textContent = phaseLabels[s.phase] || s.phase;
+      document.getElementById('current-team').textContent = s.currentTeam || '';
+
+      // Phase transition sound effects
+      if (previousPhase && previousPhase !== s.phase) {
+        if (s.phase === 'setup') playTeamCalledUp();
+        if (s.phase === 'presenting') playPresentationStart();
+        if (s.phase === 'voting') { playApplause(); setTimeout(playVotingOpens, 1600); }
+        if (s.phase === 'tiebreaker') playTiebreakerAnnounced();
       }
 
-      const votedCount = state.categories.filter(c => myVotes[c.id]).length;
-      const total = state.categories.length;
+      // Reset ratings when team changes during voting phase
+      if (previousPhase !== s.phase && s.phase === 'voting' && s.currentTeam) {
+        currentRatings = {};
+      }
 
-      if (votedCount >= total) {
-        progressEl.textContent = '';
-        doneEl.style.display = 'block';
+      previousPhase = s.phase;
+
+      // Hide all phase panels
+      document.querySelectorAll('.phase').forEach(el => el.style.display = 'none');
+
+      // Show correct phase panel
+      const isSelf = myTeam && s.currentTeam === myTeam;
+      if (s.phase === 'voting' && isSelf) {
+        document.getElementById('phase-voting-self').style.display = 'block';
+      } else if (s.phase === 'voting') {
+        document.getElementById('phase-voting').style.display = 'block';
+        buildVotingUI();
+      } else if (s.phase === 'reveal') {
+        document.getElementById('phase-reveal').style.display = 'block';
+        buildRevealUI();
+      } else if (s.phase === 'tiebreaker') {
+        document.getElementById('phase-tiebreaker').style.display = 'block';
+        buildTiebreakerUI();
       } else {
-        progressEl.innerHTML = `<strong>${votedCount}</strong> of <strong>${total}</strong> categories voted`;
-        doneEl.style.display = 'none';
+        const el = document.getElementById(`phase-${s.phase}`);
+        if (el) el.style.display = 'block';
       }
 
-      catsEl.innerHTML = state.categories.map((cat, i) => {
-        const selected = myVotes[cat.id];
-        const teamButtons = state.teams.map(team => {
-          const isSelected = selected === team;
-          const safeTeam = escapeHtml(team);
-          const jsTeam = team.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
-          const escapedTeam = team.replace(/"/g, '&quot;');
-          return `<button class="team-btn ${isSelected ? 'selected' : ''}"
-            data-cat="${cat.id}" data-team="${escapedTeam}"
-            onclick="vote('${cat.id}', '${jsTeam}')"
-            ${!state.votingOpen ? 'disabled' : ''}>${safeTeam}</button>`;
-        }).join('');
+      // Populate phase-specific sub-fields
+      if (s.phase === 'setup') {
+        document.getElementById('setup-team').textContent = s.currentTeam || '';
+      }
+      if (s.phase === 'presenting') {
+        document.getElementById('present-team').textContent = s.currentTeam || '';
+      }
 
-        return `
-          <div class="category-section">
-            <div class="cat-header">
-              <span class="cat-emoji">${cat.emoji}</span>
-              <span class="cat-label">${cat.label}</span>
-              ${selected ? `<span class="cat-voted">&#10003; ${escapeHtml(selected)}</span>` : ''}
-            </div>
-            <div class="team-grid">${teamButtons}</div>
-          </div>
-          ${i < state.categories.length - 1 ? '<hr class="divider">' : ''}
-        `;
-      }).join('');
+      // Up-next bar
+      const upNext = s.upNext || [];
+      document.getElementById('up-next-list').innerHTML = upNext
+        .map((t, i) => `<span class="up-next-item${i === 0 ? ' current' : ''}">${t}</span>`)
+        .join('');
+      document.getElementById('progress').textContent =
+        `${s.completed?.length || 0} of ${s.teamCount || '?'} presented`;
+
+      // Winner reveal sound
+      if (s.currentReveal?.phase === 'winner' && s.currentReveal?.winner) {
+        playRevealWinner();
+      }
     }
 
-    // SSE
+    // --- SSE ---
     const es = new EventSource('/voting/events');
-    es.onmessage = e => {
-      sseConnected = true;
-      render(JSON.parse(e.data));
-    };
-    es.onerror = () => console.warn('SSE reconnecting...');
+    es.onmessage = e => render(JSON.parse(e.data));
+    es.onerror = () => setTimeout(() => {}, 2000);
+
+    // --- Timer interval ---
+    timerInterval = setInterval(updateTimer, 250);
+
+    // --- Mute ---
+    function doToggleMute() {
+      const muted = toggleMute();
+      document.getElementById('mute-btn').textContent = muted ? '🔇' : '🔊';
+    }
+    document.getElementById('mute-btn').textContent = isMuted() ? '🔇' : '🔊';
   </script>
-</body>
-</html>
+</body></html>
