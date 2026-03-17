@@ -394,8 +394,8 @@
     function login() {
       const input = document.getElementById('token-input').value.trim();
       if (!input) { showLoginError('Enter an admin token'); return; }
-      // Validate by pinging an admin endpoint before proceeding
-      fetch('/voting/admin/ping', {
+      // Validate by calling an existing admin endpoint before proceeding
+      fetch('/voting/admin/results', {
         headers: { 'x-admin-token': input }
       }).then(r => {
         if (!r.ok) throw new Error('Unauthorized');

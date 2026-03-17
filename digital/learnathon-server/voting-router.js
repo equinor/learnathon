@@ -8,6 +8,14 @@ const router = express.Router();
 const ADMIN_TOKEN = process.env.ADMIN_TOKEN || 'admin-dev';
 const STATE_FILE = path.join('/tmp', 'voting-state.json');
 
+// Prevent prototype pollution by disallowing dangerous object keys.
+function isUnsafeKey(key) {
+  return (
+    typeof key === 'string' &&
+    (key === '__proto__' || key === 'constructor' || key === 'prototype')
+  );
+}
+
 // --- Categories ---
 const CATEGORIES = [
   { id: 'best-creation', label: 'Best Creation', emoji: '🥇', question: 'Rate their product' },
@@ -60,11 +68,15 @@ function save() {
 const clients = new Set();
 
 function getFilteredState() {
-  const filtered = { ...state };
+  const filtered = {
+    ...state,
+    // Clone tiebreaker separately so we can safely remove sensitive fields
+    tiebreaker: state.tiebreaker ? { ...state.tiebreaker } : null,
+  };
   // Only show next 3 teams in presentation order
   if (state.presentationOrder.length > 0 && state.currentIndex >= 0) {
     filtered.upNext = state.presentationOrder
-      .slice(state.currentIndex, state.currentIndex + 4)
+      .slice(state.currentIndex + 1, state.currentIndex + 4)
       .map(i => state.teams[i]);
   } else if (state.presentationOrder.length > 0) {
     filtered.upNext = state.presentationOrder.slice(0, 3).map(i => state.teams[i]);
@@ -76,6 +88,9 @@ function getFilteredState() {
   delete filtered.ratings;
   delete filtered.presentationOrder;
   delete filtered.voters;
+  if (filtered.tiebreaker) {
+    delete filtered.tiebreaker.votes;
+  }
   return filtered;
 }
 
@@ -256,6 +271,9 @@ router.post('/register', express.json(), (req, res) => {
   const voter = sanitize(req.body?.voter);
   const team = req.body?.team;
   if (!voter) return res.status(400).json({ error: 'voter name required' });
+  if (isUnsafeKey(voter)) {
+    return res.status(400).json({ error: 'invalid voter name' });
+  }
   if (!team || !state.teams.includes(team)) {
     return res.status(400).json({ error: 'invalid team', teams: state.teams });
   }
@@ -278,6 +296,9 @@ router.post('/rate', express.json(), (req, res) => {
 
   if (!voter || !state.voters[voter]) {
     return res.status(400).json({ error: 'voter not registered' });
+  }
+  if (isUnsafeKey(voter)) {
+    return res.status(400).json({ error: 'invalid voter name' });
   }
   const voterTeam = state.voters[voter];
   const currentTeam = getCurrentTeam();
@@ -347,6 +368,11 @@ function requireAdmin(req, res, next) {
   if (token !== ADMIN_TOKEN) return res.status(401).json({ error: 'unauthorized' });
   next();
 }
+
+// Lightweight admin token validation endpoint used by the admin UI
+router.get('/admin/ping', requireAdmin, (req, res) => {
+  res.json({ ok: true });
+});
 
 // --- Admin: Start Ceremony ---
 router.post('/admin/start-ceremony', requireAdmin, async (req, res) => {
@@ -430,7 +456,7 @@ router.post('/admin/skip-phase', requireAdmin, (req, res) => {
 
 // --- Admin: Reveal ---
 router.post('/admin/start-reveal', requireAdmin, (req, res) => {
-  if (state.phase !== 'queue' || state.completed.length === 0) {
+  if (state.phase !== 'queue' || state.completed.length !== state.teamCount) {
     return res.status(400).json({ error: 'cannot start reveal yet' });
   }
   state.phase = 'reveal';
@@ -654,7 +680,7 @@ function resolveTiebreakVote() {
     state.phase = 'reveal';
   } else {
     // Vote was tied — transition tiebreaker to signal admin should accept-tie or re-vote
-    state.tiebreaker.stage = 'accepted-tie';
+    state.tiebreaker.stage = 'vote-tied';
   }
   broadcastAll();
 }
@@ -708,6 +734,8 @@ function setState(newState) {
   if (newState.teams) {
     newState.teams = newState.teams.map(t => sanitize(t));
   }
+  // Clear any existing timer so its timeout does not fire against the restored state.
+  clearTimer();
   Object.assign(state, { ...createInitialState(), ...newState });
   broadcast();
 }

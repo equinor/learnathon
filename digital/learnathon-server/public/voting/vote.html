@@ -618,16 +618,19 @@
     function render(s) {
       currentState = s;
 
-      // Populate teams dropdown and categories map on first state with data
+      // Populate categories map on first state with data
       if (s.categories && Object.keys(CATEGORIES_MAP).length === 0) {
         for (const c of s.categories) CATEGORIES_MAP[c.id] = c;
-        const sel = document.getElementById('voter-team');
-        if (sel && sel.options.length <= 1) {
-          for (const t of s.teams || []) {
-            const opt = document.createElement('option');
-            opt.value = t; opt.textContent = t;
-            sel.appendChild(opt);
-          }
+      }
+
+      // Populate teams dropdown once teams are available and select only has placeholder
+      const sel = document.getElementById('voter-team');
+      if (sel && sel.options.length <= 1 && Array.isArray(s.teams) && s.teams.length > 0) {
+        for (const t of s.teams) {
+          const opt = document.createElement('option');
+          opt.value = t;
+          opt.textContent = t;
+          sel.appendChild(opt);
         }
       }
 

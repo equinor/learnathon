@@ -139,10 +139,10 @@ server.tool('get_voting_status', 'Get current ceremony/voting status (alias for 
 
 server.tool('register_voter',
   'Register a person to a team for voting. Must be called before submitting any ratings. The agent must clearly state who it is registering.',
-  {
-    name: { type: 'string', description: 'The person\'s name (who the agent is acting on behalf of)' },
-    team: { type: 'string', description: 'The team name this person belongs to' },
-  },
+  z.object({
+    name: z.string().describe('The person\'s name (who the agent is acting on behalf of)'),
+    team: z.string().describe('The team name this person belongs to'),
+  }),
   async ({ name, team }) => {
     try {
       const res = await fetch(`${VOTING_URL}/register`, {
@@ -161,14 +161,13 @@ server.tool('register_voter',
 
 server.tool('rate_team',
   'Submit 5-star ratings for the currently presenting team. The agent MUST state who it is voting on behalf of.',
-  {
-    voter: { type: 'string', description: 'Name of the person this vote is on behalf of (must be registered)' },
-    for_team: { type: 'string', description: 'The team being rated (must match currently presenting team)' },
-    ratings: {
-      type: 'object',
-      description: 'Ratings per category (1-5 stars each). Keys: best-creation, most-creative, best-safety, best-risk-catch, best-fail, peoples-choice',
-    },
-  },
+  z.object({
+    voter: z.string().describe('Name of the person this vote is on behalf of (must be registered)'),
+    for_team: z.string().describe('The team being rated (must match currently presenting team)'),
+    ratings: z.record(z.number()).describe(
+      'Ratings per category (1-5 stars each). Keys: best-creation, most-creative, best-safety, best-risk-catch, best-fail, peoples-choice'
+    ),
+  }),
   async ({ voter, for_team, ratings }) => {
     try {
       const res = await fetch(`${VOTING_URL}/rate`, {
@@ -182,6 +181,7 @@ server.tool('rate_team',
     } catch (err) {
       return { content: [{ type: 'text', text: `Error: ${err.message}` }] };
     }
+  }
   }
 );
 
