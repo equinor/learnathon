@@ -770,12 +770,75 @@
     function celebrateLine() {
       if (navigator.vibrate) navigator.vibrate([100, 50, 100]);
       showLineToast();
+      showLineConfetti();
     }
 
     function showLineToast() {
       const toast = document.getElementById('line-toast');
       toast.classList.add('visible');
       setTimeout(() => toast.classList.remove('visible'), 2000);
+    }
+
+    function showLineConfetti() {
+      const overlay = document.getElementById('legend-overlay');
+      overlay.classList.add('active');
+      const canvas = document.getElementById('legend-confetti');
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      const ctx = canvas.getContext('2d');
+
+      const COLORS = ['#d97706', '#f59e0b', '#fbbf24', '#7c3aed', '#a78bfa'];
+      const particles = [];
+
+      // 80 confetti particles from top
+      for (let i = 0; i < 80; i++) {
+        particles.push({
+          x: Math.random() * canvas.width,
+          y: -Math.random() * 100,
+          vx: (Math.random() - 0.5) * 4,
+          vy: Math.random() * 3 + 1.5,
+          color: COLORS[Math.floor(Math.random() * COLORS.length)],
+          size: Math.random() * 6 + 3,
+          rotation: Math.random() * 360,
+          rotSpeed: (Math.random() - 0.5) * 8,
+          shape: Math.random() > 0.4 ? 'rect' : 'circle',
+          life: 1,
+          decay: 0.006 + Math.random() * 0.004,
+        });
+      }
+
+      function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        let alive = false;
+        particles.forEach(p => {
+          if (p.life <= 0) return;
+          alive = true;
+          p.x += p.vx;
+          p.y += p.vy;
+          p.vy += 0.06;
+          p.rotation += p.rotSpeed;
+          p.life -= p.decay;
+          ctx.save();
+          ctx.globalAlpha = Math.min(p.life, 1);
+          ctx.translate(p.x, p.y);
+          ctx.rotate(p.rotation * Math.PI / 180);
+          ctx.fillStyle = p.color;
+          if (p.shape === 'rect') {
+            ctx.fillRect(-p.size / 2, -p.size / 4, p.size, p.size / 2);
+          } else {
+            ctx.beginPath();
+            ctx.arc(0, 0, p.size / 2, 0, Math.PI * 2);
+            ctx.fill();
+          }
+          ctx.restore();
+        });
+        if (alive) {
+          requestAnimationFrame(animate);
+        } else {
+          overlay.classList.remove('active');
+        }
+      }
+      requestAnimationFrame(animate);
     }
 
     function celebrateLegend() {
