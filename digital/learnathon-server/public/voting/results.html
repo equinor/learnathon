@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Learnathon 2026 — Ceremony Results</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #0f0f1a;
+      color: #e2e8f0;
+      font-family: system-ui, sans-serif;
+      min-height: 100vh;
+    }
+
+    /* ── Login ── */
+    #login {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.9);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 300;
+    }
+
+    .login-card {
+      background: #1a1a2e;
+      border: 1px solid #2a2a3e;
+      border-radius: 16px;
+      padding: 32px 28px;
+      width: 90%;
+      max-width: 360px;
+      text-align: center;
+    }
+
+    .login-card h2 {
+      font-size: 20px;
+      font-weight: bold;
+      color: #a78bfa;
+      margin-bottom: 8px;
+    }
+
+    .login-card p {
+      font-size: 13px;
+      color: #64748b;
+      margin-bottom: 24px;
+    }
+
+    .login-card input {
+      width: 100%;
+      padding: 12px 14px;
+      background: #0f0f1a;
+      border: 1px solid #2a2a3e;
+      border-radius: 8px;
+      color: #e2e8f0;
+      font-size: 16px;
+      margin-bottom: 14px;
+    }
+
+    .login-card input:focus {
+      outline: none;
+      border-color: #7c3aed;
+    }
+
+    .login-card button {
+      width: 100%;
+      padding: 12px;
+      background: #7c3aed;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity 0.15s;
+    }
+
+    .login-card button:hover { opacity: 0.88; }
+
+    #login-error {
+      color: #ef4444;
+      font-size: 13px;
+      margin-top: 10px;
+      min-height: 18px;
+    }
+
+    /* ── App layout ── */
+    #results {
+      display: none;
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 24px 16px 48px;
+    }
+
+    .app-header {
+      margin-bottom: 24px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .app-header-text h1 {
+      font-size: 22px;
+      font-weight: 700;
+      color: #a78bfa;
+    }
+
+    .app-header-text p {
+      font-size: 12px;
+      color: #64748b;
+      margin-top: 3px;
+    }
+
+    /* ── Download button ── */
+    .btn-download {
+      padding: 10px 18px;
+      background: #7c3aed;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity 0.15s;
+      white-space: nowrap;
+    }
+
+    .btn-download:hover { opacity: 0.88; }
+
+    /* ── Cards ── */
+    .card {
+      background: #1a1a2e;
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 16px;
+      border: 1px solid #2a2a3e;
+    }
+
+    .card h3 {
+      font-size: 16px;
+      font-weight: 700;
+      color: #a78bfa;
+      margin-bottom: 14px;
+    }
+
+    /* ── Skipped warning ── */
+    .card-warning h3 {
+      color: #d97706;
+    }
+
+    .card-warning p {
+      font-size: 14px;
+      color: #94a3b8;
+    }
+
+    /* ── Rank entries ── */
+    .rank-entry {
+      padding: 12px;
+      border-radius: 8px;
+      margin-bottom: 10px;
+      background: #0f0f1a;
+      border-left: 3px solid #2a2a3e;
+    }
+
+    .rank-entry:last-child { margin-bottom: 0; }
+
+    .rank-entry.rank-1 { border-left-color: #d97706; }
+    .rank-entry.rank-2 { border-left-color: #94a3b8; }
+    .rank-entry.rank-3 { border-left-color: #cd7f32; }
+
+    .rank-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 10px;
+    }
+
+    .rank-pos {
+      font-size: 13px;
+      font-weight: 700;
+      min-width: 30px;
+    }
+
+    .rank-entry.rank-1 .rank-pos { color: #d97706; }
+    .rank-entry.rank-2 .rank-pos { color: #94a3b8; }
+    .rank-entry.rank-3 .rank-pos { color: #cd7f32; }
+
+    .rank-team {
+      font-size: 15px;
+      font-weight: 600;
+      color: #e2e8f0;
+      flex: 1;
+    }
+
+    .rank-stars {
+      font-size: 14px;
+      color: #fbbf24;
+      letter-spacing: 1px;
+    }
+
+    .rank-count {
+      font-size: 12px;
+      color: #64748b;
+    }
+
+    /* ── Histogram ── */
+    .histogram {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .hist-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+    }
+
+    .hist-label {
+      color: #94a3b8;
+      min-width: 24px;
+      text-align: right;
+    }
+
+    .hist-bar-bg {
+      flex: 1;
+      background: #2a2a3e;
+      border-radius: 3px;
+      height: 10px;
+      overflow: hidden;
+    }
+
+    .hist-bar {
+      height: 100%;
+      background: #7c3aed;
+      border-radius: 3px;
+      transition: width 0.4s ease;
+      min-width: 2px;
+    }
+
+    .hist-count {
+      color: #64748b;
+      min-width: 18px;
+      text-align: right;
+    }
+
+    /* ── Overall table ── */
+    .card table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+
+    .card table thead tr {
+      border-bottom: 1px solid #2a2a3e;
+    }
+
+    .card table th {
+      text-align: left;
+      padding: 8px 10px;
+      color: #64748b;
+      font-weight: 600;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .card table td {
+      padding: 9px 10px;
+      color: #e2e8f0;
+      vertical-align: top;
+    }
+
+    .card table tbody tr:nth-child(odd) {
+      background: rgba(124, 58, 237, 0.06);
+    }
+
+    .card table tbody tr:hover {
+      background: rgba(124, 58, 237, 0.12);
+    }
+
+    .td-rank {
+      font-weight: 700;
+      color: #a78bfa;
+    }
+
+    .td-points {
+      font-weight: 600;
+      color: #fbbf24;
+    }
+
+    .td-cats {
+      font-size: 12px;
+      color: #94a3b8;
+      line-height: 1.6;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Login overlay -->
+<div id="login">
+  <div class="login-card">
+    <h2>Ceremony Results</h2>
+    <p>Enter admin token to view results</p>
+    <input
+      type="password"
+      id="token-input"
+      placeholder="Admin token"
+      autocomplete="current-password"
+      onkeydown="if(event.key==='Enter') login()"
+    />
+    <button onclick="login()">View Results</button>
+    <div id="login-error"></div>
+  </div>
+</div>
+
+<!-- Results page -->
+<div id="results">
+  <div class="app-header">
+    <div class="app-header-text">
+      <h1>Ceremony Results</h1>
+      <p>Learnathon 2026 — final scores and rankings</p>
+    </div>
+    <button class="btn-download" onclick="downloadResults()">Download JSON</button>
+  </div>
+
+  <div id="results-content"></div>
+</div>
+
+<script>
+  let token = '';
+
+  function login() {
+    token = document.getElementById('token-input').value;
+    document.getElementById('login-error').textContent = '';
+    fetch(`/voting/admin/results?token=${encodeURIComponent(token)}`)
+      .then(r => { if (!r.ok) throw new Error('Unauthorized'); return r.json(); })
+      .then(data => {
+        document.getElementById('login').style.display = 'none';
+        document.getElementById('results').style.display = 'block';
+        renderResults(data);
+      })
+      .catch(err => {
+        document.getElementById('login-error').textContent = err.message;
+      });
+  }
+
+  function renderResults(data) {
+    const { rankings, ratings, teams } = data;
+    const container = document.getElementById('results-content');
+    let html = '';
+
+    // Category labels
+    const CATEGORY_LABELS = {
+      'best-creation':   { label: 'Best Creation',          emoji: '🥇' },
+      'most-creative':   { label: 'Most Creative AI Use',   emoji: '🎨' },
+      'best-safety':     { label: 'Best Safety Practice',   emoji: '🔐' },
+      'best-risk-catch': { label: 'Best Risk Catch',        emoji: '🚨' },
+      'best-fail':       { label: 'Best Fail Story',        emoji: '😂' },
+      'peoples-choice':  { label: "People's Choice",        emoji: '🤝' },
+    };
+
+    // Skipped categories
+    if (rankings.skippedCategories?.length > 0) {
+      html += `<div class="card card-warning">
+        <h3>&#9888; Skipped Categories</h3>
+        <p>${rankings.skippedCategories.join(', ')} — fewer than 2 ranked teams</p>
+      </div>`;
+    }
+
+    // Category rankings
+    for (const [catId, ranking] of Object.entries(rankings.categories)) {
+      if (ranking.length === 0) continue;
+      const cat = CATEGORY_LABELS[catId] || { label: catId, emoji: '' };
+      html += `<div class="card"><h3>${cat.emoji} ${cat.label}</h3>`;
+      for (const entry of ranking) {
+        const filled = Math.round(entry.average);
+        const stars = '★'.repeat(filled) + '☆'.repeat(5 - filled);
+        // Compute distribution from raw ratings
+        const dist = [0, 0, 0, 0, 0]; // index 0 = 1-star, etc.
+        const teamCatRatings = ratings[entry.team]?.[catId] || {};
+        for (const val of Object.values(teamCatRatings)) {
+          if (val >= 1 && val <= 5) dist[val - 1]++;
+        }
+        const maxCount = Math.max(...dist, 1);
+
+        html += `<div class="rank-entry rank-${entry.rank}">
+          <div class="rank-header">
+            <span class="rank-pos">${ordinal(entry.rank)}</span>
+            <span class="rank-team">${escapeHtml(entry.team)}</span>
+            <span class="rank-stars">${stars} ${entry.average}</span>
+            <span class="rank-count">(${entry.ratingCount} ratings)</span>
+          </div>
+          <div class="histogram">
+            ${dist.map((count, i) => `<div class="hist-row">
+              <span class="hist-label">&#9733;${i + 1}</span>
+              <div class="hist-bar-bg"><div class="hist-bar" style="width:${(count / maxCount) * 100}%"></div></div>
+              <span class="hist-count">${count}</span>
+            </div>`).join('')}
+          </div>
+        </div>`;
+      }
+      html += '</div>';
+    }
+
+    // Overall standings
+    if (rankings.overall?.length > 0) {
+      html += `<div class="card"><h3>&#127942; Overall Winner</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Rank</th>
+              <th>Team</th>
+              <th>Points</th>
+              <th>Categories</th>
+            </tr>
+          </thead>
+          <tbody>`;
+      for (const s of rankings.overall) {
+        const rankDetails = Object.entries(s.ranks || {})
+          .map(([cat, r]) => `${cat}: ${ordinal(r)}`)
+          .join(' &middot; ');
+        html += `<tr>
+          <td class="td-rank">${ordinal(s.rank)}</td>
+          <td>${escapeHtml(s.team)}</td>
+          <td class="td-points">${s.points}</td>
+          <td class="td-cats">${rankDetails}</td>
+        </tr>`;
+      }
+      html += '</tbody></table></div>';
+    }
+
+    container.innerHTML = html;
+
+    // Store for download
+    window._resultsData = data;
+  }
+
+  function ordinal(n) {
+    return n === 1 ? '1st' : n === 2 ? '2nd' : n === 3 ? '3rd' : n + 'th';
+  }
+
+  function escapeHtml(str) {
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
+
+  function downloadResults() {
+    if (!window._resultsData) return;
+    const blob = new Blob([JSON.stringify(window._resultsData, null, 2)], { type: 'application/json' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'ceremony-results.json';
+    a.click();
+  }
+</script>
+
+</body></html>

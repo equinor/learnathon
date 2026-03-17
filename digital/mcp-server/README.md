@@ -1,100 +1,69 @@
 # Learnathon MCP Server
 
-An MCP (Model Context Protocol) server built for the Learnathon event itself.
-This is both a working tool for the day **and** a live example of what the MCP Server challenge track produces.
-
-> **Status:** Sketched — to be built before the event
+An MCP (Model Context Protocol) server that connects AI coding agents to the Learnathon 2026 bingo and ceremony/voting apps. Runs locally via stdio transport in each participant's Codespace.
 
 ---
 
-## What It Does
-
-Exposes these tools to any MCP-enabled AI agent (Claude Code, OpenCode, etc.):
+## Tools
 
 | Tool | Description |
 |------|-------------|
-| `get_schedule` | Returns the current event schedule and which phase we're in |
-| `get_teams` | Lists all teams, their challenge track, and repo link |
-| `mark_bingo` | Marks a bingo square as completed for a team |
-| `get_bingo_status` | Returns the bingo board for a team or all teams |
-| `submit_gotcha` | Adds a new entry to the Gotchas Deck |
-| `get_gotchas` | Returns all submitted gotchas |
+| `get_bingo_status` | Get bingo board status for all teams or a specific team |
+| `list_bingo_squares` | List all bingo squares with their index numbers and labels |
+| `mark_bingo_square` | Mark (or unmark) a bingo square — auto-creates the team if new |
+| `get_ceremony_status` | Get current ceremony phase, presenting team, timer, and upcoming teams |
+| `register_voter` | Register yourself to your team before voting (required before rating) |
+| `rate_team` | Submit 5-star ratings (1–5) for the presenting team across all 6 categories |
+| `cast_tiebreak_vote` | Cast a pick-one vote during a tiebreaker round |
 
 ---
 
-## Security
+## Setup
 
-**Event token**: A short random string generated before the event. Distributed via the event Slack channel and injected into all Codespaces as an org-level secret (`LEARNATHON_EVENT_TOKEN`). Every request must include it as a Bearer token. This keeps the server closed to the outside world without requiring individual logins.
+### In Claude Code
 
-Teams identify themselves by team name/number in the request body. We trust participants not to mark each other's bingo — and if they do, it's a teachable moment.
-
----
-
-## Hosting: Radix (Equinor)
-
-Deploy as a Radix application for the day. Radix is Equinor's internal Kubernetes platform — easy to spin up, easy to tear down.
-
-```
-Spin up:  1 day before the event
-Tear down: 1 day after the event
-```
-
-A `radixconfig.yaml` will be provided in this directory. After the event, archive the repo, delete the Radix app. Done.
-
----
-
-## Equinor MCP Server Template (Varia)
-
-This project will also serve as a **reusable template** for teams at Equinor who want to build and deploy their own MCP servers on Radix. After the event, publish to Varia:
-
-- Working Node.js MCP server with auth pattern
-- `radixconfig.yaml` for Radix deployment
-- `Dockerfile`
-- README explaining the pattern
-
-> **Goal:** Any Equinor team should be able to fork this and have a running MCP server on Radix within a day.
-
----
-
-## Connect to Claude Code
-
-Once running, add to `~/.claude/mcp_servers.json`:
+Add to your project's `.claude/mcp.json`:
 
 ```json
 {
   "mcpServers": {
     "learnathon": {
-      "type": "http",
-      "url": "https://learnathon-mcp.radix.equinor.com",
-      "headers": {
-        "Authorization": "Bearer ${LEARNATHON_EVENT_TOKEN}"
+      "command": "node",
+      "args": ["/path/to/learnathon/digital/mcp-server/server.js"],
+      "env": {
+        "LEARNATHON_URL": "https://server-learnathon-prod.playground.radix.equinor.com"
       }
     }
   }
 }
 ```
 
-Then in any Claude Code session:
-```
-"What teams have completed Lab 1?"
-"Mark our bingo square for 'Use an MCP tool'"
-"Show me all gotchas submitted so far"
+The `LEARNATHON_URL` defaults to the production Radix URL, so the `env` block is optional during the event.
+
+### Local development
+
+To point at a local server instead:
+
+```bash
+LEARNATHON_URL=http://localhost:8080 node server.js
 ```
 
 ---
 
-## Tech Stack (Proposed)
+## Tech Stack
 
-- Node.js + TypeScript
-- `@modelcontextprotocol/sdk` (official MCP TypeScript SDK)
-- HTTP + SSE transport (one server, all participants connect)
-- JSON file for state persistence across restarts
-- Docker + `radixconfig.yaml` for Radix deployment
+- Node.js (plain JS, no build step)
+- `@modelcontextprotocol/sdk` — official MCP SDK
+- `zod` — input validation
+- Stdio transport (one process per participant)
 
 ---
 
-## Stretch Goals
+## Backend
 
-- Bingo board as a live web view (separate from the MCP interface)
-- Integration with the voting app
-- Post-event: publish as Varia article + template repo
+The MCP server proxies to the unified learnathon server:
+
+- **Bingo API:** `{LEARNATHON_URL}/bingo/*`
+- **Ceremony/Voting API:** `{LEARNATHON_URL}/voting/*`
+
+The backend is deployed on Radix Playground at `server-learnathon-prod.playground.radix.equinor.com`.

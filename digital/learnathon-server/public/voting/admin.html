@@ -1,366 +1,616 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
+<html lang="en"><head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Learnathon 2026 — Admin</title>
+  <title>Learnathon 2026 — Ceremony Admin</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
       background: #0f0f1a;
       color: #e2e8f0;
+      font-family: system-ui, sans-serif;
       min-height: 100vh;
-      padding: 1.5rem;
     }
 
-    h1 { font-size: 1.4rem; font-weight: 700; margin-bottom: 0.25rem; }
-    .subtitle { color: #555; font-size: 0.85rem; margin-bottom: 1.5rem; }
-
-    /* Login */
-    #login-screen { max-width: 360px; margin: 10vh auto; text-align: center; }
-    #login-screen input {
-      width: 100%; padding: 0.75rem 1rem; background: #1a1a2e;
-      border: 1px solid #333; border-radius: 8px; color: #fff;
-      font-size: 1rem; margin: 1rem 0;
-    }
-    #login-screen button { width: 100%; }
-
-    /* App */
-    #app { display: none; max-width: 800px; }
-
-    .card {
-      background: #1a1a2e; border: 1px solid #2a2a3e;
-      border-radius: 12px; padding: 1.25rem; margin-bottom: 1.25rem;
-    }
-    .card h2 {
-      font-size: 0.8rem; text-transform: uppercase;
-      letter-spacing: 0.08em; color: #555; margin-bottom: 1rem;
+    /* ── Login ── */
+    #login {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.9);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 300;
     }
 
-    button {
-      padding: 0.6rem 1.25rem; border: none; border-radius: 8px;
-      font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: opacity 0.15s;
-    }
-    button:hover { opacity: 0.85; }
-    button:disabled { opacity: 0.35; cursor: not-allowed; }
-
-    .btn-primary { background: #7c3aed; color: #fff; }
-    .btn-green   { background: #16a34a; color: #fff; }
-    .btn-red     { background: #dc2626; color: #fff; }
-    .btn-amber   { background: #d97706; color: #fff; }
-    .btn-ghost   { background: #2a2a3e; color: #ccc; }
-    .btn-row { display: flex; gap: 0.75rem; flex-wrap: wrap; }
-
-    textarea {
-      width: 100%; background: #0f0f1a; border: 1px solid #333;
-      border-radius: 8px; color: #fff; padding: 0.75rem;
-      font-size: 0.9rem; resize: vertical; min-height: 120px; font-family: inherit;
+    .login-card {
+      background: #1a1a2e;
+      border: 1px solid #2a2a3e;
+      border-radius: 16px;
+      padding: 32px 28px;
+      width: 90%;
+      max-width: 360px;
+      text-align: center;
     }
 
-    /* Guidance banner */
-    #guidance {
-      display: flex; align-items: center; gap: 0.75rem;
-      padding: 0.9rem 1.1rem; border-radius: 12px; margin-bottom: 1.25rem;
-      font-size: 0.95rem; font-weight: 600; border: 1px solid transparent;
-    }
-    #guidance.step-setup  { background: #1c1917; border-color: #44403c; color: #d6d3d1; }
-    #guidance.step-ready  { background: #1e1b4b; border-color: #4338ca; color: #c7d2fe; }
-    #guidance.step-open   { background: #14532d; border-color: #15803d; color: #86efac; }
-    #guidance.step-close  { background: #1c1917; border-color: #b45309; color: #fcd34d; }
-    #guidance.step-reveal { background: #2e1065; border-color: #7c3aed; color: #e9d5ff; }
-    #guidance.step-done   { background: #14532d; border-color: #15803d; color: #86efac; }
-    #guidance-icon { font-size: 1.3rem; flex-shrink: 0; }
-
-    /* Vote URL bar */
-    #vote-url-bar {
-      display: none; align-items: center; gap: 0.75rem;
-      padding: 0.6rem 1rem; background: #14532d; border: 1px solid #15803d;
-      border-radius: 10px; margin-bottom: 1.25rem; font-size: 0.85rem; color: #86efac;
-    }
-    #vote-url-bar span { font-weight: 700; font-family: monospace; font-size: 0.9rem; }
-
-    /* Category list */
-    .cat-item {
-      display: flex; align-items: center; gap: 0.75rem;
-      padding: 0.5rem 0; border-bottom: 1px solid #1e1e30;
-    }
-    .cat-item:last-child { border-bottom: none; }
-    .cat-emoji { font-size: 1.2rem; width: 2rem; text-align: center; }
-    .cat-name  { flex: 1; font-size: 0.95rem; }
-    .cat-state { font-size: 0.75rem; color: #555; }
-    .cat-state.revealed { color: #4ade80; font-weight: 700; }
-    .cat-state.next     { color: #fbbf24; font-weight: 700; }
-
-    /* Vote totals */
-    .cat-votes { font-size: 0.75rem; color: #555; width: 60px; text-align: right; }
-
-    table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
-    th { text-align: left; color: #555; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.06em; padding: 0.4rem 0.5rem; border-bottom: 1px solid #2a2a3e; }
-    td { padding: 0.4rem 0.5rem; border-bottom: 1px solid #1a1a2e; }
-    tr.winner td { color: #fbbf24; font-weight: 700; }
-
-    .tie-alert {
-      display: flex; align-items: center; gap: 0.6rem;
-      padding: 0.7rem 1rem; background: #2d1a00; border: 2px solid #d97706;
-      border-radius: 10px; margin-top: 0.75rem;
-      font-size: 0.9rem; color: #fbbf24; font-weight: 600;
-      animation: tiePulse 1.5s infinite;
-    }
-    @keyframes tiePulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.6; }
+    .login-card h2 {
+      font-size: 20px;
+      font-weight: bold;
+      color: #a78bfa;
+      margin-bottom: 24px;
     }
 
-    .toast {
-      position: fixed; bottom: 1.5rem; left: 50%; transform: translateX(-50%);
-      background: #4ade80; color: #000; padding: 0.6rem 1.25rem; border-radius: 8px;
-      font-weight: 600; font-size: 0.9rem; display: none;
+    .login-card input {
+      width: 100%;
+      padding: 12px 14px;
+      background: #0f0f1a;
+      border: 1px solid #2a2a3e;
+      border-radius: 8px;
+      color: #e2e8f0;
+      font-size: 16px;
+      margin-bottom: 14px;
     }
+
+    .login-card input:focus {
+      outline: none;
+      border-color: #7c3aed;
+    }
+
+    .login-card button {
+      width: 100%;
+      padding: 12px;
+      background: #7c3aed;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .login-card button:hover { opacity: 0.88; }
+
+    #login-error {
+      color: #ef4444;
+      font-size: 13px;
+      margin-top: 10px;
+      min-height: 18px;
+    }
+
+    /* ── App layout ── */
+    #app {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px 16px 32px;
+    }
+
+    .app-header {
+      margin-bottom: 20px;
+    }
+
+    .app-header h1 {
+      font-size: 18px;
+      font-weight: 700;
+      color: #a78bfa;
+    }
+
+    .app-header p {
+      font-size: 12px;
+      color: #64748b;
+      margin-top: 2px;
+    }
+
+    /* ── Phase banner ── */
+    #phase-banner {
+      padding: 12px 16px;
+      border-left: 4px solid #7c3aed;
+      border-radius: 8px;
+      margin-bottom: 16px;
+      background: #1a1a2e;
+      font-size: 15px;
+      font-weight: 600;
+      color: #e2e8f0;
+    }
+
+    /* ── Timer section ── */
+    #timer-section {
+      background: #1a1a2e;
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 16px;
+      text-align: center;
+    }
+
+    #admin-timer {
+      font-size: 48px;
+      font-weight: bold;
+      color: #7c3aed;
+      font-variant-numeric: tabular-nums;
+      text-align: center;
+      line-height: 1;
+      margin-bottom: 12px;
+      min-height: 56px;
+    }
+
+    #admin-timer.paused {
+      color: #64748b;
+    }
+
+    #admin-timer.warning {
+      color: #ef4444;
+    }
+
+    #timer-controls {
+      display: none;
+      flex-direction: row;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    #timer-controls button {
+      padding: 8px 14px;
+      font-size: 13px;
+      font-weight: 600;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      background: #2a2a3e;
+      color: #e2e8f0;
+      transition: opacity 0.15s;
+    }
+
+    #timer-controls button:hover { opacity: 0.8; }
+
+    /* ── Actions ── */
+    #actions {
+      margin-bottom: 16px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0;
+    }
+
+    .action-btn {
+      display: none;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      margin: 4px;
+      transition: opacity 0.15s;
+    }
+
+    .action-btn:hover { opacity: 0.85; }
+
+    .action-btn.primary { background: #7c3aed; }
+    .action-btn.gold    { background: #d97706; }
+    .action-btn.warning { background: #ef4444; }
+    .action-btn.danger  { background: #dc2626; }
+    .action-btn.ghost   { background: #2a2a3e; }
+
+    /* ── Section card ── */
+    .section {
+      background: #1a1a2e;
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 16px;
+    }
+
+    .section h3 {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #64748b;
+      margin-bottom: 12px;
+    }
+
+    /* ── Queue list ── */
+    .queue-item {
+      padding: 8px 12px;
+      border-radius: 6px;
+      margin: 4px 0;
+      font-size: 14px;
+      color: #94a3b8;
+    }
+
+    .queue-item.completed {
+      opacity: 0.45;
+    }
+
+    .queue-item.current {
+      background: rgba(124,58,237,0.18);
+      border-left: 3px solid #7c3aed;
+      color: #c4b5fd;
+      font-weight: 600;
+    }
+
+    .queue-item.upcoming {
+      color: #e2e8f0;
+    }
+
+    /* ── Vote counts ── */
+    #vote-counts {
+      font-size: 15px;
+      color: #a78bfa;
+      font-weight: 600;
+    }
+
+    /* ── Reveal list ── */
+    .reveal-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 10px;
+      border-radius: 6px;
+      margin: 3px 0;
+      font-size: 14px;
+      color: #64748b;
+    }
+
+    .reveal-item.revealed {
+      color: #22c55e;
+    }
+
+    .reveal-item.current {
+      color: #d97706;
+      font-weight: bold;
+      background: rgba(217,119,6,0.1);
+      border-left: 3px solid #d97706;
+    }
+
+    /* ── Toast ── */
+    #toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      color: white;
+      display: none;
+      z-index: 500;
+      white-space: nowrap;
+      pointer-events: none;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+    }
+
+    #toast.success { background: #22c55e; color: #000; }
+    #toast.error   { background: #ef4444; }
+
+    /* ── Spinner (SSE connecting) ── */
+    #sse-loading {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 14px;
+      background: #1a1a2e;
+      border: 1px solid #2a2a3e;
+      border-radius: 10px;
+      font-size: 13px;
+      color: #64748b;
+      margin-bottom: 16px;
+    }
+
+    .spinner-sm {
+      width: 16px;
+      height: 16px;
+      border: 2px solid #2a2a3e;
+      border-top-color: #7c3aed;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      flex-shrink: 0;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
   </style>
-</head>
-<body>
+</head><body>
 
   <!-- Login -->
-  <div id="login-screen">
-    <h1>🎓 Learnathon Admin</h1>
-    <input type="password" id="token-input" placeholder="Admin token" />
-    <button class="btn-primary" onclick="login()">Sign in</button>
-    <p id="login-error" style="color:#ef4444;margin-top:0.5rem;font-size:0.85rem;"></p>
+  <div id="login">
+    <div class="login-card">
+      <h2>Ceremony Admin</h2>
+      <input id="token-input" type="password" placeholder="Admin token" autocomplete="current-password">
+      <button onclick="login()">Sign in</button>
+      <div id="login-error"></div>
+    </div>
   </div>
 
   <!-- App -->
-  <div id="app">
-    <h1>🎓 Learnathon 2026 — Admin</h1>
-    <p class="subtitle">Facilitator control panel — vote once, reveal one by one</p>
+  <div id="app" style="display:none">
 
-    <div id="guidance">
-      <span id="guidance-icon"></span>
-      <span id="guidance-text"></span>
+    <div class="app-header">
+      <h1>Learnathon 2026 — Ceremony Admin</h1>
+      <p>Facilitator control panel</p>
     </div>
 
-    <div id="vote-url-bar">
-      📱 Tell participants to open: <span id="vote-url"></span>
+    <div id="sse-loading" style="display:flex">
+      <div class="spinner-sm"></div>
+      Connecting to server...
     </div>
 
-    <!-- Flow controls -->
-    <div class="card">
-      <h2>Ceremony Controls</h2>
-      <div class="btn-row">
-        <button class="btn-green" id="btn-open" onclick="api('admin/open')">
-          🗳️ Open Voting
-        </button>
-        <button class="btn-ghost" id="btn-close" onclick="api('admin/close')">
-          🔒 Close Voting
-        </button>
-        <button class="btn-amber" id="btn-reveal" onclick="api('admin/reveal-next')">
-          ✨ Reveal Next
-        </button>
-        <button class="btn-red" onclick="confirmReset()">
-          ↺ Reset All
-        </button>
+    <!-- Phase Banner (color-coded border) -->
+    <div id="phase-banner"></div>
+
+    <!-- Timer + Controls -->
+    <div id="timer-section">
+      <div id="admin-timer"></div>
+      <div id="timer-controls">
+        <button onclick="adminAction('pause')">⏸ Pause</button>
+        <button onclick="adminAction('resume')">▶ Resume</button>
+        <button onclick="adminAction('extend', {seconds:30})">+30s</button>
+        <button onclick="adminAction('skip-phase')">⏭ Skip</button>
       </div>
     </div>
 
-    <!-- Categories overview -->
-    <div class="card">
-      <h2>Reveal Order</h2>
-      <div id="cat-list"></div>
+    <!-- Context-sensitive action buttons -->
+    <div id="actions">
+      <button id="btn-start" class="action-btn primary" onclick="adminAction('start-ceremony')">Start Ceremony</button>
+      <button id="btn-next" class="action-btn primary" onclick="adminAction('next-team')">Next Team ▶</button>
+      <button id="btn-reveal-start" class="action-btn gold" onclick="adminAction('start-reveal')">Start Reveal 🏆</button>
+      <button id="btn-reveal-next" class="action-btn gold" onclick="adminAction('reveal-next')">Reveal Next ▶</button>
+      <button id="btn-resolve-tie" class="action-btn warning" onclick="adminAction('resolve-tie')">Resolve Tie</button>
+      <button id="btn-next-compliment" class="action-btn ghost" onclick="adminAction('next-complimenter')">Next Complimenter</button>
+      <button id="btn-tiebreak-vote" class="action-btn warning" onclick="adminAction('start-tiebreak-vote')">Start Tiebreak Vote</button>
+      <button id="btn-accept-tie" class="action-btn ghost" onclick="adminAction('accept-tie')">Accept Tie 🤝</button>
+      <button id="btn-reset" class="action-btn danger" onclick="if(confirm('Reset everything?')) adminAction('reset')">Reset ⚠</button>
     </div>
 
-    <!-- Vote counts for current revealed category -->
-    <div class="card" id="vote-detail-card" style="display:none;">
-      <h2 id="vote-detail-title">Votes</h2>
-      <div id="vote-table"></div>
+    <!-- Queue List -->
+    <div id="queue-section" class="section">
+      <h3>Teams</h3>
+      <div id="queue-list"></div>
     </div>
 
-    <!-- Team setup -->
-    <div class="card">
-      <h2>Team Setup</h2>
-      <p style="color:#666;font-size:0.85rem;margin-bottom:0.75rem;">
-        One team name per line. Do this before the ceremony starts.
-      </p>
-      <textarea id="teams-input" placeholder="Team Rocket&#10;Team Copilot&#10;Team Vibe&#10;..."></textarea>
-      <div style="margin-top:0.75rem;">
-        <button class="btn-primary" onclick="saveTeams()">Save Teams</button>
-      </div>
+    <!-- Live Vote Count -->
+    <div id="vote-count-section" class="section" style="display:none">
+      <h3>Ratings</h3>
+      <div id="vote-counts"></div>
     </div>
+
+    <!-- Reveal Progress -->
+    <div id="reveal-section" class="section" style="display:none">
+      <h3>Awards</h3>
+      <div id="reveal-list"></div>
+    </div>
+
+    <!-- Toast -->
+    <div id="toast"></div>
+
   </div>
 
-  <div class="toast" id="toast"></div>
-
   <script>
-    function escapeHtml(str) {
-      const div = document.createElement('div');
-      div.textContent = str;
-      return div.innerHTML;
-    }
+    let token = '';
+    let state = null;
+    let timerInterval = null;
 
-    let adminToken = '';
+    // ── Login ──────────────────────────────────────────────────────────────
 
     function login() {
-      adminToken = document.getElementById('token-input').value.trim();
-      fetch('/voting/admin/ping', { headers: { 'x-admin-token': adminToken } })
-        .then(r => { if (!r.ok) throw new Error(); return r.json(); })
-        .then(() => {
-          document.getElementById('login-screen').style.display = 'none';
-          document.getElementById('app').style.display = 'block';
-          connectSSE();
-        })
-        .catch(() => {
-          document.getElementById('login-error').textContent = 'Wrong token';
-        });
+      const input = document.getElementById('token-input').value.trim();
+      if (!input) { showLoginError('Enter an admin token'); return; }
+      // Validate by calling an existing admin endpoint before proceeding
+      fetch('/voting/admin/results', {
+        headers: { 'x-admin-token': input }
+      }).then(r => {
+        if (!r.ok) throw new Error('Unauthorized');
+        return r.json();
+      }).then(() => {
+        token = input;
+        document.getElementById('login').style.display = 'none';
+        document.getElementById('app').style.display = 'block';
+        connectSSE();
+      }).catch(() => {
+        showLoginError('Wrong token');
+      });
+    }
+
+    function showLoginError(msg) {
+      document.getElementById('login-error').textContent = msg;
     }
 
     document.getElementById('token-input').addEventListener('keydown', e => {
       if (e.key === 'Enter') login();
     });
 
-    function api(endpoint) {
-      return fetch(`/voting/${endpoint}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'x-admin-token': adminToken },
-        body: '{}',
-      }).then(r => r.json()).then(data => {
-        if (data.error) showToast('❌ ' + data.error, '#ef4444');
-      });
-    }
-
-    function saveTeams() {
-      const raw = document.getElementById('teams-input').value;
-      const teams = raw.split('\n').map(t => t.trim()).filter(Boolean);
-      fetch('/voting/admin/teams', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'x-admin-token': adminToken },
-        body: JSON.stringify({ teams }),
-      }).then(r => r.json()).then(data => {
-        if (data.ok) showToast('✓ ' + data.teams.length + ' teams saved');
-        else showToast('❌ ' + data.error, '#ef4444');
-      });
-    }
-
-    function confirmReset() {
-      if (confirm('Reset all votes and reveals?')) api('admin/reset');
-    }
-
-    function showToast(msg, bg = '#4ade80') {
-      const t = document.getElementById('toast');
-      t.textContent = msg; t.style.background = bg;
-      t.style.display = 'block';
-      setTimeout(() => t.style.display = 'none', 2000);
-    }
-
-    function applyState(state) {
-      const allRevealed = state.revealedUpTo >= state.categories.length - 1;
-
-      // --- Guidance ---
-      const g = document.getElementById('guidance');
-      const icon = document.getElementById('guidance-icon');
-      const text = document.getElementById('guidance-text');
-
-      if (!state.teams.length) {
-        g.className = 'step-setup';
-        icon.textContent = '①';
-        text.textContent = 'Enter team names below and click Save Teams.';
-      } else if (!state.votingOpen && state.revealedUpTo < 0 && !Object.keys(state.votes).length) {
-        g.className = 'step-ready';
-        icon.textContent = '②';
-        text.textContent = 'Ready! Click 🗳️ Open Voting — participants vote on all 6 categories at once.';
-      } else if (state.votingOpen) {
-        g.className = 'step-open';
-        icon.textContent = '③';
-        text.textContent = 'Voting is live. Give them 2–3 minutes. Click 🔒 Close Voting when done.';
-      } else if (state.revealedUpTo < 0) {
-        g.className = 'step-close';
-        icon.textContent = '④';
-        const nextCat = state.categories[0];
-        text.textContent = `Voting closed. Build suspense... then click ✨ Reveal Next for ${nextCat.emoji} ${nextCat.label}.`;
-      } else if (!allRevealed) {
-        g.className = 'step-reveal';
-        icon.textContent = '✨';
-        const nextCat = state.categories[state.revealedUpTo + 1];
-        text.textContent = `Announce the winner. Then click ✨ Reveal Next for ${nextCat.emoji} ${nextCat.label}.`;
-      } else {
-        g.className = 'step-done';
-        icon.textContent = '🎉';
-        text.textContent = 'All 6 categories revealed! Announce the winners and hand out stickers.';
-      }
-
-      // --- Vote URL bar ---
-      const urlBar = document.getElementById('vote-url-bar');
-      if (state.votingOpen) {
-        urlBar.style.display = 'flex';
-        document.getElementById('vote-url').textContent = window.location.origin + '/voting/vote.html';
-      } else {
-        urlBar.style.display = 'none';
-      }
-
-      // --- Buttons ---
-      document.getElementById('btn-open').disabled = !state.teams.length || state.votingOpen || state.revealedUpTo >= 0;
-      document.getElementById('btn-close').disabled = !state.votingOpen;
-      document.getElementById('btn-reveal').disabled = state.votingOpen || allRevealed || (state.revealedUpTo < 0 && !Object.keys(state.votes).length);
-
-      // --- Category list ---
-      document.getElementById('cat-list').innerHTML = state.categories.map((cat, i) => {
-        const isRevealed = i <= state.revealedUpTo;
-        const isNext = i === state.revealedUpTo + 1 && !state.votingOpen && state.revealedUpTo >= 0;
-        const catVotes = state.votes[cat.id] || {};
-        const total = Object.values(catVotes).reduce((a, b) => a + b, 0);
-
-        return `
-          <div class="cat-item">
-            <div class="cat-emoji">${cat.emoji}</div>
-            <div class="cat-name">${cat.label}</div>
-            <div class="cat-votes">${total > 0 ? total + ' votes' : ''}</div>
-            <div class="cat-state ${isRevealed ? 'revealed' : ''} ${isNext ? 'next' : ''}">
-              ${isRevealed ? '✓ Revealed' : isNext ? '▶ Next' : ''}
-            </div>
-          </div>
-        `;
-      }).join('');
-
-      // --- Vote detail for most recently revealed category ---
-      const detailCard = document.getElementById('vote-detail-card');
-      if (state.revealedUpTo >= 0) {
-        const cat = state.categories[state.revealedUpTo];
-        const catVotes = state.votes[cat.id] || {};
-        const rows = state.teams
-          .map(team => ({ team, count: catVotes[team] || 0 }))
-          .sort((a, b) => b.count - a.count);
-        const maxCount = rows[0]?.count || 0;
-
-        detailCard.style.display = 'block';
-        document.getElementById('vote-detail-title').textContent = `${cat.emoji} ${cat.label} — Results`;
-        const isTie = rows.length >= 2 && maxCount > 0 && rows[0].count === rows[1].count;
-        document.getElementById('vote-table').innerHTML = `
-          <table>
-            <thead><tr><th>Team</th><th>Votes</th></tr></thead>
-            <tbody>
-              ${rows.map(r => `
-                <tr class="${r.count > 0 && r.count === maxCount ? 'winner' : ''}">
-                  <td>${escapeHtml(r.team)}</td><td>${r.count}</td>
-                </tr>
-              `).join('')}
-            </tbody>
-          </table>
-          ${isTie ? '<div class="tie-alert">⚖️ Tie! Check bingo card progress to decide the winner.</div>' : ''}
-        `;
-      } else {
-        detailCard.style.display = 'none';
-      }
-
-      // Sync teams textarea if empty
-      const teamsInput = document.getElementById('teams-input');
-      if (!teamsInput.value && state.teams.length > 0) {
-        teamsInput.value = state.teams.join('\n');
-      }
-    }
+    // ── SSE ────────────────────────────────────────────────────────────────
 
     function connectSSE() {
-      const es = new EventSource('/voting/events');
-      es.onmessage = e => applyState(JSON.parse(e.data));
+      const es = new EventSource(`/voting/admin/events?token=${encodeURIComponent(token)}`);
+      es.onmessage = e => {
+        document.getElementById('sse-loading').style.display = 'none';
+        render(JSON.parse(e.data));
+      };
+      es.onerror = () => {
+        // Reconnect silently; browser handles backoff
+      };
+    }
+
+    // ── Admin actions ──────────────────────────────────────────────────────
+
+    function adminAction(action, body) {
+      return fetch(`/voting/admin/${action}`, {
+        method: 'POST',
+        headers: { 'x-admin-token': token, 'Content-Type': 'application/json' },
+        body: body ? JSON.stringify(body) : undefined,
+      }).then(r => r.json()).then(data => {
+        if (data.error) {
+          showToast(data.error + (data.message ? ' — ' + data.message : ''), 'error');
+        } else {
+          showToast('OK', 'success');
+        }
+      }).catch(() => showToast('Network error', 'error'));
+    }
+
+    // ── Render ─────────────────────────────────────────────────────────────
+
+    const REVEAL_ORDER = [
+      'best-fail',
+      'best-risk-catch',
+      'best-safety',
+      'most-creative',
+      'best-creation',
+      'peoples-choice',
+      'overall',
+    ];
+
+    const PHASE_COLORS = {
+      idle:        '#7c3aed',
+      queue:       '#3b82f6',
+      setup:       '#22c55e',
+      presenting:  '#d97706',
+      voting:      '#ef4444',
+      reveal:      '#d97706',
+      tiebreaker:  '#ef4444',
+      done:        '#22c55e',
+    };
+
+    function render(s) {
+      state = s;
+
+      // ── Phase banner ───────────────────────────────────────
+      const phaseColor = PHASE_COLORS[s.phase] || '#7c3aed';
+      const banner = document.getElementById('phase-banner');
+      banner.style.borderColor = phaseColor;
+      const currentTeam = (s.currentIndex >= 0 && s.presentationOrder && s.teams)
+        ? s.teams[s.presentationOrder[s.currentIndex]]
+        : (s.currentTeam || '');
+      const phaseLabel = s.phase ? s.phase.toUpperCase() : 'IDLE';
+      banner.innerHTML = `<strong style="color:${phaseColor}">${phaseLabel}</strong>${currentTeam ? ' &mdash; ' + escapeHtml(currentTeam) : ''}`;
+
+      // ── Button visibility ──────────────────────────────────
+      function show(id, visible) {
+        document.getElementById(id).style.display = visible ? 'inline-block' : 'none';
+      }
+
+      const order = s.presentationOrder || [];
+      const completed = s.completed || [];
+      const teamCount = s.teamCount || 0;
+
+      show('btn-start', s.phase === 'idle');
+      show('btn-next',  s.phase === 'queue' && s.currentIndex + 1 < order.length);
+      show('btn-reveal-start',
+        s.phase === 'queue' &&
+        completed.length === teamCount &&
+        teamCount > 0
+      );
+      show('btn-reveal-next', s.phase === 'reveal');
+      show('btn-resolve-tie', s.phase === 'reveal' && s.currentReveal?.phase === 'finalists');
+      show('btn-next-compliment',
+        s.tiebreaker?.stage === 'bingo-check' || s.tiebreaker?.stage === 'compliment'
+      );
+      show('btn-tiebreak-vote', s.tiebreaker?.stage === 'compliment');
+      show('btn-accept-tie', !!s.tiebreaker);
+      show('btn-reset', true); // always available
+
+      // Timer controls
+      document.getElementById('timer-controls').style.display = s.timer ? 'flex' : 'none';
+
+      // ── Queue list ─────────────────────────────────────────
+      const queueEl = document.getElementById('queue-list');
+      if (order.length > 0 && s.teams) {
+        queueEl.innerHTML = order.map((teamIdx, pos) => {
+          const team = s.teams[teamIdx];
+          const isDone = completed.includes(team);
+          const isCurrent = pos === s.currentIndex;
+          const status = isDone ? '✓' : (isCurrent ? '▶' : String(pos + 1) + '.');
+          const cls = isDone ? 'completed' : (isCurrent ? 'current' : 'upcoming');
+          return `<div class="queue-item ${cls}">${escapeHtml(status + ' ' + team)}</div>`;
+        }).join('');
+      } else if (!order.length) {
+        queueEl.innerHTML = '<div style="color:#64748b;font-size:13px;padding:8px 0">No teams configured</div>';
+      }
+
+      // ── Vote counts ────────────────────────────────────────
+      const voteCountSection = document.getElementById('vote-count-section');
+      if (s.phase === 'voting' && s.ratings) {
+        const votingTeam = s.currentTeam || (s.teams && s.presentationOrder ? s.teams[s.presentationOrder[s.currentIndex]] : '');
+        const teamRatings = (votingTeam && s.ratings[votingTeam]) || {};
+        // Count unique voters: ratings[team][category][voter]
+        const voterSet = new Set();
+        for (const catRatings of Object.values(teamRatings)) {
+          if (typeof catRatings === 'object') {
+            Object.keys(catRatings).forEach(v => voterSet.add(v));
+          }
+        }
+        document.getElementById('vote-counts').innerHTML =
+          `<span style="font-size:28px;font-weight:bold;color:#a78bfa">${voterSet.size}</span>` +
+          `<span style="color:#64748b;font-size:13px;margin-left:6px">voter${voterSet.size !== 1 ? 's' : ''} rated${votingTeam ? ' ' + escapeHtml(votingTeam) : ''}</span>`;
+        voteCountSection.style.display = 'block';
+      } else {
+        voteCountSection.style.display = 'none';
+      }
+
+      // ── Reveal progress ────────────────────────────────────
+      const revealSection = document.getElementById('reveal-section');
+      const revealedAwards = s.revealedAwards || [];
+      const revealedWinners = s.revealedWinners || {};
+      if (revealedAwards.length > 0 || s.phase === 'reveal' || s.phase === 'done') {
+        document.getElementById('reveal-list').innerHTML = REVEAL_ORDER.map(id => {
+          const revealed = revealedAwards.includes(id);
+          const isCurrent = s.currentReveal?.awardId === id;
+          const icon = revealed ? '✓' : (isCurrent ? '▶' : '○');
+          let winner = '';
+          if (isCurrent && s.currentReveal?.winner) {
+            winner = ` <span style="color:#fbbf24">&rarr; ${escapeHtml(s.currentReveal.winner)}</span>`;
+          } else if (revealed && revealedWinners[id]) {
+            winner = ` <span style="color:#fbbf24">&rarr; ${escapeHtml(revealedWinners[id])}</span>`;
+          }
+          return `<div class="reveal-item ${revealed ? 'revealed' : ''} ${isCurrent ? 'current' : ''}">
+            <span>${icon}</span>
+            <span>${escapeHtml(id)}${winner}</span>
+          </div>`;
+        }).join('');
+        revealSection.style.display = 'block';
+      } else {
+        revealSection.style.display = 'none';
+      }
+    }
+
+    // ── Timer interval ─────────────────────────────────────────────────────
+
+    timerInterval = setInterval(() => {
+      const timerEl = document.getElementById('admin-timer');
+      if (!state?.timer) {
+        timerEl.textContent = '';
+        return;
+      }
+      const t = state.timer;
+      const rem = t.paused
+        ? t.remaining
+        : Math.max(0, Math.ceil((new Date(t.endsAt) - Date.now()) / 1000));
+      const mins = Math.floor(rem / 60);
+      const secs = rem % 60;
+      timerEl.textContent = `${mins}:${String(secs).padStart(2, '0')}`;
+      timerEl.classList.toggle('paused', !!t.paused);
+      timerEl.classList.toggle('warning', !t.paused && rem <= 30);
+    }, 250);
+
+    // ── Toast ──────────────────────────────────────────────────────────────
+
+    let toastTimeout = null;
+
+    function showToast(msg, type) {
+      const toast = document.getElementById('toast');
+      toast.textContent = msg;
+      toast.className = type || 'success';
+      toast.style.display = 'block';
+      clearTimeout(toastTimeout);
+      toastTimeout = setTimeout(() => { toast.style.display = 'none'; }, 3000);
+    }
+
+    // ── Utilities ──────────────────────────────────────────────────────────
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      const d = document.createElement('div');
+      d.textContent = str;
+      return d.innerHTML;
     }
   </script>
-</body>
-</html>
+</body></html>

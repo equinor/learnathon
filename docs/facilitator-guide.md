@@ -1,7 +1,7 @@
 # Facilitator Guide
 
 **Event:** Learnathon 2026 — EDC, March 18
-**Format:** Full day, 8:15–16:00, ~60 participants, ~20 teams of 3
+**Format:** Full day, 8:15–16:10, ~60 participants, ~20 teams of 3
 **Facilitators needed:** ~5–6 (1 lead + 4–5 coaches on the floor)
 
 ---
@@ -19,8 +19,8 @@
 | 12:30 | Lab 3: Build Sprint 2 | Coaches on floor |
 | 13:45 | Break — prep for demos | — |
 | 14:00 | Show & Tell | Lead (MC) |
-| 15:30 | Vote + Awards | Lead |
-| 16:00 | Done | — |
+| 15:40 | Vote + Awards | Lead |
+| 16:10 | Done | — |
 
 ---
 
@@ -37,7 +37,7 @@ Say something like:
 - Display team list / pairing help on screen
 - Walk through: open your team repo → Code → New Codespace → wait for setup
 - Verify: everyone can see `claude --version` in terminal
-- Common issues: Codespace slow to start (wait), API key not set (see sandbox-setup.md)
+- Common issues: Codespace slow to start (wait), API key not set (check Codespaces secrets)
 
 ---
 
@@ -120,7 +120,7 @@ At 13:45: announce "Wrap up features. Spend last 15 min preparing what you'll sa
 
 ---
 
-### 14:00 — Show & Tell (90 min)
+### 14:00 — Show & Tell (100 min)
 
 **Format per team: 5 min**
 - 2 min: demo
@@ -133,38 +133,44 @@ MC role:
 - Celebrate honest failure as much as polished demos
 - If a demo breaks live: "That's a Learnathon moment — what happened?"
 
-Rough schedule for 20 teams × 5 min = 100 min. You have 90 min — keep it moving.
+20 teams × 5 min = 100 min. Keep transitions tight to stay on schedule.
 
 ---
 
-### 15:30 — Vote + Awards (30 min)
+### 15:40 — Ceremony + Awards (30 min)
 
 Run this from the voting app admin panel (`/admin.html`). The panel tells you what to do next at every step — follow the coloured guidance banner at the top.
 
-**Key design:** Participants vote on ALL 6 categories at once (2–3 minutes), then you reveal winners one by one like a gameshow. This saves ~10 minutes compared to voting per round, giving more time for Show & Tell.
+**Key design:** Teams present one at a time (pecha-kucha style, ~2.5 min each). After each presentation, participants rate that team on all 6 categories using 5-star ratings. Self-vote blocking prevents teams from rating themselves. After all teams have presented, winners are revealed one category at a time in a dramatic staggered sequence.
 
-**Before 15:45 (during the break at 14:00):**
+**Before 15:40 (during the break at 13:45):**
 1. Open `admin.html` on your laptop → log in with the admin token
-2. Open `screen.html` on the projector (full screen, browser in presentation mode)
-3. Enter all team names in the Team Setup section → click **Save Teams**
-4. Do a quick test: Open Voting → vote on your phone → Close Voting → Reveal Next → check it works → **Reset All** to clear before the real thing
+2. Enter all team names in the Team Setup section → click **Save Teams**
+3. Set the presentation queue order
+4. Do a quick test: advance through a couple of phases, check ratings work on a phone → **Reset All** to clear before the real thing
 
 **Running the ceremony:**
 
+The ceremony follows a phase-based state machine: idle → queue → setup → presenting → voting → reveal → (tiebreaker if needed) → done.
+
 | Phase | You do | Participants see | Time |
 |-------|--------|-----------------|------|
-| **Vote** | Click **Open Voting** | Big screen shows "VOTING IS OPEN" + URL. Phones show all 6 categories with team buttons. | — |
-| | Announce: *"Phones out! Vote one team per category. You've got 2 minutes."* | Participants tap through 6 categories on their phones | 2–3 min |
-| | Watch vote count on admin panel. Call out the energy. | Progress: "4 of 6 voted" on phones | — |
-| | Click **Close Voting** | Phones: "Watch the screen for reveals!" Screen: "Results are in..." | — |
-| **Reveal 1** | Build suspense. Click **Reveal Next** | Screen shows Best Creation + bar chart, winner in gold | ~2 min |
-| **Reveal 2** | Click **Reveal Next** | Most Creative AI Use results | ~2 min |
+| **Queue** | Set team order and start the ceremony | Upcoming team list | — |
+| **Presenting** | Advance to next team. Team presents pecha-kucha style. | Current team name + timer (~2.5 min) | ~2.5 min |
+| **Voting** | After the presentation, open voting for that team | 5-star rating sliders for all 6 categories (self-vote blocked) | ~1 min |
+| | Repeat presenting → voting for each team | — | — |
+| **Reveal** | Build suspense. Reveal winners one category at a time. | Staggered finalist animation, winner highlighted | — |
+| **Reveal 1** | Click **Reveal Next** | Best Fail Story results | ~2 min |
+| **Reveal 2** | Click **Reveal Next** | Best Risk Catch results | ~2 min |
 | **Reveal 3** | Click **Reveal Next** | Best Safety Practice results | ~2 min |
-| **Reveal 4** | Click **Reveal Next** | Best Risk Catch results | ~2 min |
-| **Reveal 5** | Click **Reveal Next** | Best Fail Story results | ~2 min |
-| **Reveal 6** | Click **Reveal Next** | People's Choice results. Screen shows "Congratulations!" | ~2 min |
+| **Reveal 4** | Click **Reveal Next** | Most Creative AI Use results | ~2 min |
+| **Reveal 5** | Click **Reveal Next** | Best Creation results | ~2 min |
+| **Reveal 6** | Click **Reveal Next** | People's Choice results | ~2 min |
+| **Reveal 7** | Click **Reveal Next** | Overall Winner (aggregate of all categories) | ~2 min |
 
-**After all 6 reveals:** Announce winners, hand out stickers.
+**Tiebreakers:** If two teams are tied for a category, the app triggers a multi-stage tiebreaker: bingo card check → compliment battle → audience pick-one vote → accept tie. Follow the admin panel prompts.
+
+**After all 7 reveals:** Announce winners, hand out stickers.
 
 **If something goes wrong:**
 - App not loading on phones → read the URL off the screen slowly, check wifi
@@ -179,61 +185,70 @@ The app handles the mechanics. Your job is the energy. Here's how to make it fee
 
 #### Category order (matters more than you'd think)
 
-Run them in this order:
+Run them in this order (the app enforces this automatically):
 
 | # | Category | Why here |
 |---|----------|---------|
-| 1 | 🥇 Best Creation | Concrete, visual — easy for everyone to vote on. Warm-up round. |
-| 2 | 🎨 Most Creative AI Use | Gets more interesting. Teams start to engage. |
+| 1 | 😂 Best Fail Story | Light opener — gets laughs and lowers the stakes. |
+| 2 | 🚨 Best Risk Catch | Natural follow-on. Still accessible. |
 | 3 | 🔐 Best Safety Practice | The serious one. Give it its own moment mid-ceremony. |
-| 4 | 🚨 Best Risk Catch | Natural follow-on from security. Still thoughtful. |
-| 5 | 😂 Best Fail Story | Comic relief after two serious categories. Energy picks back up. |
-| 6 | 🤝 People's Choice | The finale. Broadest category, most votes, most drama. Save the best for last. |
+| 4 | 🎨 Most Creative AI Use | Gets more interesting. Energy building. |
+| 5 | 🥇 Best Creation | The big technical award. High stakes. |
+| 6 | 🤝 People's Choice | The crowd favourite. Broadest category, most drama. |
+| 7 | 🏆 Overall Winner | Aggregate of all categories. The grand finale. |
 
-#### The script for each round (~4 minutes)
+#### The script for each presentation (~4 minutes)
+
+**Step 1 — Introduce the team (15 sec)**
+Call the team up. Set the stage briefly.
+
+> *"Next up — Team Rocket. Let's see what they built."*
+
+**Step 2 — Team presents (~2.5 min)**
+The timer runs automatically. Let the team demo and share learnings pecha-kucha style.
+
+**Step 3 — Open rating (60 sec)**
+After the presentation, advance to the voting phase. Say:
+
+> *"Phones out — rate this team across all 6 categories. You've got 60 seconds. Remember, 1 to 5 stars."*
+
+Watch the admin panel for rating progress. Self-votes are blocked automatically.
+
+**Step 4 — Move to next team**
+Repeat steps 1–3 for each team.
+
+#### The script for each reveal (~2 minutes)
 
 **Step 1 — Introduce the category (30 sec)**
 Don't just read the name. Say what it means and why it matters.
 
 > *"Best Safety Practice goes to the team that stopped, looked at what the AI built, and asked the hard security questions. Not because they had to — because they understood why it matters."*
 
-**Step 2 — Name nominees (30–60 sec)** *(optional but highly recommended)*
-During Show & Tell, coaches should be quietly flagging 2–3 standout teams per category. Before opening voting, name them. People vote more thoughtfully when they're reminded of specific moments.
-
-> *"I want to call out three teams who stood out for this one: Team Rocket caught a hardcoded API key before it shipped. Team Copilot ran the security prompt on their whole codebase at lunch. Team Vibe found a prompt injection risk in their own app. Three great examples — but you're voting, not me."*
-
-If you don't have nominees ready, skip this — don't make it up.
-
-**Step 3 — Open voting (60–90 sec)**
-Click **Open Voting**. The URL appears on screen. Say:
-
-> *"Phones out — you've got 60 seconds. Vote for the team you think earned it."*
-
-Watch the admin panel. Call out the action:
-> *"Votes coming in... it's close... ten seconds..."*
-
-**Step 4 — The reveal (30–60 sec)**
-Click **Close Voting**. Pause. Let the silence sit for 3–5 seconds. Then:
+**Step 2 — The reveal (30–60 sec)**
+Click **Reveal Next**. Pause. Let the silence sit for 3–5 seconds. Then:
 
 > *"And the winner of Best Safety Practice is..."*
 
-Click **Reveal Results**. Let the bars animate. The winner highlights gold. Pause again — let the room react before you say the name.
+Let the finalist animation play. The winner highlights gold. Pause again — let the room react before you say the name.
 
-**Step 5 — The winner's moment (30 sec)**
+**Step 3 — The winner's moment (30 sec)**
 Don't rush past it. Say one thing about *why* they won — reference the specific moment from their demo. Give them 10 seconds of applause. If they're nearby, make eye contact or gesture to them.
+
+**Step 4 — Handle tiebreakers (if prompted)**
+The app will guide you through multi-stage tiebreakers: bingo check, compliment battle, audience vote, or accept tie. Follow the admin panel.
 
 #### Fairness
 
 - **Recency bias is real.** Teams that demoed last are more memorable. The nominees step counteracts this by reminding the room of earlier teams.
 - **If one team is sweeping.** After they win their second category, gently say: *"If you've already voted for this team today, maybe give someone else a moment."* It's an honour system — that's fine.
-- **Ties.** Check bingo card progress — the team with more squares/lines wins the tiebreaker. If still tied, award it to both. The voting app will prompt you to check bingo cards when there's a tie.
+- **Ties.** The app handles tiebreakers automatically with a multi-stage process: bingo card check → compliment battle → audience pick-one vote → accept tie. Follow the admin panel prompts.
 - **People's Choice last.** It's the fairest category because the audience has seen all 20 demos by then. It's also the most democratic — no nominees, no coaching. Pure crowd vote.
 
 #### Ending it
 
 After People's Choice, don't rush to wrap up. Let it breathe. Then:
 
-> *"Six categories. Six teams who did something worth celebrating today. But honestly — every team in this room built something real, learned something real, and shared it. That's the whole point. Thank you."*
+> *"Seven awards. Seven teams who did something worth celebrating today. But honestly — every team in this room built something real, learned something real, and shared it. That's the whole point. Thank you."*
 
 Hand out swag. Take a photo. Remind people about the retrospective on March 25.
 
@@ -271,5 +286,5 @@ Order/print these before the event. Bring them in a bag to the ceremony.
 | Team's agent is looping | Fresh chat, paste context summary |
 | Build sprint running way over | "Commit what you have, we're moving on" |
 | Team's demo is broken | Demo the code, not the running app — "here's what it should do" |
-| Voting app crashes mid-ceremony | Restart server — state reloads from file. Refresh admin + screen. |
+| Voting app crashes mid-ceremony | Restart server — state reloads from file. Refresh admin page. |
 | Voting app not reachable on phones | Check everyone is on the same wifi; read URL from screen slowly |

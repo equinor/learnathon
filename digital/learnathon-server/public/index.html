@@ -23,58 +23,127 @@
       background: linear-gradient(135deg, #7c3aed, #3b82f6);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.25rem;
     }
-    .subtitle { color: #555; font-size: 1.1rem; margin-bottom: 2.5rem; }
-    .links {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1rem;
+    .subtitle { color: #555; font-size: 1.1rem; margin-bottom: 2rem; }
+
+    /* Participant section */
+    .section-label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: #666;
+      margin-bottom: 0.75rem;
       width: 100%;
       max-width: 500px;
     }
-    a {
-      display: block;
-      background: #1a1a2e;
-      border: 1px solid #2a2a3e;
-      border-radius: 12px;
-      padding: 1.25rem;
+    .participant-links {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+      width: 100%;
+      max-width: 500px;
+      margin-bottom: 2rem;
+    }
+    .big-link {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: #1a1530;
+      border: 2px solid #7c3aed;
+      border-radius: 16px;
+      padding: 1.5rem 1rem;
       text-decoration: none;
-      color: #ccc;
+      color: #fff;
+      transition: all 0.2s;
+      text-align: center;
+    }
+    .big-link:hover {
+      background: #1e1e40;
+      border-color: #a78bfa;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 20px rgba(124, 58, 237, 0.25);
+    }
+    .big-link:active { transform: scale(0.98); }
+    .big-link-emoji { font-size: 2rem; margin-bottom: 0.4rem; }
+    .big-link-title { font-size: 1.15rem; font-weight: 700; color: #a78bfa; }
+    .big-link-desc { font-size: 0.75rem; color: #999; margin-top: 0.25rem; }
+
+    .divider {
+      width: 100%;
+      max-width: 500px;
+      border: none;
+      border-top: 1px solid #1e1e30;
+      margin-bottom: 1.5rem;
+    }
+
+    /* Facilitator section */
+    .facilitator-links {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0.5rem;
+      width: 100%;
+      max-width: 500px;
+    }
+    .small-link {
+      display: block;
+      background: #111120;
+      border: 1px solid #1e1e30;
+      border-radius: 10px;
+      padding: 0.75rem 0.5rem;
+      text-decoration: none;
+      text-align: center;
       transition: border-color 0.2s, background 0.2s;
     }
-    a:hover { border-color: #7c3aed; background: #1e1e34; }
-    .link-title { font-size: 1.1rem; font-weight: 700; color: #a78bfa; margin-bottom: 0.3rem; }
-    .link-desc { font-size: 0.8rem; color: #666; }
+    .small-link:hover { border-color: #333; background: #1a1a2e; }
+    .small-link-emoji { font-size: 1.1rem; display: block; margin-bottom: 0.2rem; }
+    .small-link-title { font-size: 0.7rem; font-weight: 600; color: #888; }
+
+    @media (max-width: 500px) {
+      h1 { font-size: 2rem; }
+      .participant-links { grid-template-columns: 1fr; }
+      .facilitator-links { grid-template-columns: 1fr 1fr; }
+    }
   </style>
 </head>
 <body>
   <h1>Learnathon 2026</h1>
   <p class="subtitle">EDC &mdash; March 18</p>
-  <div class="links">
-    <a href="/bingo/card.html">
-      <div class="link-title">Bingo Card</div>
-      <div class="link-desc">Mark squares for your team</div>
+
+  <div class="section-label">I'm a participant</div>
+  <div class="participant-links">
+    <a href="/bingo/card.html" class="big-link">
+      <div class="big-link-emoji">🎯</div>
+      <div class="big-link-title">Bingo Card</div>
+      <div class="big-link-desc">Mark squares for your team</div>
     </a>
-    <a href="/bingo/wall.html">
-      <div class="link-title">Bingo Wall</div>
-      <div class="link-desc">All teams at a glance</div>
+    <a href="/voting/vote.html" class="big-link">
+      <div class="big-link-emoji">🗳️</div>
+      <div class="big-link-title">Vote</div>
+      <div class="big-link-desc">Cast your awards votes</div>
     </a>
-    <a href="/bingo/dashboard.html">
-      <div class="link-title">Dashboard</div>
-      <div class="link-desc">Live stats &amp; activity</div>
+  </div>
+
+  <hr class="divider">
+
+  <div class="section-label">Facilitator &amp; display</div>
+  <div class="facilitator-links">
+    <a href="/bingo/dashboard.html" class="small-link">
+      <span class="small-link-emoji">📊</span>
+      <span class="small-link-title">Scoreboard</span>
     </a>
-    <a href="/voting/vote.html">
-      <div class="link-title">Vote</div>
-      <div class="link-desc">Cast your awards votes</div>
+    <a href="/bingo/wall.html" class="small-link">
+      <span class="small-link-emoji">🖥️</span>
+      <span class="small-link-title">Projector</span>
     </a>
-    <a href="/voting/screen.html">
-      <div class="link-title">Screen</div>
-      <div class="link-desc">Big-screen reveal view</div>
+    <a href="/voting/screen.html" class="small-link">
+      <span class="small-link-emoji">🏆</span>
+      <span class="small-link-title">Results</span>
     </a>
-    <a href="/voting/admin.html">
-      <div class="link-title">Voting Admin</div>
-      <div class="link-desc">Facilitator controls</div>
+    <a href="/voting/admin.html" class="small-link">
+      <span class="small-link-emoji">⚙️</span>
+      <span class="small-link-title">Admin</span>
     </a>
   </div>
 </body>
