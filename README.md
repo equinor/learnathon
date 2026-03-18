@@ -21,12 +21,11 @@ A hands-on learning event where teams explore AI-assisted software engineering b
 | 8:45 | 📚 Learn: Toolbox & Workflow | Live demo of the full loop: spec → plan → build → verify → secure → ship |
 | 9:45 | 🔨 Lab 1: Mini-spec & Plan | Define what you'll build, get an AI-generated plan, push back, agree |
 | 10:30 | 🔨 Lab 2: Build Sprint 1 | First build iteration — small commits, continuous verification |
-| 11:30 | 🍕 Lunch | |
-| 12:15 | 🔐 Security Pulse | 15-minute security review of your codebase |
-| 12:30 | 🔨 Lab 3: Build Sprint 2 | Polish, fix, prepare your demo |
-| 13:45 | ☕ Break | Prep for demos |
-| 14:00 | 🎤 Show & Tell | Every team presents: 2 min demo, 2 min learnings, 1 min Q&A |
-| 15:50 | 🗳️ Vote & Awards | Audience votes, winners revealed one by one |
+| 11:50 | 🍕 Lunch | |
+| 12:35 | 🔐 Security Pulse | 15-minute security review of your codebase |
+| 12:50 | 🔨 Lab 3: Build Sprint 2 | Polish, fix, prepare your demo |
+| 14:30 | ☕ Break | Prep for demos |
+| 14:50 | 🎤 Ceremony: Show & Tell + Awards | Each team presents and gets rated, then winners revealed |
 | 16:30 | 🎉 Done | |
 
 ---
