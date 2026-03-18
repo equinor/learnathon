@@ -81,14 +81,14 @@ If a team asks what a square means:
 
 | Square | What it means |
 |--------|--------------|
-| Use plan mode before building | Use the agent's plan mode to design before coding |
-| Create architecture drawing | Ask AI to draw a diagram (ASCII, Mermaid, etc.) of the system |
+| Spend time writing a spec | Write a proper spec before coding — describe what you're building, scope, and done criteria |
+| Push an architecture drawing to your repo | Ask AI to draw a diagram (ASCII, Mermaid, etc.) and commit it to the repo |
 | Use an MCP tool | Connect to an external system via MCP (bingo, voting, etc.) |
-| Customize your AI | Write/modify the CLAUDE.md or .github/copilot-instructions.md |
+| Intentionally customize your AI | Deliberately write/modify CLAUDE.md or .github/copilot-instructions.md to shape AI behaviour |
 | TRY A NEW TOOL | Use something not in the primary toolbox |
 | Deploy to Radix playground | Get your solution running on Radix for others to try |
 | Help another team | Go to another team and help them get unstuck |
-| Use or create a skill | Use an existing skill or write a new SKILL.md |
+| Create a skill | Write a new SKILL.md that teaches your agent a reusable workflow |
 | Identify a RISK with AI output | Catch a hallucination, wrong suggestion, or security issue |
 
 ---

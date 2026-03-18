@@ -310,9 +310,9 @@ Then pick your style:
 
 | | | |
 |:---:|:---:|:---:|
-| Use plan mode before building | Create architecture drawing | Use an MCP tool |
-| Customize your AI | ⭐ **TRY A NEW TOOL** ⭐ | Deploy to Radix playground |
-| Help another team | Use or create a skill | Identify a RISK with AI output |
+| Spend time writing a spec | Push an architecture drawing to your repo | Use an MCP tool |
+| Intentionally customize your AI | ⭐ **TRY A NEW TOOL** ⭐ | Deploy to Radix playground |
+| Help another team | Create a skill | Identify a RISK with AI output |
 
 Get a line = recognition · Fill the card = **legend status** 🏆
 

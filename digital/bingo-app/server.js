@@ -11,14 +11,14 @@ const PORT = process.env.PORT || 3001;
 // --- Bingo config ---
 
 const SQUARES = [
-  { id: 0, label: 'Use plan mode before building' },
-  { id: 1, label: 'Create architecture drawing' },
+  { id: 0, label: 'Spend time writing a spec' },
+  { id: 1, label: 'Push an architecture drawing to your repo' },
   { id: 2, label: 'Use an MCP tool' },
-  { id: 3, label: 'Customize your AI' },
+  { id: 3, label: 'Intentionally customize your AI' },
   { id: 4, label: '⭐ TRY A NEW TOOL ⭐', center: true },
   { id: 5, label: 'Deploy to Radix playground' },
   { id: 6, label: 'Help another team' },
-  { id: 7, label: 'Use or create a skill' },
+  { id: 7, label: 'Create a skill' },
   { id: 8, label: 'Identify a RISK with AI output' },
 ];
 
