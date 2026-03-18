@@ -132,7 +132,7 @@ Show the result. It should be clean. Say:
 
 Step back. Show the running app. Say:
 
-> "25 minutes. A working voting app. We'll actually use this today at 15:45.
+> "25 minutes. A working voting app. We'll actually use this today at 14:50.
 > I read every piece of code. I pushed back on the plan. I committed when it worked.
 > I asked the hard questions. That's the loop.
 > Your turn."

@@ -14,7 +14,7 @@ The demo project should be:
 - **Relevant** — ideally something that will actually be used at the event
 
 ### Option A: The Voting App (Recommended)
-Build the live voting app that participants will use at 15:45.
+Build the live voting app that participants will use at 14:50.
 
 Why this works:
 - It's genuinely useful (they'll use it in 6 hours)

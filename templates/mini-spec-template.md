@@ -15,7 +15,7 @@ Commit this file. It's your contract with the team.
 
 **Scope:** [What is explicitly IN scope? What are we explicitly NOT building?]
 
-**Done when:** [How will we know we're done? What does the demo look like at 14:00?]
+**Done when:** [How will we know we're done? What does the demo look like at 14:50?]
 
 ---
 

@@ -27,7 +27,7 @@ Paste that as the first message in the new chat.
 Ask them these three questions in order:
 1. *"Who will use this today at the demo?"*
 2. *"What is the one thing it must do?"*
-3. *"What does done look like at 14:00?"*
+3. *"What does done look like at 14:50?"*
 → That's the mini-spec. Write it down.
 
 ### "The code works but I don't understand it"
@@ -61,7 +61,7 @@ Not the end of the world. Two options:
 
 ---
 
-## Security Pulse (12:15)
+## Security Pulse (12:35)
 
 Help teams run this prompt on their code:
 ```
@@ -96,7 +96,7 @@ If a team asks what a square means:
 ## Timing Cues
 
 Call out at these times:
-- **10:15** (Lab 2): "45 minutes to lunch — commit what you have now"
-- **11:45**: "15 minutes to lunch — wrap up and commit"
-- **13:30**: "45 minutes to demo — finish features, start preparing your story"
-- **13:50**: "No new features. Polish what you have. Prepare your 5-minute demo."
+- **11:05** (Lab 2): "45 minutes to lunch — commit what you have now"
+- **11:35**: "15 minutes to lunch — wrap up and commit"
+- **13:45**: "45 minutes to ceremony — finish features, start preparing your story"
+- **14:15**: "No new features. Polish what you have. Prepare your demo."

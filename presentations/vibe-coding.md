@@ -410,7 +410,7 @@ The learning story matters more than the polish.
 
 ## Lab 2: Build Sprint 1
 
-*10:30 — 11:30*
+*10:30 — 11:50*
 
 ---
 
@@ -428,13 +428,13 @@ The learning story matters more than the polish.
 
 Commit what you have before you go!
 
-Back at **12:15**
+Back at **12:35**
 
 -----
 
 ## 🔐 Security Pulse
 
-*12:15 — 12:30*
+*12:35 — 12:50*
 
 ---
 
@@ -471,15 +471,15 @@ If you find something interesting — good or bad:
 
 ## Lab 3: Build Sprint 2
 
-*12:30 — 13:45*
+*12:50 — 14:30*
 
 ---
 
 ### Polish, fix, prepare
 
 - Scope **down** if needed — a working demo beats a broken feature
-- **13:15** — "45 minutes to demo time"
-- **13:30** — "Stop features. Prepare what you'll say."
+- **13:45** — "45 minutes to ceremony — finish features, start preparing your story"
+- **14:15** — "Stop features. Prepare what you'll say."
 
 -----
 
@@ -487,7 +487,7 @@ If you find something interesting — good or bad:
 
 ![Endgame](/presentations/images/endgame.jpg) <!-- .element style="max-height:350px" -->
 
-*13:45 — 14:00*
+*14:30 — 14:50*
 
 ---
 
@@ -520,39 +520,25 @@ Frame your demo around your strongest category:
 
 -----
 
-## 🎤 Show & Tell
+## 🎤 Ceremony: Show & Tell + Awards
 
-*14:00 — 15:40*
+*14:50 — 16:30*
 
 ---
 
-### 5 min per team
+### How it works
 
-![Honest work](/presentations/images/itaintmuch.jpg) <!-- .element style="max-height:280px" -->
+Each team presents (~2.5 min) — then everyone **rates** them immediately.
 
-| Time | What |
-|------|------|
-| **2 min** | Demo — show what you built |
-| **2 min** | Learnings — what surprised you, what worked |
-| **1 min** | Q&A |
-
-The learning story matters more than the polish.
-
-*If your demo breaks live — that's a Learnathon moment. Tell us what happened.*
-
------
-
-## 🗳️ Vote + Awards
-
-*15:40 — 16:10*
+After all teams: winners revealed one by one.
 
 ---
 
 ### Phones out!
 
-Vote for your favourites in **all 6 categories**.
+Rate each team on **all 6 categories** (5 stars) right after they present.
 
-You've got **2 minutes**.
+*If your demo breaks live — that's a Learnathon moment. Tell us what happened.*
 
 ---
 
