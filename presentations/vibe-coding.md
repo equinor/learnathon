@@ -522,7 +522,7 @@ Frame your demo around your strongest category:
 
 ## 🎤 Show & Tell
 
-*14:00 — 15:40*
+*14:00 — 15:50*
 
 ---
 
@@ -544,7 +544,7 @@ The learning story matters more than the polish.
 
 ## 🗳️ Vote + Awards
 
-*15:40 — 16:10*
+*15:50 — 16:30*
 
 ---
 

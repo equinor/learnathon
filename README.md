@@ -7,7 +7,7 @@ A hands-on learning event where teams explore AI-assisted software engineering b
 | | |
 |---|---|
 | **Date** | March 18, 2026 |
-| **Time** | 8:15 – 16:10 |
+| **Time** | 8:00 – 16:30 |
 | **Venue** | EDC, one big room |
 | **Participants** | ~60 people, ~20 teams of 3 |
 
@@ -17,7 +17,7 @@ A hands-on learning event where teams explore AI-assisted software engineering b
 
 | Time | Phase | What Happens |
 |------|-------|--------------|
-| 8:15 | 🎯 Welcome & Setup | Form teams, open your Codespace, verify tools |
+| 8:00 | 🎯 Welcome & Setup | Form teams, open your Codespace, verify tools |
 | 8:45 | 📚 Learn: Toolbox & Workflow | Live demo of the full loop: spec → plan → build → verify → secure → ship |
 | 9:45 | 🔨 Lab 1: Mini-spec & Plan | Define what you'll build, get an AI-generated plan, push back, agree |
 | 10:30 | 🔨 Lab 2: Build Sprint 1 | First build iteration — small commits, continuous verification |
@@ -26,8 +26,8 @@ A hands-on learning event where teams explore AI-assisted software engineering b
 | 12:30 | 🔨 Lab 3: Build Sprint 2 | Polish, fix, prepare your demo |
 | 13:45 | ☕ Break | Prep for demos |
 | 14:00 | 🎤 Show & Tell | Every team presents: 2 min demo, 2 min learnings, 1 min Q&A |
-| 15:40 | 🗳️ Vote & Awards | Audience votes, winners revealed one by one |
-| 16:10 | 🎉 Done | |
+| 15:50 | 🗳️ Vote & Awards | Audience votes, winners revealed one by one |
+| 16:30 | 🎉 Done | |
 
 ---
 

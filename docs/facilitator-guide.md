@@ -1,7 +1,7 @@
 # Facilitator Guide
 
 **Event:** Learnathon 2026 — EDC, March 18
-**Format:** Full day, 8:15–16:10, ~60 participants, ~20 teams of 3
+**Format:** Full day, 8:00–16:30, ~60 participants, ~20 teams of 3
 **Facilitators needed:** ~5–6 (1 lead + 4–5 coaches on the floor)
 
 ---
@@ -10,7 +10,7 @@
 
 | Time | Phase | Lead |
 |------|-------|------|
-| 8:15 | Welcome, team formation, Codespace setup check | Lead |
+| 8:00 | Welcome, team formation, Codespace setup check | Lead |
 | 8:45 | Learn: Toolbox + Live Demo | Lead (demo) |
 | 9:45 | Lab 1: Mini-spec + Plan | Coaches on floor |
 | 10:30 | Lab 2: Build Sprint 1 | Coaches on floor |
@@ -19,14 +19,14 @@
 | 12:30 | Lab 3: Build Sprint 2 | Coaches on floor |
 | 13:45 | Break — prep for demos | — |
 | 14:00 | Show & Tell | Lead (MC) |
-| 15:40 | Vote + Awards | Lead |
-| 16:10 | Done | — |
+| 15:50 | Vote + Awards | Lead |
+| 16:30 | Done | — |
 
 ---
 
 ## Phase-by-Phase Script
 
-### 8:15 — Welcome & Setup (30 min)
+### 8:00 — Welcome & Setup (45 min)
 
 **Goal:** Everyone in a team, Codespace open, no one left behind.
 
@@ -74,7 +74,7 @@ If a team is overambitious → help them cut scope.
 
 ---
 
-### 10:30 — Lab 2: Build Sprint 1 (90 min, to lunch)
+### 10:30 — Lab 2: Build Sprint 1 (60 min, to lunch)
 
 **Goal:** First working version of something, committed.
 
@@ -120,7 +120,7 @@ At 13:45: announce "Wrap up features. Spend last 15 min preparing what you'll sa
 
 ---
 
-### 14:00 — Show & Tell (100 min)
+### 14:00 — Show & Tell (110 min)
 
 **Format per team: 5 min**
 - 2 min: demo
@@ -133,17 +133,17 @@ MC role:
 - Celebrate honest failure as much as polished demos
 - If a demo breaks live: "That's a Learnathon moment — what happened?"
 
-20 teams × 5 min = 100 min. Keep transitions tight to stay on schedule.
+20 teams × 5 min = 100 min + 10 min buffer. Keep transitions tight to stay on schedule.
 
 ---
 
-### 15:40 — Ceremony + Awards (30 min)
+### 15:50 — Ceremony + Awards (40 min)
 
 Run this from the voting app admin panel (`/admin.html`). The panel tells you what to do next at every step — follow the coloured guidance banner at the top.
 
 **Key design:** Teams present one at a time (pecha-kucha style, ~2.5 min each). After each presentation, participants rate that team on all 6 categories using 5-star ratings. Self-vote blocking prevents teams from rating themselves. After all teams have presented, winners are revealed one category at a time in a dramatic staggered sequence.
 
-**Before 15:40 (during the break at 13:45):**
+**Before 15:50 (during the break at 13:45):**
 1. Open `admin.html` on your laptop → log in with the admin token
 2. Enter all team names in the Team Setup section → click **Save Teams**
 3. Set the presentation queue order

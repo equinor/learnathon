@@ -38,7 +38,7 @@ Replace the current section with:
 ```markdown
 ## 🗳️ Ceremony + Awards
 
-*15:40 — 16:10*
+*15:50 — 16:30*
 
 ---
 
