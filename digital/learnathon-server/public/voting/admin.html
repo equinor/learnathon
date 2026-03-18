@@ -191,6 +191,37 @@
     .action-btn.warning { background: #ef4444; }
     .action-btn.danger  { background: #dc2626; }
     .action-btn.ghost   { background: #2a2a3e; }
+    .action-btn.teal    { background: #0d9488; }
+
+    /* ── Team editor ── */
+    #team-editor {
+      display: none;
+    }
+
+    #team-editor textarea {
+      width: 100%;
+      min-height: 120px;
+      background: #0f0f1a;
+      border: 1px solid #2a2a3e;
+      border-radius: 8px;
+      color: #e2e8f0;
+      font-family: system-ui, sans-serif;
+      font-size: 14px;
+      padding: 10px 12px;
+      resize: vertical;
+      margin-bottom: 10px;
+    }
+
+    #team-editor textarea:focus {
+      outline: none;
+      border-color: #7c3aed;
+    }
+
+    #team-editor .editor-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
 
     /* ── Section card ── */
     .section {
@@ -350,6 +381,8 @@
 
     <!-- Context-sensitive action buttons -->
     <div id="actions">
+      <button id="btn-sync" class="action-btn teal" onclick="syncTeams()">Sync from Bingo</button>
+      <button id="btn-save-teams" class="action-btn ghost" onclick="saveTeams()">Save Teams</button>
       <button id="btn-start" class="action-btn primary" onclick="adminAction('start-ceremony')">Start Ceremony</button>
       <button id="btn-next" class="action-btn primary" onclick="adminAction('next-team')">Next Team ▶</button>
       <button id="btn-reveal-start" class="action-btn gold" onclick="adminAction('start-reveal')">Start Reveal 🏆</button>
@@ -359,6 +392,15 @@
       <button id="btn-tiebreak-vote" class="action-btn warning" onclick="adminAction('start-tiebreak-vote')">Start Tiebreak Vote</button>
       <button id="btn-accept-tie" class="action-btn ghost" onclick="adminAction('accept-tie')">Accept Tie 🤝</button>
       <button id="btn-reset" class="action-btn danger" onclick="if(confirm('Reset everything?')) adminAction('reset')">Reset ⚠</button>
+    </div>
+
+    <!-- Team Editor (idle phase) -->
+    <div id="team-editor" class="section">
+      <h3>Edit Teams (one per line)</h3>
+      <textarea id="team-textarea" placeholder="Team names, one per line..."></textarea>
+      <div style="color:#64748b;font-size:12px;margin-top:-6px;margin-bottom:8px">
+        <span id="team-count-label">0 teams</span>
+      </div>
     </div>
 
     <!-- Queue List -->
@@ -492,6 +534,26 @@
       const completed = s.completed || [];
       const teamCount = s.teamCount || 0;
 
+      // ── Team editor (idle only) ─────────────────────────────
+      const editorEl = document.getElementById('team-editor');
+      const queueSection = document.getElementById('queue-section');
+      if (s.phase === 'idle') {
+        editorEl.style.display = 'block';
+        queueSection.style.display = 'none';
+        // Only populate if the textarea hasn't been touched by the user
+        const textarea = document.getElementById('team-textarea');
+        if (!textarea._userEdited && s.teams?.length > 0) {
+          textarea.value = s.teams.join('\n');
+        }
+        const count = (textarea.value.trim() ? textarea.value.trim().split('\n').filter(l => l.trim()).length : 0);
+        document.getElementById('team-count-label').textContent = count + ' team' + (count !== 1 ? 's' : '');
+      } else {
+        editorEl.style.display = 'none';
+        queueSection.style.display = 'block';
+      }
+
+      show('btn-sync', s.phase === 'idle');
+      show('btn-save-teams', s.phase === 'idle');
       show('btn-start', s.phase === 'idle');
       show('btn-next',  s.phase === 'queue' && s.currentIndex + 1 < order.length);
       show('btn-reveal-start',
@@ -605,6 +667,51 @@
     }
 
     // ── Utilities ──────────────────────────────────────────────────────────
+
+    // ── Team editor helpers ────────────────────────────────────────────────
+
+    document.getElementById('team-textarea').addEventListener('input', function() {
+      this._userEdited = true;
+      const count = this.value.trim() ? this.value.trim().split('\n').filter(l => l.trim()).length : 0;
+      document.getElementById('team-count-label').textContent = count + ' team' + (count !== 1 ? 's' : '');
+    });
+
+    function syncTeams() {
+      fetch('/voting/admin/sync-teams', {
+        method: 'POST',
+        headers: { 'x-admin-token': token },
+      }).then(r => r.json()).then(data => {
+        if (data.error) {
+          showToast(data.error, 'error');
+        } else {
+          const textarea = document.getElementById('team-textarea');
+          textarea.value = data.teams.join('\n');
+          textarea._userEdited = false;
+          showToast(`Synced ${data.teamCount} teams from bingo`, 'success');
+        }
+      }).catch(() => showToast('Network error', 'error'));
+    }
+
+    function saveTeams() {
+      const textarea = document.getElementById('team-textarea');
+      const teams = textarea.value.split('\n').map(l => l.trim()).filter(l => l.length > 0);
+      if (teams.length === 0) {
+        showToast('Enter at least one team', 'error');
+        return;
+      }
+      fetch('/voting/admin/teams', {
+        method: 'POST',
+        headers: { 'x-admin-token': token, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ teams }),
+      }).then(r => r.json()).then(data => {
+        if (data.error) {
+          showToast(data.error, 'error');
+        } else {
+          textarea._userEdited = false;
+          showToast(`Saved ${data.teamCount} teams`, 'success');
+        }
+      }).catch(() => showToast('Network error', 'error'));
+    }
 
     function escapeHtml(str) {
       if (!str) return '';

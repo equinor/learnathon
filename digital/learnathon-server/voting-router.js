@@ -65,6 +65,32 @@ function save() {
   fs.writeFileSync(STATE_FILE, JSON.stringify(state, null, 2));
 }
 
+// --- Auto-sync teams from bingo on startup ---
+async function syncTeamsFromBingo() {
+  try {
+    const bingoUrl = `http://localhost:${process.env.PORT || 8080}/bingo/state`;
+    const bingoRes = await fetch(bingoUrl);
+    const bingoState = await bingoRes.json();
+    const teams = Object.keys(bingoState.teams || {});
+    if (teams.length > 0) {
+      state.teams = teams;
+      state.teamCount = teams.length;
+      save();
+      broadcastAll();
+    }
+    return teams;
+  } catch (err) {
+    return null;
+  }
+}
+
+// Delay auto-sync slightly to let the server finish starting up
+setTimeout(() => {
+  if (state.phase === 'idle' && state.teams.length === 0) {
+    syncTeamsFromBingo();
+  }
+}, 1000);
+
 // --- SSE Broadcast (filtered for learners — spec section 3) ---
 const clients = new Set();
 
@@ -375,40 +401,69 @@ router.get('/admin/ping', requireAdmin, (req, res) => {
   res.json({ ok: true });
 });
 
+// --- Admin: Sync Teams from Bingo ---
+router.post('/admin/sync-teams', requireAdmin, async (req, res) => {
+  if (state.phase !== 'idle') {
+    return res.status(400).json({ error: 'can only sync teams during idle phase' });
+  }
+  const teams = await syncTeamsFromBingo();
+  if (!teams) {
+    return res.status(500).json({ error: 'failed to fetch teams from bingo' });
+  }
+  res.json({ ok: true, teams, teamCount: teams.length });
+});
+
+// --- Admin: Edit Team List ---
+router.post('/admin/teams', requireAdmin, express.json(), (req, res) => {
+  if (state.phase !== 'idle') {
+    return res.status(400).json({ error: 'can only edit teams during idle phase' });
+  }
+  const teams = req.body?.teams;
+  if (!Array.isArray(teams)) {
+    return res.status(400).json({ error: 'teams must be an array' });
+  }
+  const sanitized = teams.map(t => sanitize(t)).filter(t => t.length > 0);
+  if (sanitized.length === 0) {
+    return res.status(400).json({ error: 'at least one team required' });
+  }
+  state.teams = sanitized;
+  state.teamCount = sanitized.length;
+  broadcastAll();
+  res.json({ ok: true, teams: sanitized, teamCount: sanitized.length });
+});
+
 // --- Admin: Start Ceremony ---
 router.post('/admin/start-ceremony', requireAdmin, async (req, res) => {
   if (state.phase !== 'idle') {
     return res.status(400).json({ error: 'ceremony already started' });
   }
 
-  try {
-    const bingoUrl = `http://localhost:${process.env.PORT || 8080}/bingo/state`;
-    const bingoRes = await fetch(bingoUrl);
-    const bingoState = await bingoRes.json();
-    const teams = Object.keys(bingoState.teams || {});
-    if (teams.length === 0) {
-      return res.status(400).json({ error: 'no teams found in bingo' });
+  // Use already-loaded teams, or fetch from bingo as fallback
+  let teams = state.teams;
+  if (teams.length === 0) {
+    const fetched = await syncTeamsFromBingo();
+    if (!fetched || fetched.length === 0) {
+      return res.status(400).json({ error: 'no teams available — sync from bingo or add manually' });
     }
-
-    state.teams = teams;
-    state.teamCount = teams.length;
-
-    const order = teams.map((_, i) => i);
-    for (let i = order.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [order[i], order[j]] = [order[j], order[i]];
-    }
-    state.presentationOrder = order;
-    state.currentIndex = -1;
-    state.completed = [];
-    state.ratings = {};
-    state.phase = 'queue';
-
-    broadcastAll();
-    res.json({ ok: true, teamCount: teams.length });
-  } catch (err) {
-    res.status(500).json({ error: 'failed to fetch bingo teams: ' + err.message });
+    teams = fetched;
   }
+
+  state.teams = teams;
+  state.teamCount = teams.length;
+
+  const order = teams.map((_, i) => i);
+  for (let i = order.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [order[i], order[j]] = [order[j], order[i]];
+  }
+  state.presentationOrder = order;
+  state.currentIndex = -1;
+  state.completed = [];
+  state.ratings = {};
+  state.phase = 'queue';
+
+  broadcastAll();
+  res.json({ ok: true, teamCount: teams.length });
 });
 
 // --- Admin: Next Team ---
