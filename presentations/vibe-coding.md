@@ -478,7 +478,7 @@ If you find something interesting — good or bad:
 ### Polish, fix, prepare
 
 - Scope **down** if needed — a working demo beats a broken feature
-- **13:45** — "45 minutes to ceremony — finish features, start preparing your story"
+- **13:45** — "45 minutes left in the sprint — finish features, start preparing your story"
 - **14:15** — "Stop features. Prepare what you'll say."
 
 -----

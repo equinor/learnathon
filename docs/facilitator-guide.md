@@ -108,7 +108,7 @@ This is a **15-minute** phase. Keep it tight. Don't let it run into Lab 3.
 
 **Goal:** Polish, fix, prepare the demo. Scope *down* if needed.
 
-At 13:45: announce "45 minutes to ceremony — finish features, start preparing your story."
+At 13:45: announce "45 minutes left in the sprint — finish features, start preparing your story."
 At 14:15: announce "Wrap up features. Spend last 15 min preparing what you'll say."
 
 **Preparing for the ceremony:**

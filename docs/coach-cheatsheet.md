@@ -98,5 +98,5 @@ If a team asks what a square means:
 Call out at these times:
 - **11:05** (Lab 2): "45 minutes to lunch — commit what you have now"
 - **11:35**: "15 minutes to lunch — wrap up and commit"
-- **13:45**: "45 minutes to ceremony — finish features, start preparing your story"
+- **13:45**: "45 minutes left in the sprint — finish features, start preparing your story"
 - **14:15**: "No new features. Polish what you have. Prepare your demo."
