@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learnathon 2026 - Learning Bingo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 40px;
+            max-width: 800px;
+            width: 100%;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+
+        .bingo-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .bingo-cell {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border: 3px solid #ddd;
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1em;
+            font-weight: 500;
+            color: #333;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .bingo-cell:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            border-color: #667eea;
+        }
+
+        .bingo-cell.center {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+        .bingo-cell.completed {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: white;
+            border-color: #11998e;
+        }
+
+        .bingo-cell.completed::after {
+            content: '✓';
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 2em;
+            font-weight: bold;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .stats {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 1.1em;
+            color: #666;
+        }
+
+        .bingo-message {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 1.5em;
+            color: #11998e;
+            font-weight: bold;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .bingo-message.show {
+            opacity: 1;
+        }
+
+        .instructions {
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
+
+        .instructions p {
+            margin-bottom: 10px;
+            color: #555;
+        }
+
+        .instructions p:last-child {
+            margin-bottom: 0;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 1.8em;
+            }
+
+            .bingo-grid {
+                gap: 10px;
+            }
+
+            .bingo-cell {
+                padding: 15px;
+                min-height: 120px;
+                font-size: 0.9em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎓 Learnathon 2026</h1>
+        <p class="subtitle">Learning Bingo Card</p>
+        
+        <div class="instructions">
+            <p>💡 <strong>How to play:</strong> Click on a cell when you complete that activity!</p>
+            <p>🎯 <strong>Goal:</strong> Get a line (horizontal, vertical, or diagonal) = recognition. Fill the card = legend status!</p>
+        </div>
+
+        <div class="bingo-grid" id="bingoGrid"></div>
+
+        <div class="bingo-message" id="bingoMessage"></div>
+
+        <div class="stats" id="stats">
+            Completed: <strong>0/9</strong>
+        </div>
+
+        <div class="controls">
+            <button onclick="resetBingo()">Reset Card</button>
+            <button onclick="printCard()">Print Card</button>
+        </div>
+    </div>
+
+    <script>
+        const bingoItems = [
+            { text: 'Use agent mode to scaffold', center: false },
+            { text: 'Implement at least 1 AI suggestion', center: false },
+            { text: 'Create architecture drawing', center: false },
+            { text: 'Customize your AI', center: false },
+            { text: '⭐ TRY A NEW TOOL ⭐', center: true },
+            { text: "Don't touch the keyboard", center: false },
+            { text: 'Ask AI to explain code', center: false },
+            { text: 'Generate tests for your code', center: false },
+            { text: 'Identify a RISK with AI output', center: false }
+        ];
+
+        let completedCells = new Set();
+
+        function initBingo() {
+            const grid = document.getElementById('bingoGrid');
+            grid.innerHTML = '';
+            
+            bingoItems.forEach((item, index) => {
+                const cell = document.createElement('div');
+                cell.className = 'bingo-cell' + (item.center ? ' center' : '');
+                cell.textContent = item.text;
+                cell.dataset.index = index;
+                
+                // Check if this cell was previously completed (from localStorage)
+                if (completedCells.has(index)) {
+                    cell.classList.add('completed');
+                }
+                
+                cell.addEventListener('click', () => toggleCell(index));
+                grid.appendChild(cell);
+            });
+            
+            updateStats();
+            checkBingo();
+        }
+
+        function toggleCell(index) {
+            const cell = document.querySelector(`[data-index="${index}"]`);
+            
+            if (completedCells.has(index)) {
+                completedCells.delete(index);
+                cell.classList.remove('completed');
+            } else {
+                completedCells.add(index);
+                cell.classList.add('completed');
+            }
+            
+            saveProgress();
+            updateStats();
+            checkBingo();
+        }
+
+        function updateStats() {
+            const stats = document.getElementById('stats');
+            stats.innerHTML = `Completed: <strong>${completedCells.size}/9</strong>`;
+        }
+
+        function checkBingo() {
+            const message = document.getElementById('bingoMessage');
+            
+            // Check rows
+            const rows = [[0, 1, 2], [3, 4, 5], [6, 7, 8]];
+            // Check columns
+            const cols = [[0, 3, 6], [1, 4, 7], [2, 5, 8]];
+            // Check diagonals
+            const diags = [[0, 4, 8], [2, 4, 6]];
+            
+            const allLines = [...rows, ...cols, ...diags];
+            let hasLine = false;
+            
+            for (const line of allLines) {
+                if (line.every(index => completedCells.has(index))) {
+                    hasLine = true;
+                    break;
+                }
+            }
+            
+            if (completedCells.size === 9) {
+                message.textContent = '🎉 LEGEND STATUS! You completed the entire card!';
+                message.classList.add('show');
+            } else if (hasLine) {
+                message.textContent = '🎯 BINGO! You got a line!';
+                message.classList.add('show');
+            } else {
+                message.classList.remove('show');
+            }
+        }
+
+        function resetBingo() {
+            if (confirm('Are you sure you want to reset your bingo card?')) {
+                completedCells.clear();
+                localStorage.removeItem('bingoProgress');
+                initBingo();
+            }
+        }
+
+        function printCard() {
+            window.print();
+        }
+
+        function saveProgress() {
+            localStorage.setItem('bingoProgress', JSON.stringify([...completedCells]));
+        }
+
+        function loadProgress() {
+            const saved = localStorage.getItem('bingoProgress');
+            if (saved) {
+                completedCells = new Set(JSON.parse(saved));
+            }
+        }
+
+        // Initialize on page load
+        loadProgress();
+        initBingo();
+
+        // Print styles
+        const style = document.createElement('style');
+        style.textContent = `
+            @media print {
+                body {
+                    background: white;
+                }
+                .controls, .instructions, .stats, .bingo-message {
+                    display: none;
+                }
+                .container {
+                    box-shadow: none;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>
