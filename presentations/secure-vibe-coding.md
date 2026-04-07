@@ -23,9 +23,7 @@
 
 ### Why This Matters Now
 
-Agents have **terminal access**, install packages, make network calls, write to disk.
-
-This isn't autocomplete anymore. They act on your behalf — with **your permissions**.
+![Captain Phillips](/presentations/images/captainnow.jpg) <!-- .element style="max-height:280px" -->
 
 @embed(/presentations/images/capability-card.svg, width=85%)
 
