@@ -31,6 +31,8 @@
 
 @embed(/presentations/images/trust-spectrum.svg, width=90%)
 
+*[Perry et al., 2023 (Stanford)](https://arxiv.org/abs/2211.03622)*
+
 ---
 
 ### Why This Matters Now
@@ -38,6 +40,8 @@
 ![Captain Phillips](/presentations/images/captainnow.jpg) <!-- .element style="max-height:200px" -->
 
 @embed(/presentations/images/capability-card.svg, width=95%)
+
+*[Apiiro, 2025](https://apiiro.com/blog/4x-velocity-10x-vulnerabilities-ai-coding-assistants-are-shipping-more-risks/)*
 
 ---
 
@@ -97,6 +101,8 @@ Smaller scope = smaller attack surface = fewer tokens wasted = faster feedback.
 **If you can't explain it in 3 sentences, it's too big for one pass.**
 
 @embed(/presentations/images/scope-comparison.svg, width=90%)
+
+*[GitClear, 2025](https://www.gitclear.com/ai_assistant_code_quality_2025_research)*
 
 ---
 
@@ -230,6 +236,8 @@ Agents love adding packages. Each one is an attack surface you inherit.
 
 @embed(/presentations/images/dependency-iceberg.svg, width=80%)
 
+*[Sonatype, 2024](https://www.sonatype.com/state-of-the-software-supply-chain/2024/10-year-look)*
+
 -----
 
 ## Verify & Secure — The Trust Checkpoints
@@ -270,6 +278,8 @@ A new supply chain attack vector **unique to AI coding**.
 
 @embed(/presentations/images/slopsquatting-card.svg, width=85%)
 
+*[Spracklen et al., 2024](https://arxiv.org/abs/2403.20336) · [Lanyado, 2024 (Socket.dev)](https://socket.dev/blog/slopsquatting-how-ai-hallucinations-are-fueling-a-new-class-of-supply-chain-attacks)*
+
 ---
 
 ### Fewer Dependencies, But the Right Ones
@@ -296,6 +306,8 @@ Don't let the agent hand-roll **security-sensitive code**.
 ### Hardcoded Secrets
 
 @embed(/presentations/images/secrets-hero.svg, width=60%)
+
+*[GitGuardian, 2025 + 2026](https://blog.gitguardian.com/the-state-of-secrets-sprawl-2026/)*
 
 @embed(/presentations/images/secrets-code.svg, width=65%) <!-- .element class="fragment" -->
 

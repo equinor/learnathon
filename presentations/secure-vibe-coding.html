@@ -3,6 +3,17 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+        /* Make links visually discoverable in this presentation */
+        .reveal a:not(.navigate-left):not(.navigate-right):not(.navigate-up):not(.navigate-down) {
+            text-decoration: underline;
+            text-decoration-color: rgba(151, 202, 206, 0.4);
+            text-underline-offset: 3px;
+        }
+        .reveal a:not(.navigate-left):not(.navigate-right):not(.navigate-up):not(.navigate-down):hover {
+            text-decoration-color: rgba(151, 202, 206, 0.8);
+        }
+    </style>
 </head>
 <body data-content="/presentations/secure-vibe-coding.md" data-title="Secure Vibe Coding — Webinar">
     <div class="reveal">
