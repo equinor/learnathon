@@ -1,30 +1,47 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 300" font-family="Equinor, Helvetica, sans-serif">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 320" font-family="Equinor, Helvetica, sans-serif">
   <defs>
     <linearGradient id="trustGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" stop-color="#eb0037"/>
-      <stop offset="50%" stop-color="#40d38f"/>
-      <stop offset="100%" stop-color="#666"/>
+      <stop offset="0%" stop-color="#ef4444"/>
+      <stop offset="35%" stop-color="#f59e0b"/>
+      <stop offset="50%" stop-color="#22c55e"/>
+      <stop offset="65%" stop-color="#f59e0b"/>
+      <stop offset="100%" stop-color="#6b7280"/>
     </linearGradient>
   </defs>
 
-  <rect x="60" y="60" width="680" height="40" rx="20" fill="url(#trustGrad)" opacity="0.8"/>
+  <!-- Header question -->
+  <text x="400" y="32" text-anchor="middle" fill="#e2e8f0" font-size="18" font-weight="600">How much do you trust your AI agent?</text>
 
-  <text x="100" y="45" text-anchor="middle" fill="#eb0037" font-size="14" font-weight="600">Full Trust</text>
-  <text x="100" y="130" text-anchor="middle" fill="rgba(255,255,255,0.6)" font-size="11">Accept everything</text>
-  <text x="100" y="148" text-anchor="middle" fill="rgba(255,255,255,0.6)" font-size="11">Ship fast, pray</text>
+  <!-- Emoji indicators -->
+  <text x="120" y="60" text-anchor="middle" font-size="24">&#x1F634;</text>
+  <text x="400" y="60" text-anchor="middle" font-size="24">&#x1F3AF;</text>
+  <text x="680" y="60" text-anchor="middle" font-size="24">&#x1F52C;</text>
 
-  <text x="400" y="45" text-anchor="middle" fill="#40d38f" font-size="16" font-weight="700">Calibrated Trust</text>
-  <polygon points="400,58 392,48 408,48" fill="#40d38f"/>
+  <!-- Gradient bar -->
+  <rect x="80" y="86" width="640" height="14" rx="7" fill="url(#trustGrad)" opacity="0.9"/>
 
-  <rect x="310" y="115" width="180" height="32" rx="6" fill="#1a3a4a" stroke="#97CACE" stroke-width="1.5"/>
-  <text x="400" y="136" text-anchor="middle" fill="#97CACE" font-size="12" font-weight="600">You want to be here</text>
+  <!-- Left: Full Trust -->
+  <text x="120" y="76" text-anchor="middle" fill="#ef4444" font-size="11" font-weight="600">FULL TRUST</text>
+  <text x="120" y="122" text-anchor="middle" fill="rgba(255,255,255,0.5)" font-size="10">Accept everything</text>
+  <text x="120" y="138" text-anchor="middle" fill="rgba(255,255,255,0.5)" font-size="10">Ship fast, pray</text>
 
-  <text x="700" y="45" text-anchor="middle" fill="#999" font-size="14" font-weight="600">Zero Trust</text>
-  <text x="700" y="130" text-anchor="middle" fill="rgba(255,255,255,0.6)" font-size="11">Read every token</text>
-  <text x="700" y="148" text-anchor="middle" fill="rgba(255,255,255,0.6)" font-size="11">Slower than writing it</text>
+  <!-- Center: Calibrated Trust -->
+  <text x="400" y="76" text-anchor="middle" fill="#22c55e" font-size="14" font-weight="700">CALIBRATED TRUST</text>
+  <text x="400" y="122" text-anchor="middle" fill="rgba(255,255,255,0.5)" font-size="10">Verify at each step</text>
+  <text x="400" y="138" text-anchor="middle" fill="rgba(255,255,255,0.5)" font-size="10">Trust what you've checked</text>
 
-  <rect x="100" y="200" width="600" height="60" rx="8" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
-  <text x="400" y="226" text-anchor="middle" fill="#d97706" font-size="12" font-weight="600">Devs with AI wrote less secure code on 4/5 tasks</text>
-  <text x="400" y="246" text-anchor="middle" fill="#d97706" font-size="12" font-weight="600">AND were more confident it was secure.</text>
-  <text x="690" y="252" text-anchor="end" fill="rgba(255,255,255,0.4)" font-size="9">Perry et al., 2023 (Stanford)</text>
+  <!-- Right: Zero Trust -->
+  <text x="680" y="76" text-anchor="middle" fill="#6b7280" font-size="11" font-weight="600">ZERO TRUST</text>
+  <text x="680" y="122" text-anchor="middle" fill="rgba(255,255,255,0.5)" font-size="10">Read every token</text>
+  <text x="680" y="138" text-anchor="middle" fill="rgba(255,255,255,0.5)" font-size="10">Slower than writing it</text>
+
+  <!-- Purple callout badge -->
+  <rect x="328" y="155" width="144" height="28" rx="14" fill="#7c3aed"/>
+  <text x="400" y="174" text-anchor="middle" fill="#fff" font-size="12" font-weight="600">&#x25B2; You want to be here</text>
+
+  <!-- Stat bar -->
+  <rect x="80" y="210" width="640" height="65" rx="8" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+  <text x="400" y="237" text-anchor="middle" fill="#d97706" font-size="12" font-weight="600">Devs with AI wrote less secure code on 4/5 tasks</text>
+  <text x="400" y="257" text-anchor="middle" fill="#d97706" font-size="12" font-weight="600">AND were more confident it was secure.</text>
+  <text x="710" y="265" text-anchor="end" fill="rgba(255,255,255,0.4)" font-size="9">Perry et al., 2023 (Stanford)</text>
 </svg>

@@ -1,18 +1,25 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 420" font-family="Equinor, Helvetica, sans-serif">
-  <rect x="20" y="20" width="560" height="380" rx="14" fill="#1a3a4a" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+  <text x="300" y="45" text-anchor="middle" fill="#e2e8f0" font-size="20" font-weight="700">You asked for milk.</text>
 
-  <text x="300" y="65" text-anchor="middle" fill="#fff" font-size="20" font-weight="700">You asked for milk.</text>
+  <rect x="60" y="65" width="480" height="295" rx="14" fill="#1a3a4a" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
 
-  <text x="80" y="110" fill="#40d38f" font-size="15" font-weight="600">&#x2705;  Milk</text>
-  <text x="370" y="110" fill="rgba(255,255,255,0.4)" font-size="11">&#8592; what you asked for</text>
+  <!-- Cart header -->
+  <text x="90" y="100" fill="rgba(255,255,255,0.4)" font-size="10" font-weight="600" letter-spacing="1">&#x1F6D2; AGENT'S CART:</text>
 
-  <text x="80" y="145" fill="rgba(255,255,255,0.6)" font-size="15">&#x1F35E;  Artisan bread</text>
-  <text x="80" y="180" fill="rgba(255,255,255,0.6)" font-size="15">&#x1F9C8;  Organic butter</text>
-  <text x="80" y="215" fill="rgba(255,255,255,0.6)" font-size="15">&#x2615;  Coffee machine</text>
-  <text x="80" y="250" fill="rgba(255,255,255,0.6)" font-size="15">&#x1F373;  Cast iron pan</text>
-  <text x="80" y="285" fill="rgba(255,255,255,0.6)" font-size="15">&#x1F4DA;  Cookbook collection</text>
-  <text x="80" y="320" fill="rgba(255,255,255,0.6)" font-size="15">&#x1F3E0;  Kitchen renovation</text>
+  <!-- Items -->
+  <text x="90" y="135" fill="#e2e8f0" font-size="15">&#x1F95B;  Milk</text>
+  <text x="200" y="135" fill="#22c55e" font-size="10" font-weight="600">&#x2190; what you asked for</text>
 
-  <rect x="60" y="345" width="480" height="35" rx="6" fill="rgba(217,119,6,0.1)"/>
-  <text x="300" y="368" text-anchor="middle" fill="#d97706" font-size="12" font-weight="600">Every item is more to review, more to secure, more to maintain.</text>
+  <line x1="90" y1="148" x2="510" y2="148" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+
+  <text x="90" y="172" fill="rgba(255,255,255,0.5)" font-size="15">&#x1F35E;  Artisan bread</text>
+  <text x="90" y="202" fill="rgba(255,255,255,0.5)" font-size="15">&#x1F9C8;  Organic butter</text>
+  <text x="90" y="232" fill="rgba(255,255,255,0.5)" font-size="15">&#x2615;  Coffee machine</text>
+  <text x="90" y="262" fill="rgba(255,255,255,0.5)" font-size="15">&#x1F373;  Cast iron pan</text>
+  <text x="90" y="292" fill="rgba(255,255,255,0.5)" font-size="15">&#x1F4DA;  Cookbook collection</text>
+  <text x="90" y="322" fill="rgba(255,255,255,0.5)" font-size="15">&#x1F3E0;  Kitchen renovation</text>
+
+  <!-- Bottom warning -->
+  <rect x="60" y="375" width="480" height="35" rx="8" fill="rgba(245,158,11,0.1)" stroke="rgba(245,158,11,0.2)" stroke-width="1"/>
+  <text x="300" y="398" text-anchor="middle" fill="#f59e0b" font-size="12" font-weight="600">Every item is more to review, more to secure, more to maintain.</text>
 </svg>

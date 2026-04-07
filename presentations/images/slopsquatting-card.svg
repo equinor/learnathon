@@ -1,30 +1,40 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 400" font-family="Equinor, Helvetica, sans-serif">
   <rect x="20" y="20" width="660" height="360" rx="14" fill="#1a3a4a" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
 
-  <rect x="20" y="20" width="660" height="50" rx="14" fill="rgba(217,119,6,0.15)"/>
-  <rect x="20" y="50" width="660" height="20" fill="rgba(217,119,6,0.15)"/>
-  <text x="350" y="52" text-anchor="middle" fill="#d97706" font-size="16" font-weight="700">&#x26A0;&#xFE0F; Real Attack — 2024</text>
+  <!-- Red/amber header bar -->
+  <rect x="20" y="20" width="660" height="50" rx="14" fill="rgba(239,68,68,0.2)"/>
+  <rect x="20" y="50" width="660" height="20" fill="rgba(239,68,68,0.2)"/>
+  <text x="350" y="48" text-anchor="middle" fill="#ef4444" font-size="16" font-weight="700">&#x26A0;&#xFE0F; Real Attack — 2024</text>
+  <text x="350" y="65" text-anchor="middle" fill="rgba(255,255,255,0.45)" font-size="10">When AI hallucinations become attack vectors</text>
 
-  <circle cx="80" cy="110" r="16" fill="rgba(151,202,206,0.15)" stroke="#97CACE" stroke-width="1.5"/>
-  <text x="80" y="115" text-anchor="middle" fill="#97CACE" font-size="13" font-weight="700">1</text>
-  <text x="110" y="115" fill="#fff" font-size="14">LLMs suggest <tspan font-family="monospace" fill="#97CACE">huggingface-cli</tspan></text>
+  <!-- Step 1 -->
+  <circle cx="70" cy="105" r="16" fill="rgba(151,202,206,0.15)" stroke="#97CACE" stroke-width="1.5"/>
+  <text x="70" y="110" text-anchor="middle" fill="#97CACE" font-size="13" font-weight="700">1</text>
+  <text x="100" y="110" fill="#e2e8f0" font-size="14">LLMs hallucinate <tspan font-family="monospace" fill="#97CACE">huggingface-cli</tspan></text>
 
-  <circle cx="80" cy="155" r="16" fill="rgba(151,202,206,0.15)" stroke="#97CACE" stroke-width="1.5"/>
-  <text x="80" y="160" text-anchor="middle" fill="#97CACE" font-size="13" font-weight="700">2</text>
-  <text x="110" y="160" fill="#fff" font-size="14">Researcher registers the name on PyPI</text>
+  <!-- Step 2 -->
+  <circle cx="70" cy="150" r="16" fill="rgba(151,202,206,0.15)" stroke="#97CACE" stroke-width="1.5"/>
+  <text x="70" y="155" text-anchor="middle" fill="#97CACE" font-size="13" font-weight="700">2</text>
+  <text x="100" y="155" fill="#e2e8f0" font-size="14">Researcher registers the name on PyPI</text>
 
-  <circle cx="80" cy="200" r="16" fill="rgba(217,119,6,0.15)" stroke="#d97706" stroke-width="1.5"/>
-  <text x="80" y="205" text-anchor="middle" fill="#d97706" font-size="13" font-weight="700">3</text>
-  <text x="110" y="205" fill="#d97706" font-size="14" font-weight="600">30,000+ downloads in 3 months</text>
+  <!-- Step 3 (highlighted) -->
+  <circle cx="70" cy="195" r="16" fill="rgba(239,68,68,0.15)" stroke="#ef4444" stroke-width="1.5"/>
+  <text x="70" y="200" text-anchor="middle" fill="#ef4444" font-size="13" font-weight="700">3</text>
+  <text x="100" y="200" fill="#ef4444" font-size="14" font-weight="600">30,000+ downloads in 3 months</text>
 
-  <rect x="55" y="240" width="290" height="70" rx="8" fill="rgba(235,0,55,0.06)" stroke="rgba(235,0,55,0.2)" stroke-width="1"/>
-  <text x="200" y="270" text-anchor="middle" fill="#eb0037" font-size="22" font-weight="700">20%</text>
-  <text x="200" y="293" text-anchor="middle" fill="rgba(255,255,255,0.6)" font-size="11">of AI package recs don't exist</text>
+  <!-- Stat boxes -->
+  <rect x="45" y="235" width="290" height="70" rx="10" fill="rgba(239,68,68,0.08)" stroke="rgba(239,68,68,0.3)" stroke-width="1"/>
+  <text x="190" y="268" text-anchor="middle" fill="#ef4444" font-size="26" font-weight="800">20%</text>
+  <text x="190" y="290" text-anchor="middle" fill="rgba(255,255,255,0.55)" font-size="11">of AI package recs don't exist</text>
 
-  <rect x="360" y="240" width="290" height="70" rx="8" fill="rgba(235,0,55,0.06)" stroke="rgba(235,0,55,0.2)" stroke-width="1"/>
-  <text x="505" y="270" text-anchor="middle" fill="#eb0037" font-size="22" font-weight="700">205,474</text>
-  <text x="505" y="293" text-anchor="middle" fill="rgba(255,255,255,0.6)" font-size="11">unique hallucinated package names</text>
+  <rect x="355" y="235" width="290" height="70" rx="10" fill="rgba(239,68,68,0.08)" stroke="rgba(239,68,68,0.3)" stroke-width="1"/>
+  <text x="500" y="268" text-anchor="middle" fill="#ef4444" font-size="26" font-weight="800">205,474</text>
+  <text x="500" y="290" text-anchor="middle" fill="rgba(255,255,255,0.55)" font-size="11">unique hallucinated package names</text>
 
-  <text x="350" y="345" text-anchor="middle" fill="rgba(255,255,255,0.4)" font-size="10">Spracklen et al., 2024 (576K code samples, 16 LLMs)</text>
-  <text x="350" y="362" text-anchor="middle" fill="rgba(255,255,255,0.4)" font-size="10">Lanyado, 2024 (Socket.dev research)</text>
+  <!-- Repeatability stat -->
+  <text x="350" y="322" text-anchor="middle" fill="rgba(255,255,255,0.5)" font-size="10" font-weight="600">43% of hallucinated packages are repeated consistently — making attacks predictable</text>
+
+  <!-- Attribution -->
+  <text x="350" y="348" text-anchor="middle" fill="rgba(255,255,255,0.35)" font-size="9">Spracklen et al., 2024 (576K code samples, 16 LLMs)</text>
+  <text x="350" y="366" text-anchor="middle" fill="rgba(255,255,255,0.35)" font-size="9">Lanyado, 2024 (Socket.dev research)</text>
 </svg>

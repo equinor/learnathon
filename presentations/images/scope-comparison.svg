@@ -1,74 +1,68 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 420" font-family="Equinor, Helvetica, sans-serif">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" font-family="Equinor, Helvetica, sans-serif">
   <!-- Left: Concentric circles with radar blips -->
   <!-- Crosshair lines for radar feel -->
-  <line x1="200" y1="45" x2="200" y2="335" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
-  <line x1="55" y1="190" x2="345" y2="190" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+  <line x1="190" y1="30" x2="190" y2="330" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+  <line x1="45" y1="180" x2="335" y2="180" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
 
-  <!-- Outer ring: Scope creep (red) -->
-  <circle cx="200" cy="190" r="140" fill="rgba(235,0,55,0.08)" stroke="rgba(235,0,55,0.3)" stroke-width="1.5"/>
-  <text x="200" y="355" text-anchor="middle" fill="#eb0037" font-size="10" font-weight="600">SCOPE CREEP</text>
+  <!-- Outer ring: Scope creep (red, dashed) -->
+  <circle cx="190" cy="180" r="140" fill="none" stroke="#ef4444" stroke-width="2" stroke-dasharray="6 4" opacity="0.5"/>
+  <text x="190" y="345" text-anchor="middle" fill="#ef4444" font-size="10" font-weight="600">SCOPE CREEP</text>
 
   <!-- Scope creep blips -->
-  <circle cx="110" cy="95" r="4" fill="rgba(235,0,55,0.5)"/>
-  <text x="118" y="90" fill="rgba(235,0,55,0.6)" font-size="8" font-weight="600">Sentry</text>
-  <circle cx="290" cy="85" r="4" fill="rgba(235,0,55,0.5)"/>
-  <text x="298" y="80" fill="rgba(235,0,55,0.6)" font-size="8" font-weight="600">monitoring</text>
-  <circle cx="85" cy="240" r="4" fill="rgba(235,0,55,0.5)"/>
-  <text x="68" y="255" fill="rgba(235,0,55,0.6)" font-size="8" font-weight="600">rate limit</text>
-  <circle cx="310" cy="280" r="4" fill="rgba(235,0,55,0.5)"/>
-  <text x="318" y="275" fill="rgba(235,0,55,0.6)" font-size="8" font-weight="600">logging</text>
-  <circle cx="320" cy="130" r="4" fill="rgba(235,0,55,0.5)"/>
-  <text x="300" y="120" fill="rgba(235,0,55,0.6)" font-size="8" font-weight="600">admin UI</text>
+  <circle cx="100" cy="85" r="4" fill="rgba(239,68,68,0.5)"/>
+  <text x="108" y="80" fill="rgba(239,68,68,0.6)" font-size="8" font-weight="600">Sentry</text>
+  <circle cx="280" cy="75" r="4" fill="rgba(239,68,68,0.5)"/>
+  <text x="288" y="70" fill="rgba(239,68,68,0.6)" font-size="8" font-weight="600">monitoring</text>
+  <circle cx="75" cy="230" r="4" fill="rgba(239,68,68,0.5)"/>
+  <text x="58" y="245" fill="rgba(239,68,68,0.6)" font-size="8" font-weight="600">rate limit</text>
+  <circle cx="300" cy="270" r="4" fill="rgba(239,68,68,0.5)"/>
+  <text x="308" y="265" fill="rgba(239,68,68,0.6)" font-size="8" font-weight="600">logging</text>
+  <circle cx="310" cy="120" r="4" fill="rgba(239,68,68,0.5)"/>
+  <text x="290" y="110" fill="rgba(239,68,68,0.6)" font-size="8" font-weight="600">admin UI</text>
 
-  <!-- Middle ring: Nice to have (amber) -->
-  <circle cx="200" cy="190" r="95" fill="rgba(217,119,6,0.1)" stroke="rgba(217,119,6,0.3)" stroke-width="1.5"/>
+  <!-- Middle ring: Nice to have (amber, dashed) -->
+  <circle cx="190" cy="180" r="95" fill="none" stroke="#f59e0b" stroke-width="2" stroke-dasharray="6 4" opacity="0.6"/>
 
   <!-- Nice-to-have blips -->
-  <circle cx="155" cy="115" r="3.5" fill="rgba(217,119,6,0.6)"/>
-  <text x="130" y="110" fill="rgba(217,119,6,0.7)" font-size="8" font-weight="600">auth</text>
-  <circle cx="260" cy="135" r="3.5" fill="rgba(217,119,6,0.6)"/>
-  <text x="268" y="132" fill="rgba(217,119,6,0.7)" font-size="8" font-weight="600">email</text>
-  <circle cx="140" cy="260" r="3.5" fill="rgba(217,119,6,0.6)"/>
-  <text x="115" y="272" fill="rgba(217,119,6,0.7)" font-size="8" font-weight="600">Postgres</text>
-  <circle cx="270" cy="240" r="3.5" fill="rgba(217,119,6,0.6)"/>
-  <text x="278" y="237" fill="rgba(217,119,6,0.7)" font-size="8" font-weight="600">ORM</text>
+  <circle cx="145" cy="105" r="3.5" fill="rgba(245,158,11,0.6)"/>
+  <text x="120" y="100" fill="rgba(245,158,11,0.7)" font-size="8" font-weight="600">auth</text>
+  <circle cx="250" cy="125" r="3.5" fill="rgba(245,158,11,0.6)"/>
+  <text x="258" y="122" fill="rgba(245,158,11,0.7)" font-size="8" font-weight="600">email</text>
+  <circle cx="130" cy="250" r="3.5" fill="rgba(245,158,11,0.6)"/>
+  <text x="105" y="262" fill="rgba(245,158,11,0.7)" font-size="8" font-weight="600">Postgres</text>
+  <circle cx="260" cy="230" r="3.5" fill="rgba(245,158,11,0.6)"/>
+  <text x="268" y="227" fill="rgba(245,158,11,0.7)" font-size="8" font-weight="600">ORM</text>
 
-  <!-- Inner ring: MVP (green) -->
-  <circle cx="200" cy="190" r="50" fill="rgba(64,211,143,0.15)" stroke="rgba(64,211,143,0.5)" stroke-width="2"/>
+  <!-- Inner ring: MVP (green, solid) -->
+  <circle cx="190" cy="180" r="50" fill="rgba(34,197,94,0.15)" stroke="#22c55e" stroke-width="2"/>
+  <text x="190" y="175" text-anchor="middle" fill="#22c55e" font-size="11" font-weight="700">MVP</text>
+  <text x="190" y="190" text-anchor="middle" fill="rgba(255,255,255,0.4)" font-size="8">Spec this only</text>
 
-  <!-- MVP blips -->
-  <circle cx="185" cy="175" r="3" fill="#40d38f"/>
-  <text x="170" y="170" fill="#40d38f" font-size="8" font-weight="600">form</text>
-  <circle cx="215" cy="195" r="3" fill="#40d38f"/>
-  <text x="223" y="192" fill="#40d38f" font-size="8" font-weight="600">save</text>
-  <circle cx="195" cy="210" r="3" fill="#40d38f"/>
-  <text x="175" y="222" fill="#40d38f" font-size="8" font-weight="600">confirm</text>
+  <!-- Right: Agent's plan (bad) — card style -->
+  <rect x="390" y="20" width="380" height="200" rx="10" fill="#1a3a4a" stroke="rgba(239,68,68,0.4)" stroke-width="1.5"/>
+  <text x="415" y="50" fill="#ef4444" font-size="12" font-weight="700" text-transform="uppercase" letter-spacing="1">&#x274C;  AGENT'S PLAN</text>
 
-  <!-- Right: Agent's plan (bad) -->
-  <rect x="420" y="20" width="350" height="210" rx="10" fill="rgba(235,0,55,0.05)" stroke="rgba(235,0,55,0.2)" stroke-width="1"/>
-  <text x="440" y="48" fill="#eb0037" font-size="14" font-weight="700">&#x274C;  Agent's plan</text>
+  <text x="430" y="78" fill="rgba(255,255,255,0.45)" font-size="11">&#x2610; Contact form with validation</text>
+  <text x="430" y="98" fill="rgba(255,255,255,0.45)" font-size="11">&#x2610; User authentication + sessions</text>
+  <text x="430" y="118" fill="rgba(255,255,255,0.45)" font-size="11">&#x2610; PostgreSQL database + ORM</text>
+  <text x="430" y="138" fill="rgba(255,255,255,0.45)" font-size="11">&#x2610; Admin dashboard</text>
+  <text x="430" y="158" fill="rgba(255,255,255,0.45)" font-size="11">&#x2610; Email notifications (SendGrid)</text>
+  <text x="430" y="178" fill="rgba(255,255,255,0.45)" font-size="11">&#x2610; Rate limiting + monitoring</text>
+  <text x="430" y="198" fill="rgba(255,255,255,0.45)" font-size="11">&#x2610; Logging (Winston + Sentry)</text>
 
-  <text x="455" y="75" fill="rgba(255,255,255,0.5)" font-size="11">&#x2610; Contact form with validation</text>
-  <text x="455" y="95" fill="rgba(255,255,255,0.5)" font-size="11">&#x2610; User authentication + sessions</text>
-  <text x="455" y="115" fill="rgba(255,255,255,0.5)" font-size="11">&#x2610; PostgreSQL database + ORM</text>
-  <text x="455" y="135" fill="rgba(255,255,255,0.5)" font-size="11">&#x2610; Admin dashboard</text>
-  <text x="455" y="155" fill="rgba(255,255,255,0.5)" font-size="11">&#x2610; Email notifications (SendGrid)</text>
-  <text x="455" y="175" fill="rgba(255,255,255,0.5)" font-size="11">&#x2610; Rate limiting + monitoring</text>
-  <text x="455" y="195" fill="rgba(255,255,255,0.5)" font-size="11">&#x2610; Logging (Winston + Sentry)</text>
+  <text x="415" y="215" fill="rgba(239,68,68,0.6)" font-size="9" font-weight="600">7 features · 12+ dependencies</text>
 
-  <text x="440" y="220" fill="rgba(255,255,255,0.35)" font-size="10">7 features · 12+ dependencies</text>
+  <!-- Right: Your spec (good) — card style -->
+  <rect x="390" y="240" width="380" height="120" rx="10" fill="#1a3a4a" stroke="rgba(34,197,94,0.4)" stroke-width="1.5"/>
+  <text x="415" y="268" fill="#22c55e" font-size="12" font-weight="700" letter-spacing="1">&#x2705;  YOUR SPEC</text>
 
-  <!-- Right: Your spec (good) -->
-  <rect x="420" y="245" width="350" height="120" rx="10" fill="rgba(64,211,143,0.05)" stroke="rgba(64,211,143,0.3)" stroke-width="1"/>
-  <text x="440" y="273" fill="#40d38f" font-size="14" font-weight="700">&#x2705;  Your spec</text>
+  <text x="430" y="296" fill="#e2e8f0" font-size="11" font-weight="600">&#x2611; Contact form with validation</text>
+  <text x="430" y="316" fill="#e2e8f0" font-size="11" font-weight="600">&#x2611; Submit to JSON file</text>
+  <text x="430" y="336" fill="#e2e8f0" font-size="11" font-weight="600">&#x2611; Success confirmation page</text>
 
-  <text x="455" y="300" fill="#fff" font-size="11" font-weight="600">&#x2611; Contact form with validation</text>
-  <text x="455" y="320" fill="#fff" font-size="11" font-weight="600">&#x2611; Submit to JSON file</text>
-  <text x="455" y="340" fill="#fff" font-size="11" font-weight="600">&#x2611; Success confirmation page</text>
-
-  <text x="440" y="358" fill="rgba(255,255,255,0.35)" font-size="10">3 features · 2 dependencies</text>
+  <text x="415" y="355" fill="rgba(34,197,94,0.6)" font-size="9" font-weight="600">3 features · 2 dependencies · reviewable</text>
 
   <!-- Stat -->
-  <rect x="420" y="380" width="350" height="30" rx="6" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
-  <text x="595" y="400" text-anchor="middle" fill="#d97706" font-size="10" font-weight="600">Refactoring: 25% &#x2192; &lt;10%. Copy/paste code up 8x. — GitClear, 2025</text>
+  <rect x="390" y="372" width="380" height="24" rx="6" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+  <text x="580" y="389" text-anchor="middle" fill="#d97706" font-size="9" font-weight="600">Refactoring: 25% &#x2192; &lt;10%. Copy/paste code up 8x. — GitClear, 2025</text>
 </svg>
