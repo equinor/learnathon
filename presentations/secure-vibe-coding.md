@@ -96,6 +96,8 @@ No spec = the agent chooses your **architecture**, your **dependencies**, your *
 
 ### Minimum Viable Scope
 
+Start small — **you** define the boundaries before the agent starts.
+
 Smaller scope = smaller attack surface = fewer tokens wasted = faster feedback.
 
 **If you can't explain it in 3 sentences, it's too big for one pass.**
@@ -160,6 +162,18 @@ If something goes wrong, how far back do you have to go?
 
 ---
 
+### Compact Often — The Context Cliff
+
+Long conversations degrade quality. The agent forgets your constraints, repeats mistakes, drifts from the spec.
+
+**Fresh chats with summaries > one stale marathon session.**
+
+@embed(/presentations/images/context-cliff.svg, width=85%)
+
+*LLM accuracy drops 20-30% for information in the middle of long contexts — [Liu et al., 2023](https://arxiv.org/abs/2307.03172)*
+
+---
+
 ### Limit the Environment
 
 **Principle of least privilege** for agents.
@@ -196,25 +210,27 @@ The agent wrote it, but **your name is on the commit**.
 
 ---
 
+### The Dependency Problem
+
+Agents love adding packages. Each one is an attack surface you inherit.
+
+**"I asked for a form, it installed 4 packages I didn't need."**
+
+@embed(/presentations/images/dependency-iceberg.svg, width=80%)
+
+*[Sonatype, 2024](https://www.sonatype.com/state-of-the-software-supply-chain/2024/10-year-look)*
+
+---
+
 ### The Scope Creep Loop
 
-The agent adds auth, logging, monitoring, error handling you **never requested**.
+You defined the scope — but the agent **ignores it**.
+
+It adds auth, logging, monitoring, error handling you **never requested**.
 
 Each addition is more code to trust, more surface area.
 
 **"Only implement what I asked for."**
-
----
-
-### Compact Often — The Context Cliff
-
-Long conversations degrade quality. The agent forgets your constraints, repeats mistakes, drifts from the spec.
-
-**Fresh chats with summaries > one stale marathon session.**
-
-@embed(/presentations/images/context-cliff.svg, width=85%)
-
-*LLM accuracy drops 20-30% for information in the middle of long contexts — [Liu et al., 2023](https://arxiv.org/abs/2307.03172)*
 
 ---
 
@@ -228,15 +244,32 @@ Better output, fewer tokens.
 
 ---
 
-### The Dependency Problem
+### Level Up with Tools
 
-Agents love adding packages. Each one is an attack surface you inherit.
+MCP gives the agent **capabilities**. Skills give the agent **judgment**.
 
-**"I asked for a form, it installed 4 packages I didn't need."**
+@embed(/presentations/images/kitchen-vs-recipe.svg, width=90%)
 
-@embed(/presentations/images/dependency-iceberg.svg, width=80%)
+---
 
-*[Sonatype, 2024](https://www.sonatype.com/state-of-the-software-supply-chain/2024/10-year-look)*
+### Progressive Disclosure in Skills
+
+20 skills cost almost nothing — they load only what's needed, when it's needed.
+
+@embed(/presentations/images/progressive-disclosure-iceberg.svg, width=60%)
+
+---
+
+### Installing Plugins Safely
+
+Plugins and MCP servers run code on your machine. Treat them like dependencies.
+
+1. **Install from a verified marketplace** — [claudecode.dev](https://claudecode.dev), official registries
+2. **Read the documentation** — what tools does it add? What permissions does it need?
+3. **Check the source** — is it open-source? Who maintains it?
+4. **Review what it does** — don't just approve every tool call blindly
+
+**Our top pick: [Superpowers](https://claudecode.dev/plugins/superpowers)** — TDD, debugging, planning, code review, and subagent workflows.
 
 -----
 
