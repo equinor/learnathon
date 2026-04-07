@@ -43,5 +43,5 @@
   <rect x="80" y="210" width="640" height="65" rx="8" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
   <text x="400" y="237" text-anchor="middle" fill="#d97706" font-size="12" font-weight="600">Devs with AI wrote less secure code on 4/5 tasks</text>
   <text x="400" y="257" text-anchor="middle" fill="#d97706" font-size="12" font-weight="600">AND were more confident it was secure.</text>
-  <text x="710" y="265" text-anchor="end" fill="rgba(255,255,255,0.4)" font-size="9">Perry et al., 2023 (Stanford)</text>
+  <a href="https://arxiv.org/abs/2211.03622" target="_blank"><text x="710" y="265" text-anchor="end" fill="rgba(255,255,255,0.4)" font-size="9" text-decoration="underline">Perry et al., 2023 (Stanford)</text></a>
 </svg>

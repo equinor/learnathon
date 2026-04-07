@@ -64,5 +64,5 @@
 
   <!-- Stat -->
   <rect x="390" y="372" width="380" height="24" rx="6" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
-  <text x="580" y="389" text-anchor="middle" fill="#d97706" font-size="9" font-weight="600">Refactoring: 25% &#x2192; &lt;10%. Copy/paste code up 8x. — GitClear, 2025</text>
+  <a href="https://www.gitclear.com/ai_assistant_code_quality_2025_research" target="_blank"><text x="580" y="389" text-anchor="middle" fill="#d97706" font-size="9" font-weight="600" text-decoration="underline">Refactoring: 25% &#x2192; &lt;10%. Copy/paste code up 8x. — GitClear, 2025</text></a>
 </svg>

@@ -44,5 +44,5 @@
   <text x="350" y="355" text-anchor="middle" fill="#ef4444" font-size="13" font-weight="700">200+ transitive dependencies</text>
 
   <text x="350" y="385" text-anchor="middle" fill="rgba(255,255,255,0.5)" font-size="11">Each one is code you trust implicitly but have never read.</text>
-  <text x="350" y="405" text-anchor="middle" fill="rgba(255,255,255,0.35)" font-size="9">704,102 malicious packages in 2024 (+156% YoY) · 50% of unprotected repos had cached malware — Sonatype</text>
+  <a href="https://www.sonatype.com/state-of-the-software-supply-chain/2024/10-year-look" target="_blank"><text x="350" y="405" text-anchor="middle" fill="rgba(255,255,255,0.35)" font-size="9" text-decoration="underline">704,102 malicious packages in 2024 (+156% YoY) · 50% of unprotected repos had cached malware — Sonatype</text></a>
 </svg>
