@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 520" font-family="Equinor, Helvetica, sans-serif">
+  <rect x="10" y="10" width="580" height="500" rx="14" fill="#1a3a4a"/>
+
+  <defs>
+    <linearGradient id="headerGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#7c3aed"/>
+      <stop offset="100%" stop-color="#a78bfa"/>
+    </linearGradient>
+  </defs>
+  <rect x="10" y="10" width="580" height="60" rx="14" fill="url(#headerGrad)"/>
+  <rect x="10" y="50" width="580" height="20" fill="url(#headerGrad)"/>
+  <text x="300" y="38" text-anchor="middle" fill="#fff" font-size="16" font-weight="700">Secure Vibe Coding Cheat Sheet</text>
+  <text x="300" y="58" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-size="10">spec &#x2192; plan &#x2192; build &#x2192; verify &#x2192; secure &#x2192; ship</text>
+
+  <rect x="25" y="85" width="270" height="90" rx="10" fill="rgba(64,211,143,0.08)"/>
+  <text x="45" y="110" fill="#40d38f" font-size="10" font-weight="700">SPEC</text>
+  <text x="45" y="130" fill="#fff" font-size="12" font-weight="600">Security questions baked in</text>
+  <text x="45" y="150" fill="rgba(255,255,255,0.5)" font-size="10">What data? What access? What input?</text>
+
+  <rect x="305" y="85" width="270" height="90" rx="10" fill="rgba(64,211,143,0.08)"/>
+  <text x="325" y="110" fill="#40d38f" font-size="10" font-weight="700">PLAN</text>
+  <text x="325" y="130" fill="#fff" font-size="12" font-weight="600">Min scope + limit permissions</text>
+  <text x="325" y="150" fill="rgba(255,255,255,0.5)" font-size="10">Push back on bloat &amp; unnecessary deps</text>
+
+  <rect x="25" y="185" width="270" height="90" rx="10" fill="rgba(217,119,6,0.08)"/>
+  <text x="45" y="210" fill="#d97706" font-size="10" font-weight="700">BUILD</text>
+  <text x="45" y="230" fill="#fff" font-size="12" font-weight="600">Read before commit. Compact often.</text>
+  <text x="45" y="250" fill="rgba(255,255,255,0.5)" font-size="10">Small commits = small blast radius</text>
+
+  <rect x="305" y="185" width="270" height="90" rx="10" fill="rgba(217,119,6,0.08)"/>
+  <text x="325" y="210" fill="#d97706" font-size="10" font-weight="700">VERIFY</text>
+  <text x="325" y="230" fill="#fff" font-size="12" font-weight="600">Run it yourself. Trust code, not claims.</text>
+  <text x="325" y="250" fill="rgba(255,255,255,0.5)" font-size="10">Verify then trust &#x2014; never the reverse</text>
+
+  <rect x="25" y="285" width="550" height="110" rx="10" fill="rgba(235,0,55,0.08)"/>
+  <text x="45" y="310" fill="#eb0037" font-size="10" font-weight="700">SECURE &#x2014; THE 5-MINUTE PULSE</text>
+
+  <rect x="45" y="320" width="110" height="24" rx="4" fill="rgba(235,0,55,0.1)"/>
+  <text x="100" y="337" text-anchor="middle" fill="#fff" font-size="10" font-weight="600">&#x1F511; Secrets</text>
+
+  <rect x="165" y="320" width="110" height="24" rx="4" fill="rgba(235,0,55,0.1)"/>
+  <text x="220" y="337" text-anchor="middle" fill="#fff" font-size="10" font-weight="600">&#x1F9F9; Input</text>
+
+  <rect x="285" y="320" width="120" height="24" rx="4" fill="rgba(235,0,55,0.1)"/>
+  <text x="345" y="337" text-anchor="middle" fill="#fff" font-size="10" font-weight="600">&#x1F4E6; Packages</text>
+
+  <rect x="415" y="320" width="120" height="24" rx="4" fill="rgba(235,0,55,0.1)"/>
+  <text x="475" y="337" text-anchor="middle" fill="#fff" font-size="10" font-weight="600">&#x1F310; Ext. calls</text>
+
+  <text x="45" y="372" fill="rgba(255,255,255,0.5)" font-size="10">+ Right deps, not more deps &#x2014; use peer-reviewed libs for security-sensitive code</text>
+
+  <rect x="25" y="405" width="550" height="42" rx="10" fill="rgba(124,58,237,0.08)"/>
+  <text x="300" y="432" text-anchor="middle" fill="#a78bfa" font-size="12" font-weight="600">&#x1F680; Ship &#x2014; with your eyes open, not closed</text>
+
+  <text x="300" y="480" text-anchor="middle" fill="rgba(255,255,255,0.25)" font-size="9">Screenshot this.</text>
+</svg>
