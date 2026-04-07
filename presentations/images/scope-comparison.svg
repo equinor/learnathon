@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" font-family="Equinor, Helvetica, sans-serif">
+  <circle cx="200" cy="180" r="140" fill="rgba(235,0,55,0.08)" stroke="rgba(235,0,55,0.3)" stroke-width="1.5"/>
+  <text x="200" y="340" text-anchor="middle" fill="#eb0037" font-size="10" font-weight="600">SCOPE CREEP</text>
+
+  <circle cx="200" cy="180" r="95" fill="rgba(217,119,6,0.1)" stroke="rgba(217,119,6,0.3)" stroke-width="1.5"/>
+  <text x="200" y="110" text-anchor="middle" fill="#d97706" font-size="10">Nice to have</text>
+
+  <circle cx="200" cy="180" r="50" fill="rgba(64,211,143,0.15)" stroke="rgba(64,211,143,0.5)" stroke-width="2"/>
+  <text x="200" y="177" text-anchor="middle" fill="#40d38f" font-size="14" font-weight="700">MVP</text>
+  <text x="200" y="195" text-anchor="middle" fill="#40d38f" font-size="10">Build this</text>
+
+  <rect x="430" y="50" width="330" height="120" rx="10" fill="rgba(235,0,55,0.05)" stroke="rgba(235,0,55,0.2)" stroke-width="1"/>
+  <text x="450" y="80" fill="#eb0037" font-size="14" font-weight="700">&#x274C;  Agent's plan</text>
+  <text x="470" y="105" fill="rgba(255,255,255,0.7)" font-size="13">7 features</text>
+  <text x="470" y="128" fill="rgba(255,255,255,0.7)" font-size="13">12+ dependencies</text>
+  <text x="470" y="151" fill="rgba(255,255,255,0.5)" font-size="11">"I also added auth, logging, and monitoring"</text>
+
+  <rect x="430" y="195" width="330" height="100" rx="10" fill="rgba(64,211,143,0.05)" stroke="rgba(64,211,143,0.3)" stroke-width="1"/>
+  <text x="450" y="225" fill="#40d38f" font-size="14" font-weight="700">&#x2705;  Your spec</text>
+  <text x="470" y="252" fill="rgba(255,255,255,0.7)" font-size="13">3 features</text>
+  <text x="470" y="275" fill="rgba(255,255,255,0.7)" font-size="13">2 dependencies</text>
+
+  <rect x="430" y="320" width="330" height="50" rx="6" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+  <text x="595" y="345" text-anchor="middle" fill="#d97706" font-size="11" font-weight="600">Refactoring: 25% &#x2192; less than 10%. Copy/paste code up 8x.</text>
+  <text x="595" y="362" text-anchor="middle" fill="rgba(255,255,255,0.35)" font-size="9">GitClear, 2025 — 211M lines analysed</text>
+</svg>
