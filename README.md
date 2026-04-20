@@ -69,6 +69,8 @@ Optional tools (Lovable, Bolt, v0, Cursor) are welcome but not supported. See `l
 
 Each team gets a bingo card with methods to try. Not mandatory — but earns recognition!
 
+**🎮 [Open Interactive Bingo Card](bingo.html)** — Click to use the digital version!
+
 | | | |
 |:---:|:---:|:---:|
 | Spend time writing a spec | Push an architecture drawing to your repo | Use an MCP tool |
